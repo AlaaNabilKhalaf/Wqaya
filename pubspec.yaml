@@ -1,0 +1,72 @@
+name: wqaya
+description: "A medical project"
+publish_to:
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons:
+  flutter_svg:
+  flutter_screenutil:
+#  firebase_core:
+#  firebase_auth:
+#  google_sign_in:
+  flutter_bloc:
+  bloc:
+  shared_preferences:
+#  flutter_localization:
+#  flutter_localizations:
+#    sdk: flutter
+  flutter_launcher_icons:
+#  intl:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/images/auth_view/
+    - assets/images/boarding_view/
+    - assets/images/home_view/
+    - assets/images/splash_view/
+
+  fonts:
+    - family: cairoBlack
+      fonts:
+        - asset: fonts/Cairo/Cairo-Black.ttf
+
+    - family: cairoBold
+      fonts:
+        - asset: fonts/Cairo/Cairo-Bold.ttf
+
+    - family: cairoMedium
+      fonts:
+        - asset: fonts/Cairo/Cairo-Medium.ttf
+
+    - family: cairoSemiBold
+      fonts:
+        - asset: fonts/Cairo/Cairo-SemiBold.ttf
+
+    - family: cairoRegular
+      fonts:
+        - asset: fonts/Cairo/Cairo-Regular.ttf
+
+    - family: cairoLight
+      fonts:
+        - asset: fonts/Cairo/Cairo-Light.ttf
+
+
+#flutter_intl:
+#  enabled: true
