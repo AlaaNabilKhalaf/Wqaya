@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 
 
@@ -11,7 +12,7 @@ class RegularText extends StatelessWidget {
     this.textOverflow,
     this.maxLine,
     this.textAlign,
-    this.textDirection
+
   });
 
   final double fontSize ;
@@ -22,7 +23,6 @@ class RegularText extends StatelessWidget {
   final int? maxLine;
   final Color textColor;
   final TextAlign? textAlign;
-  final TextDirection? textDirection;
   final TextOverflow? textOverflow;
 
   @override
@@ -34,13 +34,12 @@ class RegularText extends StatelessWidget {
       overflow: textOverflow?? TextOverflow.ellipsis,
       textAlign: textAlign?? TextAlign.center,
       maxLines: maxLine,
-      textDirection: textDirection,
       style: TextStyle(
         fontFamily: fontFamily,
             fontSize: fontSize,
             color: textColor,
       ),
-    );
+    ).tr();
   }
 }
 

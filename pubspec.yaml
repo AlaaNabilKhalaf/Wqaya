@@ -1,6 +1,6 @@
 name: wqaya
 description: "A medical project"
-publish_to:
+publish_to: null
 version: 1.0.0+1
 
 environment:
@@ -10,20 +10,17 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons:
-  flutter_svg:
-  flutter_screenutil:
-#  firebase_core:
-#  firebase_auth:
-#  google_sign_in:
-  flutter_bloc:
-  bloc:
-  shared_preferences:
-#  flutter_localization:
-#  flutter_localizations:
-#    sdk: flutter
-  flutter_launcher_icons:
-#  intl:
+  cupertino_icons: null
+  flutter_svg: null
+  flutter_screenutil: null
+  #  firebase_core:
+  #  firebase_auth:
+  #  google_sign_in:
+  flutter_bloc: null
+  bloc: null
+  shared_preferences: null
+  flutter_launcher_icons: null
+  easy_localization: ^3.0.7+1
 
 dev_dependencies:
   flutter_test:
@@ -41,7 +38,7 @@ flutter:
     - assets/images/boarding_view/
     - assets/images/home_view/
     - assets/images/splash_view/
-
+    - assets/locals/translations/
   fonts:
     - family: cairoBlack
       fonts:
@@ -67,6 +64,3 @@ flutter:
       fonts:
         - asset: fonts/Cairo/Cairo-Light.ttf
 
-
-#flutter_intl:
-#  enabled: true

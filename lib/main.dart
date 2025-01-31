@@ -1,16 +1,25 @@
 import 'package:bloc/bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'Core/bloc_observer/bloc_observer.dart';
+// import 'package:flutter_localization/flutter_localization.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   // await CacheNetwork.cacheInitialization();
   await ScreenUtil.ensureScreenSize();
-  runApp(const Wqaya());
+  runApp(
+      EasyLocalization(
+      supportedLocales: const [Locale('ar', 'EG')],
+      path: "assets/locals/translations",
+      saveLocale: true,
+      fallbackLocale: const Locale('ar', 'EG'),
+      child: const Wqaya()));
 }
 
 class Wqaya extends StatelessWidget {
@@ -31,9 +40,11 @@ class Wqaya extends StatelessWidget {
     minTextAdapt: true,
     splitScreenMode: true,
    builder: ( _ , child ){
-          return const MaterialApp(
-            locale: Locale("ar"),
+          return MaterialApp(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
             debugShowCheckedModeBanner: false,
-            home:SplashView(),);
+            home:const SplashView(),);
    },
     );}}

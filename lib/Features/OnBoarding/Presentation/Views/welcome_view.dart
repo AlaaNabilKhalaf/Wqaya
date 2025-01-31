@@ -6,7 +6,6 @@ import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Views/on_boarding_view.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/image_container.dart';
-
 import '../../../../Core/widgets/custom_button.dart';
 
 class WelcomeView extends StatelessWidget {
@@ -23,13 +22,9 @@ class WelcomeView extends StatelessWidget {
 
           Column(
             children: [
-              RegularText(text: "مرحبًا بك", fontSize: 30.sp, textColor: primaryColor, fontFamily: black),
+              RegularText(text: 'welcome', fontSize: 30.sp, textColor: primaryColor, fontFamily: black),
               RegularText(
-                  text: """  نهدف من خلال هذا التطبيق
- إلى جعل تجربتك الصحية أكثر  
- .سهولة وراحة
-                  """
-                  , fontSize: 25.sp,
+                  text: 'weAimeTo', fontSize: 25.sp,
                   textAlign: TextAlign.center,
                   textColor: primaryColor, fontFamily: medium),
             ],
@@ -42,7 +37,7 @@ class WelcomeView extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> const OnBoardingView()));
 
           },
-              child: const Icon(Icons.arrow_forward_rounded,color: myWhiteColor,)),
+              child: const Icon(Icons.arrow_back_rounded,color: myWhiteColor,)),
         )
 
         ],

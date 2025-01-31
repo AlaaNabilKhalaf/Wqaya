@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
@@ -49,7 +50,7 @@ endSplash();
                   height: 208.h,width: 189.w,
                   child: Image.asset(AssetsData.splashLogo )),
               // SvgImage(imagePath: AssetsData.splashLogo,height: 208.h,width: 189.w,),
-              RegularText(text: "لحياة صحية افضل", fontSize: 30.sp, textColor: myWhiteColor, fontFamily: regular),
+              RegularText(text:'logo', fontSize: 30.sp, textColor: myWhiteColor, fontFamily: regular),
 
             ],
           ),
