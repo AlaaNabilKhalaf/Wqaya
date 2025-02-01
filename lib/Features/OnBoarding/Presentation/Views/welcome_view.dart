@@ -6,7 +6,7 @@ import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Views/on_boarding_view.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/image_container.dart';
-import '../../../../Core/widgets/custom_button.dart';
+import '../../../../Core/widgets/regular_button.dart';
 
 class WelcomeView extends StatelessWidget {
   const WelcomeView({super.key});
