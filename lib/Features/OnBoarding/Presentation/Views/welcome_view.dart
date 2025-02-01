@@ -33,7 +33,7 @@ class WelcomeView extends StatelessWidget {
         Padding(
           padding:  EdgeInsets.only(bottom: 48.h),
           child: RegularButton(
-              width: 44.w, height: 44.h, buttonColor: primaryColor, borderRadius: 15.r, onTap: (){
+              width: 45.w, height: 45.h, buttonColor: primaryColor, borderRadius: 15.r, onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> const OnBoardingView()));
 
           },
