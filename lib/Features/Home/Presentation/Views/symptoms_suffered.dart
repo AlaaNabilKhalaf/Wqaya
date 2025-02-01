@@ -5,16 +5,17 @@ import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/regular_button.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
+import 'package:wqaya/Features/Home/Presentation/Views/chronic_diseases_view.dart';
 import 'package:wqaya/Features/Home/Presentation/Widgets/symptoms_container.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+class SymptomsSufferedView extends StatefulWidget {
+  const SymptomsSufferedView({super.key});
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  State<SymptomsSufferedView> createState() => _SymptomsSufferedViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _SymptomsSufferedViewState extends State<SymptomsSufferedView> {
   List<String> symptoms = [
     "شعور بالرغبة في التقيؤ",
     "إرتفاع درجة حرارة الجسم",
@@ -119,7 +120,11 @@ class _HomeViewState extends State<HomeView> {
               height: 50.h,
               buttonColor: selectedSymptoms.isEmpty?unselectedContainerColor : primaryColor,
               borderRadius: 10,
-              onTap: () {},
+              onTap: () {
+                if (selectedSymptoms.isNotEmpty){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ChronicDiseasesView(),));
+                }
+              },
               child: RegularText(
                 text: "next",
                 fontSize: 15.sp,

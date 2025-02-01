@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: null
-  flutter_svg: null
+  flutter_svg: ^2.0.17
   flutter_screenutil: null
   #  firebase_core:
   #  firebase_auth:
