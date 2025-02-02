@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'Core/bloc_observer/bloc_observer.dart';
-// import 'package:flutter_localization/flutter_localization.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
