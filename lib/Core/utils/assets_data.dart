@@ -11,6 +11,7 @@ class AssetsData{
 
   // HOME VIEW
   static const String medicine = "assets/images/home_view/medicine.png" ;
+  static const String profilePicture = "assets/images/home_view/profile_picture.jpeg" ;
 
 
 }

@@ -9,7 +9,7 @@ import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/regular_button.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Home/Presentation/Widgets/symptoms_container.dart';
-import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
+import 'package:wqaya/Features/OnBoarding/Presentation/Views/home_view.dart';
 
 class ChronicDiseasesView extends StatefulWidget {
   const ChronicDiseasesView({super.key});
@@ -66,7 +66,7 @@ class _ChronicDiseasesViewState extends State<ChronicDiseasesView> {
   void _showSuccessDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: true, // Allows dismissing the dialog by clicking outside
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -102,10 +102,9 @@ class _ChronicDiseasesViewState extends State<ChronicDiseasesView> {
         );
       },
     ).then((_) {
-      // This block will be executed when the dialog is dismissed
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const SplashView()), // Replace with your next screen
+        MaterialPageRoute(builder: (context) => const HomeView()), // Replace with your next screen
       );
     });
   }
