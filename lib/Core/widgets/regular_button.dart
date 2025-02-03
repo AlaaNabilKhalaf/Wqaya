@@ -4,16 +4,16 @@ class RegularButton extends StatelessWidget {
   const RegularButton({
     super.key,
     required this.child,
-    required this.width,
-    required this.height,
+     this.width,
+     this.height,
     required this.buttonColor,
     required this.borderRadius,
     required this.onTap
   });
 
   final Widget child ;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final Color buttonColor ;
   final double borderRadius ;
   final Function onTap;
