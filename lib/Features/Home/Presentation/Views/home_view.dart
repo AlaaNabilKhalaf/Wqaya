@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/utils/colors.dart';
-import 'package:wqaya/Core/utils/constance.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
+import 'package:wqaya/Core/widgets/cust_app_bar.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
+import 'package:wqaya/Features/Complaints/Presentation/Views/complaints_view.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/better_health_poster.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/home_container.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/symptom_container.dart';
@@ -24,57 +25,14 @@ class HomeView extends StatelessWidget {
 
     return  SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          leading: const Padding(
-          padding: EdgeInsets.only(right: 8.0,top: 5),
-          child: CircleAvatar(
-            radius: 35,
-            foregroundImage: AssetImage(AssetsData.profilePicture),
-          ),
-        ),
-          title:  Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  RegularText(
-                            text: 'name',
-                            fontSize: 15.sp,
-                            textColor: primaryColor,
-                            fontFamily: black,
-                          ),
-                  RegularText(
-                            text: " 👋 ",
-                            fontSize: 15.sp,
-                            textColor: primaryColor,
-                            fontFamily: black,
-                          ),
-                ],
-              ),
-              const SizedBox(height: 3,),
-              Row(
-                children: [
-                  RegularText(
-                            text: 'address',
-                            fontSize: 13.sp,
-                            textColor: primaryColor,
-                            fontFamily: regular,
-                          ),
-                  const PlatformAdaptiveIcon(cupertinoIcon: Icons.keyboard_arrow_down_sharp, materialIcon: Icons.keyboard_arrow_down_sharp,color: primaryColor,),
-                  const Spacer(),
-                  const PlatformAdaptiveIcon(cupertinoIcon: Icons.notifications_none_outlined, materialIcon: Icons.notifications_none_outlined,color: primaryColor,)
-
-                ],
-              ),
-              ],
-          ),
-        ),
+        appBar: const PreferredSize(preferredSize:Size.fromHeight(kToolbarHeight),
+        child: CustAppBar()),
         body:  Padding(
           padding:  const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-Expanded(
+              Expanded(
                 flex: 3,
                 child: GridView.builder(
                   physics: const BouncingScrollPhysics(),
@@ -174,26 +132,29 @@ Expanded(
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: textFieldColor,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                          color: unselectedContainerColor
-                      )
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child:RegularText(
-                      text: "showDetails",
-                      fontSize: 20.sp,
-                      textColor: primaryColor,
-                      fontFamily: bold,
+              InkWell(
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ComplaintsView(),)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: textFieldColor,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                            color: unselectedContainerColor
+                        )
                     ),
-
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child:RegularText(
+                        text: "showDetails",
+                        fontSize: 20.sp,
+                        textColor: primaryColor,
+                        fontFamily: bold,
+                      ),
+                
+                    ),
                   ),
                 ),
               ),

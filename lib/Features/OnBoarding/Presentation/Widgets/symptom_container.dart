@@ -29,7 +29,7 @@ class SymptomContainer extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: Row(
           children: [
-            Expanded(
+            Flexible(
               child: Text(
                 "highTemp",
                 style:TextStyle(

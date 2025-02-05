@@ -9,7 +9,7 @@ import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/regular_button.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Home/Presentation/Widgets/symptoms_container.dart';
-import 'package:wqaya/Features/OnBoarding/Presentation/Views/home_view.dart';
+import 'package:wqaya/Features/Home/Presentation/Views/home_view.dart';
 
 class ChronicDiseasesView extends StatefulWidget {
   const ChronicDiseasesView({super.key});

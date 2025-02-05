@@ -25,6 +25,14 @@
   "surgery" : "العمليات",
   "login" : "تسجيل دخول",
   "signup": "انشاء حساب",
-  "ifYouDonNotWantToLogin" : "يمكنك انشاء حساب وفي حاله الرغبة \nفي عدم التسجيل اضغط علي زر تخطي"
+  "ifYouDonNotWantToLogin" : "يمكنك انشاء حساب وفي حاله الرغبة \nفي عدم التسجيل اضغط علي زر تخطي",
+  "symptomSearch": "بحث عن عرض",
+  "medicineSearch": "بحث عن دواء",
+  "painScale": "شدة الألم",
+  "painDuration": "مدة الألم",
+  "dayToWeek": "من يوم لأسبوع",
+  "weekToTwoWeeks": "من أسبوع لأسبوعين",
+  "twoWeeksToMonth": "من أسبوعين لشهر",
+  "monthToMore": "من شهر لأكتر"
 
 }
