@@ -35,7 +35,7 @@ class _ComplaintsViewState extends State<NewComplaintView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RegularText(
-              text: "currentComplain",
+              text: "newComplain",
               fontSize: 20.sp,
               textColor: primaryColor,
               fontFamily: bold,
