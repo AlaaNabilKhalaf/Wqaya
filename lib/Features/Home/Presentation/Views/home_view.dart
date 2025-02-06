@@ -134,6 +134,7 @@ class HomeView extends StatelessWidget {
               ),
               InkWell(
                 onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ComplaintsView(),)),
+                splashColor: textFieldColor,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(

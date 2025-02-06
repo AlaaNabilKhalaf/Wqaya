@@ -6,15 +6,16 @@ import 'package:wqaya/Core/utils/constance.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 
 class SymptomContainer extends StatelessWidget {
-  const SymptomContainer({
-    super.key,
-  });
+  const SymptomContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color:textFieldColor,
+    return Align(
+      alignment: Alignment.centerLeft, // Aligns content to the left
+      child: Container(
+        padding: const EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          color: textFieldColor,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
@@ -23,16 +24,15 @@ class SymptomContainer extends StatelessWidget {
               blurRadius: 7,
               offset: const Offset(2, 8),
             ),
-          ]
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
+          ],
+        ),
         child: Row(
+          mainAxisSize: MainAxisSize.min, // Takes minimum width needed
           children: [
             Flexible(
               child: Text(
                 "highTemp",
-                style:TextStyle(
+                style: TextStyle(
                   fontSize: 12.sp,
                   color: primaryColor,
                   fontFamily: bold,
@@ -40,11 +40,12 @@ class SymptomContainer extends StatelessWidget {
                 softWrap: true,
               ).tr(),
             ),
-            const Spacer(),
+            const SizedBox(width: 8), // Add some space between text and icon
             const PlatformAdaptiveIcon(
-              cupertinoIcon: Icons.check_box, materialIcon: Icons.check_box_outline_blank,
+              cupertinoIcon: Icons.check_box,
+              materialIcon: Icons.check_box_outline_blank,
               color: unselectedContainerColor,
-            )
+            ),
           ],
         ),
       ),

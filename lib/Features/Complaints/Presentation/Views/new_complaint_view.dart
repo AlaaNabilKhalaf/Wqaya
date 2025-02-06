@@ -5,26 +5,25 @@ import 'package:wqaya/Core/utils/constance.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/cust_app_bar.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
-import 'package:wqaya/Features/Complaints/Presentation/Views/new_complaint_view.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/complaints_button.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/custom_slider.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/sym_or_med_search.dart';
 
-class ComplaintsView extends StatefulWidget {
-  const ComplaintsView({super.key});
+class NewComplaintView extends StatefulWidget {
+  const NewComplaintView({super.key});
 
   @override
-  State<ComplaintsView> createState() => _ComplaintsViewState();
+  State<NewComplaintView> createState() => _ComplaintsViewState();
 }
 
-class _ComplaintsViewState extends State<ComplaintsView> {
-final List<String> durations=[
-  "dayToWeek",
-  "weekToTwoWeeks",
-  "twoWeeksToMonth",
-  "monthToMore",
-];
-int index=0;
+class _ComplaintsViewState extends State<NewComplaintView> {
+  final List<String> durations=[
+    "dayToWeek",
+    "weekToTwoWeeks",
+    "twoWeeksToMonth",
+    "monthToMore",
+  ];
+  int index=0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,74 +98,74 @@ int index=0;
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                 RegularText(
+                RegularText(
                   text: "painScale",
                   fontSize: 20.sp,
                   textColor: primaryColor,
                   fontFamily: medium,
                 ),
-                 const SizedBox(width: 10,),
-                 Column(
-                   children: [
-                     SizedBox(height: 10.h,),
-                     CustomSlider(),
-                   ],
-                 ),
+                const SizedBox(width: 10,),
+                Column(
+                  children: [
+                    SizedBox(height: 10.h,),
+                    CustomSlider(),
+                  ],
+                ),
               ],
             ),
             Row(
               children: [
-                 RegularText(
+                RegularText(
                   text: "painScale",
                   fontSize: 20.sp,
                   textColor: primaryColor,
                   fontFamily: medium,
                 ),
-                 const Spacer(),
-                 Column(
-                   children: [
-                     SizedBox(height: 10.h,),
-                     InkWell(
-                       radius: 15,
-                       onTap: () {
-                         if(index==3){
-                           index = 0;
-                         }else {
-                           index++;
-                         }
-                         setState(() {
-                         });
-                       },
-                       child: Container(
-                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                         decoration: BoxDecoration(
-                             color: textFieldColor,
-                             borderRadius: BorderRadius.circular(15),
-                             border: Border.all(
-                                 color: unselectedContainerColor)),
-                         child: Row(
-                           children: [
-                             RegularText(
-                               text: durations[index],
-                               fontSize: 20.sp,
-                               textColor: primaryColor,
-                               fontFamily: medium,
-                             ),
-                             Transform.rotate(
-                                angle: 1.5708,
-                                child : const PlatformAdaptiveIcon(
-                                    cupertinoIcon: Icons.switch_left, materialIcon: Icons.switch_left,
-                                  color: primaryColor,
-                                ),
-                             )
+                const Spacer(),
+                Column(
+                  children: [
+                    SizedBox(height: 10.h,),
+                    InkWell(
+                      radius: 15,
+                      onTap: () {
+                        if(index==3){
+                          index = 0;
+                        }else {
+                          index++;
+                        }
+                        setState(() {
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                            color: textFieldColor,
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(
+                                color: unselectedContainerColor)),
+                        child: Row(
+                          children: [
+                            RegularText(
+                              text: durations[index],
+                              fontSize: 20.sp,
+                              textColor: primaryColor,
+                              fontFamily: medium,
+                            ),
+                            Transform.rotate(
+                              angle: 1.5708,
+                              child : const PlatformAdaptiveIcon(
+                                cupertinoIcon: Icons.switch_left, materialIcon: Icons.switch_left,
+                                color: primaryColor,
+                              ),
+                            )
 
-                           ],
-                         ),
-                       ),
-                     ),
-                   ],
-                 ),
-                 const Spacer(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
 
               ],
             ),
@@ -174,28 +173,28 @@ int index=0;
               children: [
                 Flexible(
                   child: ComplaintsButton(
-                      text: "save",
-                      fontFamily: bold,
-                      textColor: primaryColor,
-                      borderColor: unselectedContainerColor,
-                      buttonColor: textFieldColor,
-                      fontSize: 20.sp,
-                      onTap:(){
-                        print("save");
-                      } ,
+                    text: "save",
+                    fontFamily: bold,
+                    textColor: primaryColor,
+                    borderColor: unselectedContainerColor,
+                    buttonColor: textFieldColor,
+                    fontSize: 20.sp,
+                    onTap:(){
+                      print("save");
+                    } ,
                   ),
                 ),
                 Flexible(
                   child: ComplaintsButton(
-                      text: "anotherComplaint",
-                      fontFamily: bold,
-                      textColor: primaryColor,
-                      borderColor: unselectedContainerColor,
-                      buttonColor: textFieldColor,
-                      fontSize: 20.sp,
-                      onTap:(){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const NewComplaintView(),));
-                      } ,
+                    text: "anotherComplaint",
+                    fontFamily: bold,
+                    textColor: primaryColor,
+                    borderColor: unselectedContainerColor,
+                    buttonColor: textFieldColor,
+                    fontSize: 20.sp,
+                    onTap:(){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => NewComplaintView(),));
+                    } ,
                   ),
                 ),
               ],

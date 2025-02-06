@@ -33,6 +33,10 @@
   "dayToWeek": "من يوم لأسبوع",
   "weekToTwoWeeks": "من أسبوع لأسبوعين",
   "twoWeeksToMonth": "من أسبوعين لشهر",
-  "monthToMore": "من شهر لأكتر"
+  "monthToMore": "من شهر لأكتر",
+  "save": "حفظ",
+  "anotherComplaint": "شكوى اخرى",
+  "pastComplaints": "الشكاوي القديمة",
+  "newComplaint": "الشكوى الجديدة"
 
 }
