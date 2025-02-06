@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/constance.dart';
@@ -9,6 +10,8 @@ import 'package:wqaya/Features/Complaints/Presentation/Views/new_complaint_view.
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/complaints_button.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/custom_slider.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/sym_or_med_search.dart';
+import 'package:wqaya/Features/NavBar/Presentation/Widgets/custom_bottom_nav_bar.dart';
+import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
 
 class ComplaintsView extends StatefulWidget {
   const ComplaintsView({super.key});
