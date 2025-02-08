@@ -11,8 +11,9 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: null
-  flutter_svg: ^2.0.17
+  flutter_svg: null
   flutter_screenutil: null
+#  device_preview:
   #  firebase_core:
   #  firebase_auth:
   #  google_sign_in:
@@ -20,9 +21,11 @@ dependencies:
   bloc: null
   shared_preferences: null
   flutter_launcher_icons: null
-  easy_localization: ^3.0.7+1
+
   flutter_staggered_grid_view: ^0.7.0
 
+  easy_localization:
+  pin_code_fields:
 dev_dependencies:
   flutter_test:
     sdk: flutter

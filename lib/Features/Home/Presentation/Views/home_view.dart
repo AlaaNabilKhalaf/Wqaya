@@ -25,6 +25,7 @@ class HomeView extends StatelessWidget {
 
     return  SafeArea(
       child: Scaffold(
+        backgroundColor: myWhiteColor,
         appBar: const PreferredSize(preferredSize:Size.fromHeight(kToolbarHeight),
         child: CustAppBar()),
         body:  Padding(

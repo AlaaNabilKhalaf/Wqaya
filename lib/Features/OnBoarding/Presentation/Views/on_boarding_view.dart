@@ -5,9 +5,8 @@ import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/widgets/regular_button.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/image_container.dart';
-
 import '../../../../Core/utils/fonts.dart';
-import '../../../Auth/Presentation/Views/following_up.dart';
+import '../../../Auth/Presentation/Views/following_up_view.dart';
 import '../Widgets/auth_switch_bottom.dart';
 
 class OnBoardingView extends StatelessWidget {
@@ -16,6 +15,7 @@ class OnBoardingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: myWhiteColor,
       body: Column(
         children: [
           const ImageContainer(image: AssetsData.boarding2),
