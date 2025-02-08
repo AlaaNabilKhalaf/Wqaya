@@ -19,7 +19,7 @@
   "followingUp": "تابع التسجيل",
   "female": "انثى",
   "other": "اخري",
-  "welcomeToYou" : "اهلا بك!",
+  "welcomeToYou" : "اهلا بك !",
   "startLogin" : "قم بتسجيل الدخول",
   "phoneNumber" : "رقم الهاتف",
   "password" : "كلمة السر",
@@ -27,5 +27,7 @@
   "confirmPassword": "تاكيد كلمة السر",
   "name": "الاسم",
   "startSignUp" : "ابدأ انشاء حسابك",
-  "getCode": "الحضول علي كود التاكيد"
+  "getCode": "الحصول علي كود التاكيد",
+  "codeIsSent" : "تم ارسال الكود واتساب",
+  "confirmed": "تم التأكيد"
 }

@@ -21,8 +21,8 @@ dependencies:
   bloc: null
   shared_preferences: null
   flutter_launcher_icons: null
-  easy_localization: ^3.0.7+1
-
+  easy_localization:
+  pin_code_fields:
 dev_dependencies:
   flutter_test:
     sdk: flutter
