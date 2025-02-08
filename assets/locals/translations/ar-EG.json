@@ -18,5 +18,14 @@
   "male": "ذكر",
   "followingUp": "تابع التسجيل",
   "female": "انثى",
-  "other": "اخري"
+  "other": "اخري",
+  "welcomeToYou" : "اهلا بك!",
+  "startLogin" : "قم بتسجيل الدخول",
+  "phoneNumber" : "رقم الهاتف",
+  "password" : "كلمة السر",
+  "forgetPassword" : "هل نسيت كلمة السر؟",
+  "confirmPassword": "تاكيد كلمة السر",
+  "name": "الاسم",
+  "startSignUp" : "ابدأ انشاء حسابك",
+  "getCode": "الحضول علي كود التاكيد"
 }

@@ -13,7 +13,7 @@ class SocialLoginWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Column(
       children: [
-        SizedBox(height: 70.h,),
+        SizedBox(height: 40.h,),
 
         //Others Bottom
         RegularText(text: 'other', fontSize: 16.sp, textColor: primaryColor, fontFamily: semiBold),
