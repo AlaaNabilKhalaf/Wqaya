@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
-import 'package:wqaya/Core/widgets/custom_button.dart';
+import 'package:wqaya/Core/widgets/regular_button.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 
 import '../../../../Core/utils/colors.dart';

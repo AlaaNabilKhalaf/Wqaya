@@ -21,6 +21,9 @@ dependencies:
   bloc: null
   shared_preferences: null
   flutter_launcher_icons: null
+
+  flutter_staggered_grid_view: ^0.7.0
+
   easy_localization:
   pin_code_fields:
 dev_dependencies:

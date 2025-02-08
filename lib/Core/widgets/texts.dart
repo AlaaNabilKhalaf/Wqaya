@@ -29,7 +29,6 @@ class RegularText extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Text(
-
       text,
       overflow: textOverflow?? TextOverflow.ellipsis,
       textAlign: textAlign?? TextAlign.center,

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/utils/colors.dart';
+import 'package:wqaya/Core/widgets/regular_button.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/image_container.dart';
 import '../../../../Core/utils/fonts.dart';
-import '../../../../Core/widgets/custom_button.dart';
 import '../../../Auth/Presentation/Views/following_up_view.dart';
 import '../Widgets/auth_switch_bottom.dart';
 
