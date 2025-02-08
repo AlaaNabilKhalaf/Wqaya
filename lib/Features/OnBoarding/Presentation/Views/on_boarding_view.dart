@@ -6,7 +6,7 @@ import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/image_container.dart';
 import '../../../../Core/utils/fonts.dart';
 import '../../../../Core/widgets/custom_button.dart';
-import '../../../Auth/Presentation/Views/following_up.dart';
+import '../../../Auth/Presentation/Views/following_up_view.dart';
 import '../Widgets/auth_switch_bottom.dart';
 
 class OnBoardingView extends StatelessWidget {

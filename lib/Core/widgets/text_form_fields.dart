@@ -21,55 +21,68 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      validator: validatorMethod ,
-      cursorColor: primaryColor,
-      keyboardType: TextInputType.text,
-      obscureText: isPassword?? false,
-      decoration: InputDecoration(
-        labelText: hintText,
-        labelStyle: TextStyle(
-            color: Colors.red,
-            fontSize: 16.sp,
-            fontFamily: medium
-        ),
-        border:  const OutlineInputBorder(
-            borderSide: BorderSide(
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [BoxShadow(color:Colors.grey.shade300,blurRadius: 10.r,)],
+     borderRadius: BorderRadius.circular(15.r)
+      ),
+      child: TextFormField(
+
+
+        validator: validatorMethod ,
+        cursorColor: primaryColor,
+        keyboardType: TextInputType.text,
+        obscureText: isPassword?? false,
+        decoration: InputDecoration(
+          filled: true,
+      fillColor: textFormBackgroundColor,
+          labelText: hintText,
+          labelStyle: TextStyle(
               color: bottomColor,
-              width: 1,
-            )
-        ),
-        errorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: errorColor,
-              width: 1,
-            )
-        ),
-        focusedBorder: OutlineInputBorder(
-            borderSide:  const BorderSide(
-                color: primaryColor,
-                width: 1
-            ),
-            borderRadius: BorderRadius.circular(8)
-        ),
-        suffixIcon: icon,
-        hintText: hintText,
-        hintStyle: TextStyle(
-            color: bottomColor,
-            fontSize: 16.sp,
-            fontFamily: medium
-        ),
-        enabledBorder: OutlineInputBorder(
-            borderSide:  BorderSide(
+              fontSize: 16.sp,
+              fontFamily: medium
+          ),
+          border:  const OutlineInputBorder(
+
+              borderSide: BorderSide(
                 color: bottomColor,
-                width: 2
-            ),
-            borderRadius: BorderRadius.circular(8)
-        ) ,
+                width: 1,
+              )
+          ),
+          errorBorder: const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: errorColor,
+                width: 1,
+              )
+          ),
+          focusedBorder: OutlineInputBorder(
+
+              borderSide:  const BorderSide(
+                  color: primaryColor,
+                  width: 1
+              ),
+            borderRadius: BorderRadius.circular(20.r),
+
+          ),
+          suffixIcon: icon,
+          hintText: hintText,
+          hintStyle: TextStyle(
+              color: bottomColor,
+              fontSize: 16.sp,
+              fontFamily: medium
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderSide:  const BorderSide(
+                  color: bottomColor,
+                  width: 2
+              ),
+              borderRadius: BorderRadius.circular(20.r),
+          ) ,
+
+        ),
+        controller: fieldController,
 
       ),
-      controller: fieldController,
-
     );
   }
 }
@@ -91,61 +104,72 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onTapOutside: (v){
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-       cursorHeight: 25,
-      showCursor: true,
-      cursorColor: primaryColor,
-      keyboardType: TextInputType.text,
-      obscureText: isPassword?? false,
-      decoration: InputDecoration(
-        labelText: hintText,
-        labelStyle: TextStyle(
-            color: bottomColor,
-            fontSize: 16.sp,
-            fontFamily: medium
-        ),
+    return Container(
+      decoration: BoxDecoration(
+          boxShadow: [BoxShadow(color:Colors.grey.shade300,blurRadius: 10.r,)],
+          borderRadius: BorderRadius.circular(15.r)
+      ),
+      child: TextField(
+        onTapOutside: (v){
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+         cursorHeight: 25,
+        showCursor: true,
+        cursorColor: primaryColor,
+        keyboardType: TextInputType.text,
+        obscureText: isPassword?? false,
+        decoration: InputDecoration(
+          fillColor: textFormBackgroundColor,
+          filled: true,
 
-        border:  const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: errorColor,
-              width: 1,
-            )
-        ),
-        errorBorder: const OutlineInputBorder(
+          labelText: hintText,
+          labelStyle: TextStyle(
+              color: bottomColor,
+              fontSize: 16.sp,
+              fontFamily: medium
+          ),
 
-            borderSide: BorderSide(
-              color: errorColor,
-              width: 1,
-            )
+          border:  const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: errorColor,
+                width: 1,
+              )
+          ),
+          errorBorder: const OutlineInputBorder(
+
+              borderSide: BorderSide(
+                color: errorColor,
+                width: 1,
+              )
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderSide:  const BorderSide(
+                  color: primaryColor,
+                  width: 1
+              ),
+            borderRadius: BorderRadius.circular(20.r),
+
+          ),
+          suffixIcon: icon,
+          hintText: hintText,
+          hintStyle: TextStyle(
+              color: bottomColor,
+              fontSize: 16.sp,
+              fontFamily: medium
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderSide:  const BorderSide(
+                  color: bottomColor,
+                  width: 2
+              ),
+            borderRadius: BorderRadius.circular(20.r),
+
+          ) ,
+
         ),
-        focusedBorder: OutlineInputBorder(
-            borderSide:  const BorderSide(
-                color: primaryColor,
-                width: 1
-            ),
-            borderRadius: BorderRadius.circular(8)
-        ),
-        suffixIcon: icon,
-        hintText: hintText,
-        hintStyle: TextStyle(
-            color: bottomColor,
-            fontSize: 16.sp,
-            fontFamily: medium
-        ),
-        enabledBorder: OutlineInputBorder(
-            borderSide:  BorderSide(
-                color: bottomColor,
-                width: 2
-            ),
-            borderRadius: BorderRadius.circular(8)
-        ) ,
+        controller: fieldController,
 
       ),
-      controller: fieldController,
-
     );
   }
 }
@@ -168,55 +192,69 @@ class CustomPasswordFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      validator: validatorMethod ,
-      cursorColor: primaryColor,
-      keyboardType: TextInputType.text,
-      obscureText: isPassword?? false,
-      decoration: InputDecoration(
-        labelText: hintText,
-        labelStyle: TextStyle(
-            color: bottomColor,
-            fontSize: 16.sp,
-            fontFamily: medium
+    return Container(
+      decoration: BoxDecoration(
+          boxShadow: [BoxShadow(color:Colors.grey.shade300,blurRadius: 10.r,)],
+          borderRadius: BorderRadius.circular(15.r)
+      ),
+      child: TextFormField(
+
+        validator: validatorMethod ,
+        cursorColor: primaryColor,
+        keyboardType: TextInputType.text,
+        obscureText: isPassword?? false,
+        decoration: InputDecoration(
+          filled: true,
+
+          fillColor: textFormBackgroundColor,
+
+          labelText: hintText,
+          labelStyle: TextStyle(
+              color: bottomColor,
+              fontSize: 16.sp,
+              fontFamily: medium
+          ),
+          border:  const OutlineInputBorder(
+
+              borderSide: BorderSide(
+                color: errorColor,
+                width: 1,
+              )
+          ),
+          errorBorder: const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: errorColor,
+                width: 1,
+              )
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderSide:  const BorderSide(
+                  color: primaryColor,
+                  width: 1
+              ),
+            borderRadius: BorderRadius.circular(20.r),
+
+          ),
+          suffixIcon: icon,
+          hintText: hintText,
+          hintStyle: TextStyle(
+              color: bottomColor,
+              fontSize: 16.sp,
+              fontFamily: medium
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderSide:  const BorderSide(
+                  color: bottomColor,
+                  width: 2
+              ),
+            borderRadius: BorderRadius.circular(20.r),
+
+          ) ,
+
         ),
-        border:  const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: errorColor,
-              width: 1,
-            )
-        ),
-        errorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: errorColor,
-              width: 1,
-            )
-        ),
-        focusedBorder: OutlineInputBorder(
-            borderSide:  const BorderSide(
-                color: primaryColor,
-                width: 1
-            ),
-            borderRadius: BorderRadius.circular(8)
-        ),
-        suffixIcon: icon,
-        hintText: hintText,
-        hintStyle: TextStyle(
-            color: bottomColor,
-            fontSize: 16.sp,
-            fontFamily: medium
-        ),
-        enabledBorder: OutlineInputBorder(
-            borderSide:  BorderSide(
-                color: bottomColor,
-                width: 2
-            ),
-            borderRadius: BorderRadius.circular(8)
-        ) ,
+        controller: fieldController,
 
       ),
-      controller: fieldController,
-
     );
   }
 }

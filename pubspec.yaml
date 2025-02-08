@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: null
   flutter_svg: null
   flutter_screenutil: null
+#  device_preview:
   #  firebase_core:
   #  firebase_auth:
   #  google_sign_in:
