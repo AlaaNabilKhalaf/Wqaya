@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/symptoms_suffered.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
 import 'Core/bloc_observer/bloc_observer.dart';
 
 void main() async {
@@ -46,6 +47,6 @@ class Wqaya extends StatelessWidget {
             locale: const Locale('ar', 'EG'), // Force Arabic
 
             debugShowCheckedModeBanner: false,
-            home:const SymptomsSufferedView(),);
+            home:const SplashView(),);
    },
     );}}

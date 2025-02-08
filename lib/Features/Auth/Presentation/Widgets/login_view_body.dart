@@ -4,7 +4,7 @@ import 'package:wqaya/Features/Auth/Presentation/Widgets/social_login_widget.dar
 
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
-import '../../../../Core/widgets/custom_button.dart';
+import '../../../../Core/widgets/regular_button.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
 import 'custom_dropdown_phones.dart';
@@ -28,7 +28,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           Column(
             children: [
               RegularText(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
-              RegularText(text: 'startLogin', fontSize: 30.sp, textColor: bottomColor, fontFamily: medium),
+              RegularText(text: 'startLogin', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
             ],
           ),
 

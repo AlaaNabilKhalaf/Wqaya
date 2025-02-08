@@ -7,7 +7,7 @@ import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Auth/Presentation/Views/get_code_view.dart';
 import 'package:wqaya/Features/Auth/Presentation/Widgets/social_login_widget.dart';
 
-import '../../../../Core/widgets/custom_button.dart';
+import '../../../../Core/widgets/regular_button.dart';
 import 'custom_dropdown_phones.dart';
 
 class SignUpViewBody extends StatefulWidget {

@@ -6,7 +6,7 @@ import 'package:wqaya/Core/utils/constance.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 
 class SymptomContainer extends StatelessWidget {
-  const SymptomContainer({Key? key}) : super(key: key);
+  const SymptomContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
