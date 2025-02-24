@@ -22,7 +22,6 @@ class _ComplaintsButtonState extends State<ComplaintsButton> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          width: double.infinity,
           decoration: BoxDecoration(
               color: widget.buttonColor,
               borderRadius: BorderRadius.circular(15),

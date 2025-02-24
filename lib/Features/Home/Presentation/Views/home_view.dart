@@ -5,7 +5,7 @@ import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/cust_app_bar.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
-import 'package:wqaya/Features/Complaints/Presentation/Views/complaints_view.dart';
+import 'package:wqaya/Features/Complaints/Presentation/Views/first_complaints_view.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/better_health_poster.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/home_container.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/symptom_container.dart';
@@ -134,7 +134,7 @@ class HomeView extends StatelessWidget {
                 ),
               ),
               InkWell(
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ComplaintsView(),)),
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstComplaintsView(),)),
                 splashColor: textFieldColor,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

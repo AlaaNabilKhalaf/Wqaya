@@ -59,5 +59,19 @@
   "home": "الرئيسية",
   "messages":"الرسائل" ,
   "notifications": "اشعاراتي",
-  "myAcc": "حسابي"
+  "myAcc": "حسابي",
+  "foodSensitivity": "حساسية الأكل",
+  "searchForFood": "البحث عن اكلات",
+  "enterFood": "أدخل الأكلة التي تسبب لك الحساسية...",
+  "addFood": "إضافة أكلة",
+  "contagiousDiseases": "الأمراض المعدية",
+  "searchForContagiousDiseases": "بحث عن الأمراض المعدية",
+  "enterContagiousDisease": "أدخل الأمراض المعدية التي تعاني منها...",
+  "addContagiousDisease": "إضافة مرض معدي",
+  "cured":"تم التعافي",
+  "notCured": "لم يتم التعافي",
+  "skip": "تخطي",
+  "surgeryType": "نوع العملية",
+  "enterSurgery": "أدخل  نوع العمليات الجراية ...",
+  "addSurgery": "أدخل اسباب العمليات ..."
 }
