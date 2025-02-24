@@ -37,6 +37,9 @@
   "save": "حفظ",
   "anotherComplaint": "شكوى اخرى",
   "pastComplaints": "الشكاوي القديمة",
-  "newComplaint": "الشكوى الجديدة"
-
+  "newComplaint": "الشكوى الجديدة",
+  "home": "الرئيسية",
+  "messages":"الرسائل" ,
+  "notifications": "اشعاراتي",
+  "myAcc": "حسابي"
 }

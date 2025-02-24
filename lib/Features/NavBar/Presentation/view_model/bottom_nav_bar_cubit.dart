@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/home_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
@@ -16,16 +17,16 @@ class BottomNavCubit extends Cubit<int> {
     CartView(),
   ];
   final List<String> labels =[
-    "Home",
-    "Home2",
-    "Home3",
-    "Home4",
+    "home".tr(),
+    "messages".tr(),
+    "notifications".tr(),
+    "myAcc".tr(),
   ];
 
   final List<IconData> icons = [
     Icons.home_filled,
-    Icons.person,
-    Icons.favorite,
-    Icons.shopping_cart,
+    Icons.message_outlined,
+    Icons.notifications_none_outlined,
+    Icons.person_outline,
   ];
 }

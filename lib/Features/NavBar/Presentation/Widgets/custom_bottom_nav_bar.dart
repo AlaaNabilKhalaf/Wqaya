@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/constance.dart';
+import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
@@ -42,7 +43,8 @@ class CustomBottomNavBar extends StatelessWidget {
                         labels[index],
                         style: TextStyle(
                           color: isSelected ? Colors.white : Colors.white70,
-                          fontSize: isSelected ? 14 : 12,
+                          fontSize: isSelected ? 16 : 14,
+                          fontFamily: bold
                         ),
                       ),
                     ],
