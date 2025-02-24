@@ -38,7 +38,7 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/images/auth_view/
+   # - assets/images/auth_view/
     - assets/images/boarding_view/
     - assets/images/home_view/
     - assets/images/splash_view/
