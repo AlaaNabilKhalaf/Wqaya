@@ -38,7 +38,7 @@ class _FirstComplaintsViewState extends State<ContagiousDiseaseView> {
             ),
             SearchComplaintSection(text: "contagiousDiseases".tr(), searchText: "searchForContagiousDiseases".tr()),
             const SizedBox(height: 10,),
-            const Flexible(child: ComplaintContainer(mainText: "addContagiousDisease", containerText: "enterContagiousDisease")),
+            Flexible(child: ComplaintContainer(mainText: "addContagiousDisease", containerText: "enterContagiousDisease")),
             Row(
               children: [
                 Expanded(
@@ -93,7 +93,7 @@ class _FirstComplaintsViewState extends State<ContagiousDiseaseView> {
                     buttonColor: textFieldColor,
                     fontSize: 20.sp,
                     onTap:(){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SurgriesView(),));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SurgeriesView(),));
                     } ,
                   ),
                 ),

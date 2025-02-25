@@ -5,18 +5,17 @@ import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Core/widgets/cust_app_bar.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
-import 'package:wqaya/Features/Complaints/Presentation/Views/xray_view.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/complaint_container.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/complaints_button.dart';
 
-class SurgeriesView extends StatefulWidget {
-  const SurgeriesView({super.key});
+class XrayView extends StatefulWidget {
+  const XrayView({super.key});
 
   @override
-  _SurgeriesViewState createState() => _SurgeriesViewState();
+  State<XrayView> createState() => _XrayViewState();
 }
 
-class _SurgeriesViewState extends State<SurgeriesView> {
+class _XrayViewState extends State<XrayView> {
   DateTime? selectedDate;
 
   Future<void> _selectDate(BuildContext context) async {
@@ -47,7 +46,7 @@ class _SurgeriesViewState extends State<SurgeriesView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RegularText(
-              text: "surgery",
+              text: "xray",
               fontSize: 20.sp,
               textColor: primaryColor,
               fontFamily: bold,
@@ -55,7 +54,7 @@ class _SurgeriesViewState extends State<SurgeriesView> {
             Flexible(
               child: ComplaintContainer(
                 mainText: "",
-                containerText: "surgeryType",
+                containerText: "xrayType",
                 isMainTextRequired: true,
               ),
             ),
@@ -63,7 +62,7 @@ class _SurgeriesViewState extends State<SurgeriesView> {
             Flexible(
               child: ComplaintContainer(
                 mainText: "",
-                containerText: "surgeryReason",
+                containerText: "xrayReason",
                 isMainTextRequired: true,
               ),
             ),
@@ -83,7 +82,7 @@ class _SurgeriesViewState extends State<SurgeriesView> {
                   children: [
                     Text(
                       selectedDate == null
-                          ? "chooseSurgeryDate"
+                          ? "chooseXrayDate"
                           : "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
                       style: TextStyle(
                         fontSize: 16.sp,
@@ -120,9 +119,7 @@ class _SurgeriesViewState extends State<SurgeriesView> {
                     borderColor: unselectedContainerColor,
                     buttonColor: textFieldColor,
                     fontSize: 20.sp,
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const XrayView(),));
-                    },
+                    onTap: () {},
                   ),
                 ),
               ],
@@ -133,3 +130,4 @@ class _SurgeriesViewState extends State<SurgeriesView> {
     );
   }
 }
+

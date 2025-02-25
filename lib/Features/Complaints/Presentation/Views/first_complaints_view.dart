@@ -28,7 +28,7 @@ class _FirstComplaintsViewState extends State<FirstComplaintsView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             const Flexible(
+              Flexible(
               child: ComplaintContainer(
                 mainText: "currentComplain",
                 containerText: "complainReason",

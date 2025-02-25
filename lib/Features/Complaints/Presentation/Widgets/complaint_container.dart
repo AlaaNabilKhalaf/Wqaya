@@ -6,8 +6,9 @@ import 'package:wqaya/Core/widgets/texts.dart';
 
 class ComplaintContainer extends StatelessWidget {
   final String mainText , containerText ;
-  const ComplaintContainer({
-    super.key, required this.mainText, required this.containerText,
+  bool isMainTextRequired = false ;
+   ComplaintContainer({
+    super.key, required this.mainText, required this.containerText,isMainTextRequired
   });
 
   @override
@@ -15,14 +16,14 @@ class ComplaintContainer extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        RegularText(
+        isMainTextRequired==true ?RegularText(
           text: mainText,
           fontSize: 20.sp,
           textColor: primaryColor,
           fontFamily: bold,
-        ),
-        const SizedBox(
-          height: 15,
+        ):const SizedBox(),
+         SizedBox(
+          height: isMainTextRequired==false ? 0 : 15,
         ),
         RegularText(
           text: containerText,

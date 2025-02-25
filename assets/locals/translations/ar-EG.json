@@ -73,5 +73,11 @@
   "skip": "تخطي",
   "surgeryType": "نوع العملية",
   "enterSurgery": "أدخل  نوع العمليات الجراية ...",
-  "addSurgery": "أدخل اسباب العمليات ..."
+  "addSurgery": "أدخل اسباب العمليات ...",
+  "surgeryReason": "سبب العملية",
+  "surgeryDate": "تاريخ العملية",
+  "chooseSurgeryDate": "اختر تاريخ العملية",
+  "xrayType": "نوع الأشعة",
+  "xrayReason": "سبب الأشعة",
+  "chooseXrayDate": "اختر تاريخ الأشعة"
 }

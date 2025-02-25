@@ -41,7 +41,7 @@ class _FirstComplaintsViewState extends State<SecondComplaintsView> {
             ),
             SearchComplaintSection(text: "foodSensitivity".tr(), searchText: "searchForFood".tr()),
             const SizedBox(height: 10,),
-            const Flexible(child: ComplaintContainer(mainText: "addFood", containerText: "enterFood")),
+             Flexible(child: ComplaintContainer(mainText: "addFood", containerText: "enterFood")),
             Row(
               children: [
                 Expanded(
