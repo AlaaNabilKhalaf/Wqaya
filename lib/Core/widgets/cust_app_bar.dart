@@ -6,8 +6,8 @@ import 'package:wqaya/Core/utils/constance.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 
-class CustAppBar extends StatelessWidget {
-  const CustAppBar({super.key});
+class HomeCustomAppBar extends StatelessWidget {
+  const HomeCustomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

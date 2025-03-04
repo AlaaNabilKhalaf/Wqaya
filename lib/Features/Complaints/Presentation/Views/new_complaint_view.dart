@@ -28,7 +28,7 @@ class _ComplaintsViewState extends State<NewComplaintView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight), child: CustAppBar()),
+          preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(

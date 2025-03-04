@@ -32,7 +32,7 @@
   "followingUp": "تابع التسجيل",
   "female": "انثى",
   "other": "اخري",
-  "welcomeToYou" : "اهلا بك !",
+  "welcomeToYou" : "أهلا بك !",
   "startLogin" : "قم بتسجيل الدخول",
   "phoneNumber" : "رقم الهاتف",
   "password" : "كلمة السر",
@@ -55,6 +55,15 @@
   "save": "حفظ",
   "anotherComplaint": "شكوى اخرى",
   "pastComplaints": "الشكاوي القديمة",
-  "newComplaint": "الشكوى الجديدة"
+  "newComplaint": "الشكوى الجديدة",
+  "inYourProfile" : "في ملفك الشخصي",
+  "editName": "تعديل الاسم",
+  "changePassword": "تغيير كلمة السر",
+  "editPhoneNumber": "تعديل رقم الهاتف",
+  "changeProfilePicture": "تغيير صورة الملف الشخصي",
+  "currentPassword": "كلمة السر الحالية",
+  "newPassword": "كلمة السر الجديدة",
+  "confirmNewPassword": "إعادة كتابة كلمة السر الجديدة",
+  "confirm": "تأكيد"
 
 }

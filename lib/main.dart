@@ -2,11 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wqaya/Features/Home/Presentation/Views/symptoms_suffered.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
 import 'Core/bloc_observer/bloc_observer.dart';
-
+import 'Features/Profile/Presentation/Views/profile_view.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -43,10 +41,9 @@ class Wqaya extends StatelessWidget {
           return MaterialApp(
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
-            // locale: context.locale,
             locale: const Locale('ar', 'EG'), // Force Arabic
 
             debugShowCheckedModeBanner: false,
-            home:const SplashView(),);
+            home:const ProfileView(),);
    },
     );}}
