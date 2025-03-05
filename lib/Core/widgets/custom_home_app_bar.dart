@@ -32,12 +32,12 @@ class HomeCustomAppBar extends StatelessWidget {
                 textColor: primaryColor,
                 fontFamily: black,
               ),
-              RegularText(
-                text: " 👋 ",
-                fontSize: 15.sp,
-                textColor: primaryColor,
-                fontFamily: black,
-              ),
+              // RegularText(
+              //   text: " 👋 ",
+              //   fontSize: 15.sp,
+              //   textColor: primaryColor,
+              //   fontFamily: black,
+              // ),
             ],
           ),
           const SizedBox(height: 3,),
@@ -49,7 +49,7 @@ class HomeCustomAppBar extends StatelessWidget {
                 textColor: primaryColor,
                 fontFamily: regular,
               ),
-              const PlatformAdaptiveIcon(cupertinoIcon: Icons.keyboard_arrow_down_sharp, materialIcon: Icons.keyboard_arrow_down_sharp,color: primaryColor,),
+              // const PlatformAdaptiveIcon(cupertinoIcon: Icons.keyboard_arrow_down_sharp, materialIcon: Icons.keyboard_arrow_down_sharp,color: primaryColor,),
               const Spacer(),
               const PlatformAdaptiveIcon(cupertinoIcon: Icons.notifications_none_outlined, materialIcon: Icons.notifications_none_outlined,color: primaryColor,)
 
