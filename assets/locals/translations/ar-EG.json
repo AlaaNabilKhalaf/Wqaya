@@ -64,6 +64,9 @@
   "currentPassword": "كلمة السر الحالية",
   "newPassword": "كلمة السر الجديدة",
   "confirmNewPassword": "إعادة كتابة كلمة السر الجديدة",
-  "confirm": "تأكيد"
+  "confirm": "تأكيد",
+  "home" : "الرئيسية",
+  "chat": "التحدث مع البوت",
+  "profile": "حسابي"
 
 }

@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
-import 'package:wqaya/Core/widgets/cust_app_bar.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/contagious_disease_view.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/complaint_container.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/complaints_button.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/pain_widgets.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/search_complaint_section.dart';
+
+import '../../../../Core/widgets/custom_home_app_bar.dart';
 
 
 class SecondComplaintsView extends StatefulWidget {
@@ -25,7 +26,7 @@ class _FirstComplaintsViewState extends State<SecondComplaintsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight), child: CustAppBar()),
+          preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(

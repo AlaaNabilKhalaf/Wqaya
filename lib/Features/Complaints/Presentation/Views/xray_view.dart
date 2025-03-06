@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
-import 'package:wqaya/Core/widgets/cust_app_bar.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/complaint_container.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/complaints_button.dart';
+
+import '../../../../Core/widgets/custom_home_app_bar.dart';
 
 class XrayView extends StatefulWidget {
   const XrayView({super.key});
@@ -38,7 +39,7 @@ class _XrayViewState extends State<XrayView> {
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
-        child: CustAppBar(),
+        child: HomeCustomAppBar(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -51,7 +52,7 @@ class _XrayViewState extends State<XrayView> {
               textColor: primaryColor,
               fontFamily: bold,
             ),
-            Flexible(
+            const Flexible(
               child: ComplaintContainer(
                 mainText: "",
                 containerText: "xrayType",
@@ -59,7 +60,7 @@ class _XrayViewState extends State<XrayView> {
               ),
             ),
             const SizedBox(height: 10),
-            Flexible(
+            const Flexible(
               child: ComplaintContainer(
                 mainText: "",
                 containerText: "xrayReason",

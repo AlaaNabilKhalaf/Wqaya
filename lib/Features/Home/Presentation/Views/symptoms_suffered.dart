@@ -64,6 +64,7 @@ class _SymptomsSufferedViewState extends State<SymptomsSufferedView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: myWhiteColor,
       appBar: AppBar(
         forceMaterialTransparency: true,
         actions: const [

@@ -4,12 +4,19 @@ import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 
-class ComplaintContainer extends StatelessWidget {
+class ComplaintContainer extends StatefulWidget {
   final String mainText , containerText ;
-  bool isMainTextRequired = false ;
-   ComplaintContainer({
+
+   const ComplaintContainer({
     super.key, required this.mainText, required this.containerText,isMainTextRequired
   });
+
+  @override
+  State<ComplaintContainer> createState() => _ComplaintContainerState();
+}
+
+class _ComplaintContainerState extends State<ComplaintContainer> {
+  bool isMainTextRequired = false ;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +24,7 @@ class ComplaintContainer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         isMainTextRequired==true ?RegularText(
-          text: mainText,
+          text: widget.mainText,
           fontSize: 20.sp,
           textColor: primaryColor,
           fontFamily: bold,
@@ -26,7 +33,7 @@ class ComplaintContainer extends StatelessWidget {
           height: isMainTextRequired==false ? 0 : 15,
         ),
         RegularText(
-          text: containerText,
+          text: widget.containerText,
           fontSize: 20.sp,
           textColor: primaryColor,
           fontFamily: medium,

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/home_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
 
+import '../../../Profile/Presentation/Views/profile_view.dart';
+
 class BottomNavCubit extends Cubit<int> {
   BottomNavCubit() : super(0); // Default to first tab
 
@@ -12,21 +14,19 @@ class BottomNavCubit extends Cubit<int> {
   }
   final List<Widget> pages = [
     const HomeView(),
-    ProfileView(),
-    FavoritesView(),
-    CartView(),
+    const BotView(),
+    const ProfileView(),
+
   ];
   final List<String> labels =[
-    "home".tr(),
-    "messages".tr(),
-    "notifications".tr(),
-    "myAcc".tr(),
+    'home'.tr(),
+    'chat'.tr(),
+    'profile'.tr(),
   ];
 
   final List<IconData> icons = [
     Icons.home_filled,
-    Icons.message_outlined,
-    Icons.notifications_none_outlined,
+    Icons.maps_ugc,
     Icons.person_outline,
   ];
 }

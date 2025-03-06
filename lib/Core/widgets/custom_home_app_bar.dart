@@ -13,7 +13,7 @@ class HomeCustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       forceMaterialTransparency: true,
-      backgroundColor: Colors.white,
+      backgroundColor: myWhiteColor,
       leading: const Padding(
         padding: EdgeInsets.only(right: 8.0,top: 5),
         child: CircleAvatar(

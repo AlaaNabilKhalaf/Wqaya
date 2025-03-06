@@ -5,7 +5,7 @@ import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/regular_button.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
-import '../../../Home/Presentation/Views/home_view.dart';
+import '../../../NavBar/Presentation/Views/nav_bar_view.dart';
 import 'custom_dropdown_governments.dart';
 
 class FollowingUpFormFields extends StatefulWidget {
@@ -87,7 +87,7 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
           child: RegularButton(
               height: 55.h,
               buttonColor: primaryColor, borderRadius: 20.r, onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> const HomeView()));
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const NavBarView()));
           }, child: RegularText(text: 'next', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: semiBold)),
         ),
       ],

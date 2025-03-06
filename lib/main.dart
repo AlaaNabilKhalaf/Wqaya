@@ -1,11 +1,10 @@
-import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
+import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
 import 'Core/bloc_observer/bloc_observer.dart';
 
 void main() async {
@@ -50,7 +49,7 @@ class Wqaya extends StatelessWidget {
           locale: const Locale('ar', 'EG'),
           // Force Arabic
           debugShowCheckedModeBanner: false,
-          home: NavBarView(), // Updated to use bottom navigation
+          home: const SplashView(), // Updated to use bottom navigation
         );
       },
     );

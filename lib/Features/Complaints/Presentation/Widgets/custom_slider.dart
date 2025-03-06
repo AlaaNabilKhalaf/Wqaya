@@ -6,16 +6,19 @@ import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 
 class CustomSlider extends StatefulWidget {
+  const CustomSlider({super.key});
+
   @override
-  _CustomSliderState createState() => _CustomSliderState();
+  State<CustomSlider> createState() => _CustomSliderState();
 }
+
 
 class _CustomSliderState extends State<CustomSlider> {
   double sliderValue = 0.3;
 
   @override
   Widget build(BuildContext context) {
-     double maxWidth = getResponsiveSize(context, fontSize: 250);
+    double maxWidth = getResponsiveSize(context, fontSize: 250);
     return Stack(
       children: [
         Container(
@@ -59,20 +62,20 @@ class _CustomSliderState extends State<CustomSlider> {
         Positioned(
           right: 10,
           child: RegularText(
-          text: "0",
-          fontSize: 10.sp,
-          textColor: myWhiteColor,
-          fontFamily: medium,
-        ),
+            text: "0",
+            fontSize: 10.sp,
+            textColor: myWhiteColor,
+            fontFamily: medium,
+          ),
         ),
         Positioned(
           left: 10,
           child: RegularText(
-          text: "10",
-          fontSize: 10.sp,
-          textColor: myWhiteColor,
-          fontFamily: medium,
-        ),
+            text: "10",
+            fontSize: 10.sp,
+            textColor: myWhiteColor,
+            fontFamily: medium,
+          ),
         )
       ],
     );

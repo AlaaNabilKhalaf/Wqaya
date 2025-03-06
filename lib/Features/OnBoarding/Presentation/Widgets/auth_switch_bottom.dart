@@ -24,6 +24,8 @@ class AuthSwitchBottom extends StatelessWidget {
       child: Row(
       children: [
         Expanded(child: RegularButton(
+            borderColor: Colors.transparent,
+
             buttonColor: bottomColor , borderRadius: 22.r, onTap: (){
 
               Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginView()));
@@ -32,6 +34,7 @@ class AuthSwitchBottom extends StatelessWidget {
             child: RegularText(text: 'login', fontSize: 16.sp, textColor: myWhiteColor, fontFamily: bold))),
 
         Expanded(child: RegularButton(
+          borderColor: Colors.transparent,
             buttonColor: primaryColor , borderRadius: 0, onTap: (){
 
           Navigator.push(context, MaterialPageRoute(builder: (context)=> const SignUpView()));

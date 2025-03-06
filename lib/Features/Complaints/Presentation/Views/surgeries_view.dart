@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
-import 'package:wqaya/Core/widgets/cust_app_bar.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/xray_view.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/complaint_container.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/complaints_button.dart';
 
+import '../../../../Core/widgets/custom_home_app_bar.dart';
+
 class SurgeriesView extends StatefulWidget {
   const SurgeriesView({super.key});
 
   @override
-  _SurgeriesViewState createState() => _SurgeriesViewState();
+  State<SurgeriesView> createState() => _SurgeriesViewState();
 }
 
 class _SurgeriesViewState extends State<SurgeriesView> {
@@ -39,7 +40,7 @@ class _SurgeriesViewState extends State<SurgeriesView> {
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
-        child: CustAppBar(),
+        child: HomeCustomAppBar(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -133,3 +134,4 @@ class _SurgeriesViewState extends State<SurgeriesView> {
     );
   }
 }
+

@@ -25,7 +25,7 @@ class ButtonCollection extends StatelessWidget {
                 buttonColor: textFieldColor,
                 fontSize: 20.sp,
                 onTap:(){
-                  print("save");
+                debugPrint("Save");
                 } ,
               ),
             ),

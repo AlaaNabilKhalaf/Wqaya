@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wqaya/Features/Auth/Presentation/Views/following_up_view.dart';
 import 'package:wqaya/Features/Auth/Presentation/Widgets/social_login_widget.dart';
 
 import '../../../../Core/Utils/colors.dart';
@@ -63,7 +64,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               ),
               RegularButton(
                   height: 55.h,
-                  buttonColor: primaryColor, borderRadius: 20.r, onTap: (){}, child: RegularText(text: 'login', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: semiBold))
+                  buttonColor: primaryColor, borderRadius: 20.r, onTap: (){
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const FollowingUpView()));
+              }, child: RegularText(text: 'login', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: semiBold))
 
             ],
           ),

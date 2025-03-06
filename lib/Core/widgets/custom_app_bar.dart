@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/colors.dart';
-import 'package:wqaya/Core/utils/fonts.dart';
-import 'package:wqaya/Core/widgets/texts.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({super.key, this.title, this.leading, this.actions});

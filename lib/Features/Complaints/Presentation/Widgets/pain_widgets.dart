@@ -39,7 +39,7 @@ class _PainWidgetsState extends State<PainWidgets> {
             Column(
               children: [
                 SizedBox(height: 10.h,),
-                CustomSlider(),
+                const CustomSlider(),
               ],
             ),
           ],

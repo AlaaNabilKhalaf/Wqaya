@@ -102,16 +102,19 @@ class _ChronicDiseasesViewState extends State<ChronicDiseasesView> {
         );
       },
     ).then((_) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeView()), // Replace with your next screen
-      );
+      (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeView()), // Replace with your next screen
+        );
+      };
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: myWhiteColor,
       appBar: AppBar(
         forceMaterialTransparency: true,
         actions: const [
