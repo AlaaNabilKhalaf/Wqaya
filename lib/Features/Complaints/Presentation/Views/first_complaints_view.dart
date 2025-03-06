@@ -22,6 +22,7 @@ class _FirstComplaintsViewState extends State<FirstComplaintsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: myWhiteColor,
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
       body: Padding(
@@ -29,7 +30,7 @@ class _FirstComplaintsViewState extends State<FirstComplaintsView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-              Flexible(
+              const Flexible(
               child: ComplaintContainer(
                 mainText: "currentComplain",
                 containerText: "complainReason",

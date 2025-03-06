@@ -38,6 +38,7 @@ class _SurgeriesViewState extends State<SurgeriesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: myWhiteColor,
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: HomeCustomAppBar(),
@@ -53,7 +54,7 @@ class _SurgeriesViewState extends State<SurgeriesView> {
               textColor: primaryColor,
               fontFamily: bold,
             ),
-            Flexible(
+            const Flexible(
               child: ComplaintContainer(
                 mainText: "",
                 containerText: "surgeryType",
@@ -61,7 +62,7 @@ class _SurgeriesViewState extends State<SurgeriesView> {
               ),
             ),
             const SizedBox(height: 10),
-            Flexible(
+            const Flexible(
               child: ComplaintContainer(
                 mainText: "",
                 containerText: "surgeryReason",

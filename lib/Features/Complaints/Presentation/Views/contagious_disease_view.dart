@@ -24,6 +24,7 @@ class _FirstComplaintsViewState extends State<ContagiousDiseaseView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: myWhiteColor,
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
       body: Padding(
@@ -39,7 +40,7 @@ class _FirstComplaintsViewState extends State<ContagiousDiseaseView> {
             ),
             SearchComplaintSection(text: "contagiousDiseases".tr(), searchText: "searchForContagiousDiseases".tr()),
             const SizedBox(height: 10,),
-            Flexible(child: ComplaintContainer(mainText: "addContagiousDisease", containerText: "enterContagiousDisease")),
+            const Flexible(child: ComplaintContainer(mainText: "addContagiousDisease", containerText: "enterContagiousDisease")),
             Row(
               children: [
                 Expanded(

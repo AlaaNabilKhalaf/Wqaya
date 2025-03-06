@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/constance.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
@@ -22,36 +23,40 @@ class CustomBottomNavBar extends StatelessWidget {
       child: BlocBuilder<BottomNavCubit, int>(
         builder: (context, currentIndex) {
           return Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: 10.h),
             color: primaryColor,
+            height: 86.h,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: List.generate(icons.length, (index) {
                 bool isSelected = currentIndex == index;
-                return IconButton(
-                  icon: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        icons[index],
-                        color: isSelected ? Colors.white : Colors.white70,
-                        size: isSelected
-                            ? getResponsiveSize(context, fontSize: 32)
-                            : getResponsiveSize(context, fontSize: 26),
-                      ),
-                      Text(
-                        labels[index],
-                        style: TextStyle(
+                return SizedBox(
+                  height: 66.h,
+                  child: IconButton(
+                    icon: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          icons[index],
                           color: isSelected ? Colors.white : Colors.white70,
-                          fontSize: isSelected ? 16 : 14,
-                          fontFamily: bold
+                          size: isSelected
+                              ? getResponsiveSize(context, fontSize: 27)
+                              : getResponsiveSize(context, fontSize: 26),
                         ),
-                      ),
-                    ],
+                        Text(
+                          labels[index],
+                          style: TextStyle(
+                            color: isSelected ? Colors.white : Colors.white70,
+                            fontSize: isSelected ? 16 : 14,
+                            fontFamily: bold
+                          ),
+                        ),
+                      ],
+                    ),
+                    onPressed: () {
+                      context.read<BottomNavCubit>().updateIndex(index);
+                    },
                   ),
-                  onPressed: () {
-                    context.read<BottomNavCubit>().updateIndex(index);
-                  },
                 );
               }),
             ),

@@ -26,7 +26,7 @@ class BottomNavCubit extends Cubit<int> {
 
   final List<IconData> icons = [
     Icons.home_filled,
-    Icons.maps_ugc,
+    Icons.mark_unread_chat_alt_outlined,
     Icons.person_outline,
   ];
 }

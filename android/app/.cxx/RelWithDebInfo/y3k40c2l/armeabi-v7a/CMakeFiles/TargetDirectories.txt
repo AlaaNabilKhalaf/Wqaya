@@ -1,0 +1,2 @@
+C:/Users/alaa/Desktop/Graduation Project/Wqaya/android/app/.cxx/RelWithDebInfo/y3k40c2l/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/alaa/Desktop/Graduation Project/Wqaya/android/app/.cxx/RelWithDebInfo/y3k40c2l/armeabi-v7a/CMakeFiles/rebuild_cache.dir

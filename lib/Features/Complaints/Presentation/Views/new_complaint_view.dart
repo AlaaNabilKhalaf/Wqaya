@@ -27,6 +27,7 @@ class _ComplaintsViewState extends State<NewComplaintView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: myWhiteColor,
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
       body: Padding(
@@ -108,7 +109,7 @@ class _ComplaintsViewState extends State<NewComplaintView> {
                 Column(
                   children: [
                     SizedBox(height: 10.h,),
-                    CustomSlider(),
+                    const CustomSlider(),
                   ],
                 ),
               ],
