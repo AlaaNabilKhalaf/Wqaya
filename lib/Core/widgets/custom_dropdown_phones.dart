@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../Core/Utils/colors.dart';
-import '../../../../Core/Utils/fonts.dart';
+import '../Utils/colors.dart';
+import '../Utils/fonts.dart';
 
 class CustomDropdownPhones extends StatefulWidget {
   const CustomDropdownPhones({super.key});

@@ -20,7 +20,9 @@ class CustomAppBar extends StatelessWidget {
         title ?? "",
 ),
       leading: leading ??
-          GestureDetector(child: RegularText(text: 'more', fontSize: 16.sp, textColor: primaryColor, fontFamily: bold)),
+          GestureDetector(
+          child: const Icon(Icons.info_outlined, color: primaryColor,size: 28,),
+          ),
 
       actions: actions ??
           [

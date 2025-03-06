@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Features/Auth/Presentation/Widgets/get_code_body.dart';
 
@@ -9,11 +8,11 @@ class GetCodeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: myWhiteColor,
-      appBar: PreferredSize(preferredSize: Size.fromHeight(30.h),
-          child: const CustomAppBar()),
-      body: const GetCodeBody()
+      appBar: PreferredSize(preferredSize: Size.fromHeight(kToolbarHeight),
+          child: CustomAppBar()),
+      body: GetCodeBody()
     );
   }
 }

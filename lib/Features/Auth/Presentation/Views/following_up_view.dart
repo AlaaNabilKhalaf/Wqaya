@@ -24,8 +24,8 @@ class FollowingUpView extends StatelessWidget {
         // extendBodyBehindAppBar: true,
         // extendBody: true,
         backgroundColor: myWhiteColor,
-        appBar: PreferredSize(preferredSize: Size.fromHeight(30.h),
-            child: const CustomAppBar()),
+        appBar: const PreferredSize(preferredSize: Size.fromHeight(kToolbarHeight),
+            child: CustomAppBar()),
         body: Padding(
           padding: const EdgeInsets.all(18.0),
           child: Column(

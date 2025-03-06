@@ -7,7 +7,7 @@ import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/regular_button.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
-import 'custom_dropdown_phones.dart';
+import '../../../../Core/widgets/custom_dropdown_phones.dart';
 
 class LoginViewBody extends StatefulWidget {
   const LoginViewBody({super.key});

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/constance.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
-import 'package:wqaya/Core/widgets/cust_app_bar.dart';
+import 'package:wqaya/Core/widgets/custom_home_app_bar.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/complaints_button.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/custom_slider.dart';
@@ -28,7 +28,7 @@ class _ComplaintsViewState extends State<NewComplaintView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight), child: CustAppBar()),
+          preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(

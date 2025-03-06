@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../Core/Utils/colors.dart';
-import 'custom_ alert.dart';
+import '../../../../Core/widgets/custom_ alert.dart';
 
 class PinCodeWidget extends StatelessWidget {
   const PinCodeWidget({super.key});
@@ -19,11 +19,7 @@ class PinCodeWidget extends StatelessWidget {
             context: context,
             barrierDismissible: false, // Prevent dismissing by tapping outside
             builder: (BuildContext context) {
-              return const AlertDialog(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                content: CustomAlert(),
-              );
+              return const CustomAlert();
             },
           );
         },
