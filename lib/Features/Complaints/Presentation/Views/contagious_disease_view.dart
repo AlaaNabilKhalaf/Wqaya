@@ -29,83 +29,88 @@ class _FirstComplaintsViewState extends State<ContagiousDiseaseView> {
           preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RegularText(
-              text: "contagiousDiseases",
-              fontSize: 20.sp,
-              textColor: primaryColor,
-              fontFamily: medium,
-            ),
-            SizedBox(
-                height: MediaQuery.of(context).size.height*0.3,
-                child: SearchComplaintSection(text: "contagiousDiseases".tr(), searchText: "searchForContagiousDiseases".tr())),
-            const SizedBox(height: 10,),
-            const Flexible(child: ComplaintContainer(mainText: "addContagiousDisease", containerText: "enterContagiousDisease")),
-            Row(
-              children: [
-                Expanded(
-                  child: ComplaintsButton(
-                    text: "cured",
-                    fontFamily: bold,
-                    textColor: primaryColor,
-                    borderColor: unselectedContainerColor,
-                    buttonColor: textFieldColor,
-                    fontSize: 20.sp,
-                    onTap:(){
-                    } ,
+        child: SingleChildScrollView(
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RegularText(
+                text: "contagiousDiseases",
+                fontSize: 20.sp,
+                textColor: primaryColor,
+                fontFamily: medium,
+              ),
+              SizedBox(
+                  height: MediaQuery.of(context).size.height*0.3,
+                  child: SearchComplaintSection(text: "contagiousDiseases".tr(), searchText: "searchForContagiousDiseases".tr())),
+              const SizedBox(height: 10,),
+              SizedBox(
+                  height: MediaQuery.of(context).size.height*0.3,
+                  child: const ComplaintContainer(mainText: "addContagiousDisease", containerText: "enterContagiousDisease")),
+              Row(
+                children: [
+                  Expanded(
+                    child: ComplaintsButton(
+                      text: "cured",
+                      fontFamily: bold,
+                      textColor: primaryColor,
+                      borderColor: unselectedContainerColor,
+                      buttonColor: textFieldColor,
+                      fontSize: 20.sp,
+                      onTap:(){
+                      } ,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 20,),
-                Expanded(
-                  child: ComplaintsButton(
-                    text: "notCured",
-                    fontFamily: bold,
-                    textColor: primaryColor,
-                    borderColor: unselectedContainerColor,
-                    buttonColor: textFieldColor,
-                    fontSize: 20.sp,
-                    onTap:(){
-                    } ,
+                  const SizedBox(width: 20,),
+                  Expanded(
+                    child: ComplaintsButton(
+                      text: "notCured",
+                      fontFamily: bold,
+                      textColor: primaryColor,
+                      borderColor: unselectedContainerColor,
+                      buttonColor: textFieldColor,
+                      fontSize: 20.sp,
+                      onTap:(){
+                      } ,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10,),
-            Row(
-              children: [
-                Expanded(
-                  child: ComplaintsButton(
-                    text: "skip",
-                    fontFamily: bold,
-                    textColor: primaryColor,
-                    borderColor: unselectedContainerColor,
-                    buttonColor: textFieldColor,
-                    fontSize: 20.sp,
-                    onTap:(){
-                    } ,
+                ],
+              ),
+              const SizedBox(height: 10,),
+              Row(
+                children: [
+                  Expanded(
+                    child: ComplaintsButton(
+                      text: "skip",
+                      fontFamily: bold,
+                      textColor: primaryColor,
+                      borderColor: unselectedContainerColor,
+                      buttonColor: textFieldColor,
+                      fontSize: 20.sp,
+                      onTap:(){
+                      } ,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 20,),
-                Expanded(
-                  child: ComplaintsButton(
-                    text: "next",
-                    fontFamily: bold,
-                    textColor: primaryColor,
-                    borderColor: unselectedContainerColor,
-                    buttonColor: textFieldColor,
-                    fontSize: 20.sp,
-                    onTap:(){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SurgeriesView(),));
-                    } ,
+                  const SizedBox(width: 20,),
+                  Expanded(
+                    child: ComplaintsButton(
+                      text: "next",
+                      fontFamily: bold,
+                      textColor: primaryColor,
+                      borderColor: unselectedContainerColor,
+                      buttonColor: textFieldColor,
+                      fontSize: 20.sp,
+                      onTap:(){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const SurgeriesView(),));
+                      } ,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
 
-          ],
+            ],
+          ),
         ),
       ),
     );

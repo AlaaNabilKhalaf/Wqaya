@@ -45,91 +45,95 @@ class _SurgeriesViewState extends State<SurgeriesView> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RegularText(
-              text: "surgery",
-              fontSize: 20.sp,
-              textColor: primaryColor,
-              fontFamily: bold,
-            ),
-            const Flexible(
-              child: ComplaintContainer(
-                mainText: "",
-                containerText: "surgeryType",
-                isMainTextRequired: true,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RegularText(
+                text: "surgery",
+                fontSize: 20.sp,
+                textColor: primaryColor,
+                fontFamily: bold,
               ),
-            ),
-            const SizedBox(height: 10),
-            const Flexible(
-              child: ComplaintContainer(
-                mainText: "",
-                containerText: "surgeryReason",
-                isMainTextRequired: true,
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            GestureDetector(
-              onTap: () => _selectDate(context),
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
-                decoration: BoxDecoration(
-                  color: textFieldColor,
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: unselectedContainerColor),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      selectedDate == null
-                          ? "chooseSurgeryDate"
-                          : "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontFamily: bold,
-                        color: primaryColor,
-                      ),
-                    ).tr(),
-                    const Icon(Icons.calendar_today, color: primaryColor),
-                  ],
+              SizedBox(
+                height: MediaQuery.of(context).size.height*0.25,
+                child: const ComplaintContainer(
+                  mainText: "",
+                  containerText: "surgeryType",
+                  isMainTextRequired: true,
                 ),
               ),
-            ),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: MediaQuery.of(context).size.height*0.25,
+                child: const ComplaintContainer(
+                  mainText: "",
+                  containerText: "surgeryReason",
+                  isMainTextRequired: true,
+                ),
+              ),
+              const SizedBox(height: 10),
 
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: ComplaintsButton(
-                    text: "skip",
-                    fontFamily: bold,
-                    textColor: primaryColor,
-                    borderColor: unselectedContainerColor,
-                    buttonColor: textFieldColor,
-                    fontSize: 20.sp,
-                    onTap: () {},
+              GestureDetector(
+                onTap: () => _selectDate(context),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
+                  decoration: BoxDecoration(
+                    color: textFieldColor,
+                    borderRadius: BorderRadius.circular(8.r),
+                    border: Border.all(color: unselectedContainerColor),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        selectedDate == null
+                            ? "chooseSurgeryDate"
+                            : "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontFamily: bold,
+                          color: primaryColor,
+                        ),
+                      ).tr(),
+                      const Icon(Icons.calendar_today, color: primaryColor),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: ComplaintsButton(
-                    text: "next",
-                    fontFamily: bold,
-                    textColor: primaryColor,
-                    borderColor: unselectedContainerColor,
-                    buttonColor: textFieldColor,
-                    fontSize: 20.sp,
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const XrayView(),));
-                    },
+              ),
+
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: ComplaintsButton(
+                      text: "skip",
+                      fontFamily: bold,
+                      textColor: primaryColor,
+                      borderColor: unselectedContainerColor,
+                      buttonColor: textFieldColor,
+                      fontSize: 20.sp,
+                      onTap: () {},
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: ComplaintsButton(
+                      text: "next",
+                      fontFamily: bold,
+                      textColor: primaryColor,
+                      borderColor: unselectedContainerColor,
+                      buttonColor: textFieldColor,
+                      fontSize: 20.sp,
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const XrayView(),));
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
