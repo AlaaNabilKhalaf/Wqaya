@@ -11,7 +11,7 @@ class SymptomContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.centerLeft, // Aligns content to the left
+      alignment: Alignment.centerLeft,
       child: Container(
         padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
@@ -19,7 +19,7 @@ class SymptomContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.2),
+              color: Colors.grey.withValues(alpha: 0.1),
               spreadRadius: 1,
               blurRadius: 7,
               offset: const Offset(2, 8),
@@ -27,7 +27,7 @@ class SymptomContainer extends StatelessWidget {
           ],
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min, // Takes minimum width needed
+          mainAxisSize: MainAxisSize.max,
           children: [
             Flexible(
               child: Text(
@@ -40,7 +40,7 @@ class SymptomContainer extends StatelessWidget {
                 softWrap: true,
               ).tr(),
             ),
-            const SizedBox(width: 8), // Add some space between text and icon
+            const Spacer(),
             const PlatformAdaptiveIcon(
               cupertinoIcon: Icons.check_box,
               materialIcon: Icons.check_box_outline_blank,

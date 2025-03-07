@@ -14,10 +14,10 @@ class SymOrMedSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
+    return Expanded(
       child: Column(
         children: [
-          Flexible(
+          Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -28,7 +28,7 @@ class SymOrMedSearch extends StatelessWidget {
                   fontFamily: semiBold,
                 ),
                 const SizedBox(width: 20,),
-                Flexible(
+                Expanded(
                   child: Container(
                     decoration: BoxDecoration(
                         color: textFieldColor,
@@ -66,16 +66,18 @@ class SymOrMedSearch extends StatelessWidget {
               ],
             ),
           ),
-          Flexible(
-            child: GridView.builder(
-              physics: const BouncingScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,
-              childAspectRatio: 4,
+          Expanded(
+            flex: 2,
+            child: Container(
+              color: myWhiteColor,
+              child: ListView.separated(
+                separatorBuilder: (context, index) => const SizedBox(height: 10,),
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.all(0),
+                shrinkWrap: true,
+                itemBuilder: (context, index) => const SymptomContainer(),
+                itemCount: 4,
               ),
-              padding: const EdgeInsets.all(0),
-              shrinkWrap: true,
-              itemBuilder: (context, index) => const SymptomContainer(),
-              itemCount: 4,
             ),
           ),
         ],
