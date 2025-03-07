@@ -26,7 +26,7 @@ class _FirstComplaintsViewState extends State<FirstComplaintsView> {
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
       body: Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -36,7 +36,6 @@ class _FirstComplaintsViewState extends State<FirstComplaintsView> {
                 containerText: "complainReason",
               ),
             ),
-
             const SymOrMedSearch(isSym: true,),
             const SymOrMedSearch(isSym: false,),
             Row(
@@ -56,8 +55,6 @@ class _FirstComplaintsViewState extends State<FirstComplaintsView> {
                 ),
               ],
             ),
-
-
           ],
         ),
       ),

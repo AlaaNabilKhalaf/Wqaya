@@ -40,8 +40,8 @@ class CustomBottomNavBar extends StatelessWidget {
                           icons[index],
                           color: isSelected ? Colors.white : Colors.white70,
                           size: isSelected
-                              ? getResponsiveSize(context, fontSize: 27)
-                              : getResponsiveSize(context, fontSize: 26),
+                              ? getResponsiveSize(context, fontSize: 24)
+                              : getResponsiveSize(context, fontSize: 20),
                         ),
                         Text(
                           labels[index],

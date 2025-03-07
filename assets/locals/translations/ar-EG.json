@@ -67,6 +67,21 @@
   "confirm": "تأكيد",
   "home" : "الرئيسية",
   "chat": "التحدث مع البوت",
-  "profile": "حسابي"
+  "profile": "حسابي",
+  "foodSensitivity" : "الحساسية من الأكل",
+  "searchForFood" : "بحث عن أكلات",
+  "enterFood": "إضافة أكلة",
+  "contagiousDiseases": "أمراض معدية",
+  "searchForContagiousDiseases": "البحث عن أمراض معدية",
+  "enterContagiousDisease" : "اضافة مرض معدي",
+  "cured": "تم التعافي",
+  "notCured" : "لم يتم التعافي",
+  "skip" : "تخطي",
+  "surgeryType": "نوع العملية",
+  "surgeryReason": "سبب العملية",
+  "chooseSurgeryDate": "اختار معاد العملية",
+  "xrayType": "نوع الاشعة",
+  "xrayReason": "سبب الاشعة",
+  "chooseXrayDate": "اختار معاد الاشعة"
 
 }

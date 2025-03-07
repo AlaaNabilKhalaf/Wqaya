@@ -17,53 +17,60 @@ class SecondComplaintsView extends StatefulWidget {
   const SecondComplaintsView({super.key});
 
   @override
-  State<SecondComplaintsView> createState() => _FirstComplaintsViewState();
+  State<SecondComplaintsView> createState() => _SecondComplaintsViewState();
 }
 
-class _FirstComplaintsViewState extends State<SecondComplaintsView> {
+class _SecondComplaintsViewState extends State<SecondComplaintsView> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: myWhiteColor,
+      resizeToAvoidBottomInset: true,
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
       body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const PainWidgets(),
-            const SizedBox(height: 40,),
-            RegularText(
-              text: "foodSensitivity",
-              fontSize: 20.sp,
-              textColor: primaryColor,
-              fontFamily: medium,
-            ),
-            SearchComplaintSection(text: "foodSensitivity".tr(), searchText: "searchForFood".tr()),
-            const SizedBox(height: 10,),
-             const Flexible(child: ComplaintContainer(mainText: "addFood", containerText: "enterFood")),
-            Row(
-              children: [
-                Expanded(
-                  child: ComplaintsButton(
-                    text: "next",
-                    fontFamily: bold,
-                    textColor: primaryColor,
-                    borderColor: unselectedContainerColor,
-                    buttonColor: textFieldColor,
-                    fontSize: 20.sp,
-                    onTap:(){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ContagiousDiseaseView(),));
-                    } ,
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const PainWidgets(),
+              const SizedBox(height: 10,),
+              RegularText(
+                text: 'foodSensitivity',
+                fontSize: 20.sp,
+                textColor: primaryColor,
+                fontFamily: medium,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height*0.3,
+                  child: SearchComplaintSection(text: 'foodSensitivity'.tr(), searchText: 'searchForFood'.tr())),
+              const SizedBox(height: 10,),
+               SizedBox(
+                   height: MediaQuery.of(context).size.height*0.3,
+                   child: const ComplaintContainer(mainText: 'addFood', containerText: 'enterFood')),
+              Row(
+                children: [
+                  Expanded(
+                    child: ComplaintsButton(
+                      text: 'next',
+                      fontFamily: bold,
+                      textColor: primaryColor,
+                      borderColor: unselectedContainerColor,
+                      buttonColor: textFieldColor,
+                      fontSize: 20.sp,
+                      onTap:(){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ContagiousDiseaseView(),));
+                      } ,
+                    ),
                   ),
-                ),
-              ],
-            ),
-
-
-          ],
+                ],
+              ),
+          
+          
+            ],
+          ),
         ),
       ),
     );

@@ -27,142 +27,174 @@ class HomeView extends StatelessWidget {
     return  Scaffold(
       backgroundColor: myWhiteColor,
       appBar: const PreferredSize(preferredSize:Size.fromHeight(kToolbarHeight),
-      child: HomeCustomAppBar()),
+          child: HomeCustomAppBar()),
       body:  Padding(
-        padding:  const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 3,
-              child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:2,
-                mainAxisSpacing: 15,
-                  crossAxisSpacing: 20,
-                ),
-                  itemBuilder: (context, index)=>HomeContainer(text: itemsList[index].key, image:itemsList[index].value),
-                  itemCount: 4,),
-            ),
-            const SizedBox(height: 20,),
-            const BetterHealthPoster(),
-            const SizedBox(height: 10,),
-            RegularText(
-              text: "currentComplain",
-              fontSize: 20.sp,
-              textColor: primaryColor,
-              fontFamily: bold,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RegularText(
-                  text: "complainReason",
-                  fontSize: 20.sp,
-                  textColor: primaryColor,
-                  fontFamily: medium,
-                ),
-                const Spacer(),
-                RegularText(
-                  text: "symptoms",
-                  fontSize: 20.sp,
-                  textColor: primaryColor,
-                  fontFamily: medium,
-                ),
-                const Spacer(),
-
-              ],
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: textFieldColor,
-                              borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                  color: unselectedContainerColor
-                                )
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: TextField(
-                                  keyboardType: TextInputType.multiline,
-                                  onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-                                  maxLines: null,
-                                  decoration:  InputDecoration(
-                                    fillColor: Colors.red,
-                                    border: InputBorder.none,
-                                    label: RegularText(
-                                      text: "enterReason",
-                                      fontSize: 10.sp,
-                                      textColor: unselectedContainerColor,
-                                      fontFamily: bold,
-                                    ),
-                                  )
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-
-                      ],
+          padding:  const EdgeInsets.all(8.0),
+          child:
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 200.h,
+                  child: ListView.separated(
+                    physics: const BouncingScrollPhysics(),
+                    separatorBuilder: (context, index) => const SizedBox(width: 10),
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => HomeContainer(
+                      text: itemsList[index].key,
+                      image: itemsList[index].value,
                     ),
+                    itemCount: 4,
                   ),
-                   Expanded(child: Column(
-                    children: [
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0,right: 5),
-                      child: ListView.separated(
-                          physics: const BouncingScrollPhysics(),
-                          separatorBuilder: (context, index) => const SizedBox(height: 6,),
-                          itemBuilder: (context, index) => const SymptomContainer(),
-                          itemCount: 15, ),
-                    ),
-                  )
-                    ],
-                  )),
-                ],
+                ),
               ),
-            ),
-            InkWell(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const FirstComplaintsView(),)),
-              splashColor: textFieldColor,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: textFieldColor,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                          color: unselectedContainerColor
-                      )
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child:RegularText(
-                      text: "showDetails",
+              const SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    BetterHealthPoster(),
+                    SizedBox(height: 10),
+                  ],
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    RegularText(
+                      text: 'currentComplain',
                       fontSize: 20.sp,
                       textColor: primaryColor,
                       fontFamily: bold,
                     ),
+                  ],
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    RegularText(
+                      text: "complainReason",
+                      fontSize: 20.sp,
+                      textColor: primaryColor,
+                      fontFamily: medium,
+                    ),
+                    const Spacer(),
+                    RegularText(
+                      text: "symptoms",
+                      fontSize: 20.sp,
+                      textColor: primaryColor,
+                      fontFamily: medium,
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+              ),
+              SliverFillRemaining(
+                fillOverscroll: false,
+                hasScrollBody: false,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Flexible(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: textFieldColor,
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                      color: unselectedContainerColor
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: TextField(
+                                    keyboardType: TextInputType.multiline,
+                                    onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                                    maxLines: null,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.red,
+                                      border: InputBorder.none,
+                                      label: RegularText(
+                                        text: "enterReason",
+                                        fontSize: 10.sp,
+                                        textColor: unselectedContainerColor,
+                                        fontFamily: bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                      child: SizedBox(
+                        height: 250.h,
+                        child: Column(
+                          children: [
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 0.0, right: 5),
+                                child: ListView.separated(
+                                  physics: const BouncingScrollPhysics(),
+                                  separatorBuilder: (context, index) => const SizedBox(height: 6),
+                                  itemBuilder: (context, index) => const SymptomContainer(),
+                                  itemCount: 5,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
+
+              SliverToBoxAdapter(
+                child: InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const FirstComplaintsView(),
+                    ),
+                  ),
+                  splashColor: textFieldColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: textFieldColor,
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                            color: unselectedContainerColor
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RegularText(
+                          text: "showDetails",
+                          fontSize: 20.sp,
+                          textColor: primaryColor,
+                          fontFamily: bold,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-
-          ],
-        ),
+            ],
+          )
       ),
     );
   }

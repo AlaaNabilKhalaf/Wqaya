@@ -29,4 +29,9 @@ class BottomNavCubit extends Cubit<int> {
     Icons.mark_unread_chat_alt_outlined,
     Icons.person_outline,
   ];
+  final List<GlobalKey<NavigatorState>> navigatorKeys = [
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+  ];
 }

@@ -38,7 +38,9 @@ class _FirstComplaintsViewState extends State<ContagiousDiseaseView> {
               textColor: primaryColor,
               fontFamily: medium,
             ),
-            SearchComplaintSection(text: "contagiousDiseases".tr(), searchText: "searchForContagiousDiseases".tr()),
+            SizedBox(
+                height: MediaQuery.of(context).size.height*0.3,
+                child: SearchComplaintSection(text: "contagiousDiseases".tr(), searchText: "searchForContagiousDiseases".tr())),
             const SizedBox(height: 10,),
             const Flexible(child: ComplaintContainer(mainText: "addContagiousDisease", containerText: "enterContagiousDisease")),
             Row(
