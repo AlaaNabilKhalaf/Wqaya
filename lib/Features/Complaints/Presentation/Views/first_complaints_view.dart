@@ -55,8 +55,6 @@ class _FirstComplaintsViewState extends State<FirstComplaintsView> {
                 ),
               ],
             ),
-
-
           ],
         ),
       ),
