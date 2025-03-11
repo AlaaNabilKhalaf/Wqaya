@@ -7,8 +7,9 @@ import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/widgets/custom_ alert.dart';
 
 class PinCodeWidget extends StatelessWidget {
-  const PinCodeWidget({super.key , required this.nextScreen});
-final Function nextScreen ;
+  const PinCodeWidget({super.key , required this.nextScreen, this.nextText});
+  final Function nextScreen ;
+  final String? nextText ;
   @override
   Widget build(BuildContext context) {
     return
@@ -18,9 +19,11 @@ final Function nextScreen ;
         onCompleted: (v){
           showDialog(
             context: context,
-            barrierDismissible: true,
+            barrierDismissible: false,
             builder: (BuildContext context) {
-              return  CustomAlert(nextScreenFunction: (){
+              return CustomAlert(
+                  nextText: nextText,
+                  nextScreenFunction: (){
          nextScreen();
               });
             },

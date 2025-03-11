@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
 import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
 import 'Core/bloc_observer/bloc_observer.dart';
+import 'Features/Profile/Controller/profile_image_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +20,17 @@ void main() async {
       path: "assets/locals/translations",
       saveLocale: true,
       fallbackLocale: const Locale('ar', 'EG'),
-      child: BlocProvider(
-        create: (context) => BottomNavCubit(),
+      // child: BlocProvider(
+      //   create: (context) => BottomNavCubit(),
+      //
+      // ),
+      child: MultiBlocProvider(providers: [
+
+        BlocProvider<BottomNavCubit>(
+          create: (context) => BottomNavCubit(),),
+        BlocProvider<ProfileImageCubit>(
+            create: (context) => ProfileImageCubit()),
+      ],
         child: const Wqaya(),
       ),
     ),

@@ -74,7 +74,7 @@ class _SymptomsSufferedViewState extends State<SymptomsSufferedView> {
         children: [
           Center(
             child: RegularText(
-              text: "symptomsSuffer",
+              text: 'symptomsSuffer',
               fontSize: 20.sp,
               textColor: primaryColor,
               fontFamily: black,

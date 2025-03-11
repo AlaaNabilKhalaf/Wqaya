@@ -66,11 +66,15 @@ class _ChronicDiseasesViewState extends State<ChronicDiseasesView> {
   void _showSuccessDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return  CustomAlert(confirmText: 'dataConfirmed',nextScreenFunction: (){
+        return  CustomAlert(
+          nextText: 'goToHome',
+          nextScreenFunction: (){
           Navigator.push(context, MaterialPageRoute(builder: (context)=> const NavBarView()));
-        },);
+        },
+
+          confirmText: 'dataConfirmed',);
       },
     );
   }
@@ -86,7 +90,7 @@ class _ChronicDiseasesViewState extends State<ChronicDiseasesView> {
         children: [
           Center(
             child: RegularText(
-              text: "chronicDiseases",
+              text: 'chronicDiseases',
               fontSize: 20.sp,
               textColor: primaryColor,
               fontFamily: black,
@@ -127,7 +131,7 @@ class _ChronicDiseasesViewState extends State<ChronicDiseasesView> {
                 }
               },
               child: RegularText(
-                text: "goToHome",
+                text: 'goToHome',
                 fontSize: 15.sp,
                 fontFamily: black,
                 textColor: myWhiteColor,

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wqaya/Features/Profile/Presentation/Views/profile_view.dart';
-
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/custom_home_app_bar.dart';
@@ -89,11 +87,12 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 ProfileCard(cardAction: 'confirm', onTap: (){
                   showDialog(
                     context: context,
-                    barrierDismissible: false, // Prevent dismissing by tapping outside
+                    barrierDismissible: true, // Prevent dismissing by tapping outside
                     builder: (BuildContext context) {
-                      return CustomAlert(nextScreenFunction: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ProfileView()));
-                      },nextText: 'back',);
+                      return CustomAlert (
+                        nextText: '',
+                        nextScreenFunction: (){},);
+
                     },
                   );
 

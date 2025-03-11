@@ -43,7 +43,7 @@ final Function nextScreenFunction;
                 // Confirmation Text
                 RegularText(text: confirmText??'confirmed', fontSize: 40.sp, textColor: Colors.white, fontFamily: bold),
                 Padding(
-                  padding: const EdgeInsets.only(top: 20,bottom: 10),
+                  padding: const EdgeInsets.only(top: 15,bottom: 10),
                   child: GestureDetector(
                     onTap: (){
                    nextScreenFunction();
@@ -53,8 +53,8 @@ final Function nextScreenFunction;
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        RegularText(text:nextText?? 'next', fontSize: 25.sp, textColor: myWhiteColor, fontFamily: bold),
-                        const Icon(Icons.arrow_forward_rounded, color: myWhiteColor,size: 25,)
+                        RegularText(text:nextText?? 'next', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: bold),
+                        nextText != '' ?const Icon(Icons.arrow_forward_rounded, color: myWhiteColor,size: 23,) : const SizedBox()
                       ],),
                   ),
                 )

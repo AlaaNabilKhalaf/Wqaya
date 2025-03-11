@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wqaya/Features/Profile/Presentation/Views/profile_view.dart';
-
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/custom_ alert.dart';
 import '../../../../Core/widgets/custom_home_app_bar.dart';
+import '../../../../Core/widgets/image_picker_widget.dart';
 import '../../../../Core/widgets/password_icon.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
@@ -56,15 +54,16 @@ class _ChangeProfilePictureViewState extends State<ChangeProfilePictureView> {
                     isPasswordVisible: passwordIsVisible,
                     fieldController: currentPasswordController, hintText: 'كلمة السر الحالية',),
                 ),
-               SizedBox(height: 200.h,),
+                const ImagePickerWidget(),
+
                 ProfileCard(cardAction: 'confirm', onTap: (){
                   showDialog(
                     context: context,
-                    barrierDismissible: false, // Prevent dismissing by tapping outside
+                    barrierDismissible: true, // Prevent dismissing by tapping outside
                     builder: (BuildContext context) {
-                      return CustomAlert(nextScreenFunction: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ProfileView()));
-                      },nextText: 'back',);
+                      return CustomAlert (
+                        nextText: '',
+                        nextScreenFunction: (){},);
 
                     },
                   );

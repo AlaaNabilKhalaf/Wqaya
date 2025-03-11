@@ -29,10 +29,11 @@ String selectedGovernment = 'الغريبة';
 Widget build(BuildContext context) {
 return Row(
 mainAxisSize: MainAxisSize.min,
+mainAxisAlignment: MainAxisAlignment.center,
 children: [
 DropdownButton<String>(
 dropdownColor: myWhiteColor,
-menuWidth: MediaQuery.of(context).size.width*0.27,
+menuWidth: MediaQuery.of(context).size.width*0.30,
 elevation: 2,
 borderRadius: BorderRadius.circular(25.r),
 value: selectedGovernment,

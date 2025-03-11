@@ -22,13 +22,13 @@ class GetCodeResetBody extends StatelessWidget {
           SizedBox(height: 10.h),
           RegularText(text: 'codeIsSent', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
           SizedBox(height: 30.h),
-           PinCodeWidget(nextScreen:(){
-             Navigator.push(
+           PinCodeWidget(
+             nextScreen:(){Navigator.pushReplacement(
                context,
                MaterialPageRoute(builder: (context) => const ResetPasswordView()), // Replace with your next screen
-             );
-
-           },),
+             );},
+           nextText: 'continue',
+           ),
           const Spacer(),
         ],
       ),

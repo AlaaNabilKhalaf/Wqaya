@@ -43,7 +43,9 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                   children: [
                     SizedBox(
                         width: MediaQuery.of(context).size.width*0.64,
-                        child: CustomTextFormField(fieldController: phoneNumberController, hintText: 'رقم الهاتف')),
+                        child: CustomTextFormField(
+                            textInputType: TextInputType.phone,
+                            fieldController: phoneNumberController, hintText: 'رقم الهاتف')),
                     Container(
                       alignment: Alignment.center,
                       height: 55.h,

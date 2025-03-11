@@ -11,12 +11,14 @@ class CustomTextFormField extends StatelessWidget {
     required this.hintText,
     this.icon,
     this.isPasswordVisible,
-    this.validatorMethod
+    this.validatorMethod,
+    this.textInputType
   });
   final TextEditingController fieldController ;
   final String hintText ;
   final bool? isPasswordVisible ;
   final Widget? icon ;
+  final TextInputType? textInputType ;
   final String? Function(String?)? validatorMethod ;
 
 
@@ -29,10 +31,9 @@ class CustomTextFormField extends StatelessWidget {
       ),
       child: TextFormField(
 
-
+keyboardType: textInputType?? TextInputType.text,
         validator: validatorMethod ,
         cursorColor: primaryColor,
-        keyboardType: TextInputType.text,
         obscureText: isPasswordVisible?? false,
         decoration: InputDecoration(
           filled: true,

@@ -25,7 +25,10 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CustomTextFormField(fieldController: idController, hintText: 'الرقم القومي'),
+        CustomTextFormField(
+            textInputType: TextInputType.phone,
+
+            fieldController: idController, hintText: 'الرقم القومي'),
         Padding(
           padding:  EdgeInsets.symmetric(vertical: 30.h),
           child: Row(
@@ -35,7 +38,10 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
                 // height: 55.h,
                   width: MediaQuery.of(context).size.width*0.64,
 
-                  child: CustomTextFormField(fieldController: ageController, hintText: 'العمر')),
+                  child: CustomTextFormField(
+                      textInputType: TextInputType.phone,
+
+                      fieldController: ageController, hintText: 'العمر')),
 
 
               GestureDetector(
@@ -87,7 +93,7 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
           child: RegularButton(
               height: 55.h,
               buttonColor: primaryColor, borderRadius: 20.r, onTap: (){
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const SymptomsSufferedView()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> const SymptomsSufferedView()));
           }, child: RegularText(text: 'next', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: semiBold)),
         ),
       ],

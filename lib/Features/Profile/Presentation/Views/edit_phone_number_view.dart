@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/widgets/custom_dropdown_phones.dart';
-import 'package:wqaya/Features/Profile/Presentation/Views/profile_view.dart';
-
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/custom_home_app_bar.dart';
@@ -47,6 +45,7 @@ class _EditPhoneNumberViewState extends State<EditPhoneNumberView> {
                 Padding(
                   padding: EdgeInsets.only(top: 30.h),
                   child: CustomTextFormField(
+
                     icon: GestureDetector(
                         onTap: (){
                           setState(() {
@@ -64,7 +63,10 @@ class _EditPhoneNumberViewState extends State<EditPhoneNumberView> {
                     children: [
                       SizedBox(
                           width: MediaQuery.of(context).size.width*0.64,
-                          child: CustomTextFormField(fieldController: phoneNumberController, hintText: 'رقم الهاتف الجديد')),
+                          child: CustomTextFormField(
+                              textInputType: TextInputType.phone,
+
+                              fieldController: phoneNumberController, hintText: 'رقم الهاتف الجديد')),
                       Container(
                         alignment: Alignment.center,
                         height: 55.h,
@@ -85,7 +87,10 @@ class _EditPhoneNumberViewState extends State<EditPhoneNumberView> {
                   children: [
                     SizedBox(
                         width: MediaQuery.of(context).size.width*0.64,
-                        child: CustomTextFormField(fieldController: confirmNewPhoneNumberController, hintText: 'اعادة ادخال رقم الهاتف الجديد')),
+                        child: CustomTextFormField(
+                            textInputType: TextInputType.phone,
+
+                            fieldController: confirmNewPhoneNumberController, hintText: 'اعادة ادخال رقم الهاتف الجديد')),
                     Container(
                       alignment: Alignment.center,
                       height: 55.h,
@@ -102,11 +107,11 @@ class _EditPhoneNumberViewState extends State<EditPhoneNumberView> {
                 ProfileCard(cardAction: 'confirm', onTap: (){
                   showDialog(
                     context: context,
-                    barrierDismissible: false, // Prevent dismissing by tapping outside
+                    barrierDismissible: true, // Prevent dismissing by tapping outside
                     builder: (BuildContext context) {
-                      return CustomAlert(nextScreenFunction: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ProfileView()));
-                      },nextText: 'back',);
+                      return CustomAlert (
+                        nextText: '',
+                        nextScreenFunction: (){},);
 
                     },
                   );

@@ -27,5 +27,11 @@ class AssetsData{
   static const String apple = "assets/images/auth_view/apple.png" ;
 
 
+  // PROFILE VIEW
+  static const String imagePicking = "assets/images/profile_view/imagePicking.png" ;
+
+
+
+
 
 }

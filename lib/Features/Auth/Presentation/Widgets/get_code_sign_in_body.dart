@@ -21,9 +21,11 @@ class GetCodeSignInBody extends StatelessWidget {
           SizedBox(height: 10.h),
           RegularText(text: 'codeIsSent', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
           SizedBox(height: 30.h),
-           PinCodeWidget(nextScreen:
+           PinCodeWidget(
+               nextText: 'continue',
+               nextScreen:
           (){
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const FollowingUpView()), // Replace with your next screen
             )

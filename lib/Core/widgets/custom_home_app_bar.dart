@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/about_button.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
+import 'package:wqaya/Features/Profile/Controller/profile_image_cubit.dart';
+import 'package:wqaya/Features/Profile/Controller/profile_image_states.dart';
 
 
 class HomeCustomAppBar extends StatelessWidget {
@@ -12,14 +14,24 @@ class HomeCustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<ProfileImageCubit>(context);
+
+ return BlocBuilder<ProfileImageCubit,ProfileImageStates>(builder: (context, _){
     return AppBar(
       forceMaterialTransparency: true,
       backgroundColor: myWhiteColor,
-      leading: const Padding(
-        padding: EdgeInsets.only(right: 8.0,top: 5),
-        child: CircleAvatar(
-          radius: 35,
-          foregroundImage: AssetImage(AssetsData.profilePicture),
+      leading:  Padding(
+        padding: const EdgeInsets.only(right: 8.0,top: 5),
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          height: 110.h,width: 110.w,
+          decoration:  BoxDecoration(
+              color: const Color(0xff0094FD),
+              shape: BoxShape.circle,
+              border: Border.all(color: const Color(0xff0094FD),width: 1)
+          ),
+          child:  cubit.imgFile!=null? Image.file(
+              cubit.imgFile!)  : const Icon(Icons.person , color: myWhiteColor,size: 35,),
         ),
       ),
       title:  Row(
@@ -42,10 +54,11 @@ class HomeCustomAppBar extends StatelessWidget {
               ),
             ],
           ),
-        const Spacer(),
-      const AboutButton()
+          const Spacer(),
+          const AboutButton()
         ],
       ),
     );
+  },);
   }
 }
