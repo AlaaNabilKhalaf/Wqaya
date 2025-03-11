@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/utils/colors.dart';
-import 'package:wqaya/Core/utils/constance.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
+import 'package:wqaya/Core/widgets/about_button.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
+
 
 class HomeCustomAppBar extends StatelessWidget {
   const HomeCustomAppBar({super.key});
@@ -21,10 +22,10 @@ class HomeCustomAppBar extends StatelessWidget {
           foregroundImage: AssetImage(AssetsData.profilePicture),
         ),
       ),
-      title:  Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      title:  Row(
         children: [
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               RegularText(
                 text: 'name',
@@ -32,29 +33,17 @@ class HomeCustomAppBar extends StatelessWidget {
                 textColor: primaryColor,
                 fontFamily: black,
               ),
-              // RegularText(
-              //   text: " 👋 ",
-              //   fontSize: 15.sp,
-              //   textColor: primaryColor,
-              //   fontFamily: black,
-              // ),
-            ],
-          ),
-          const SizedBox(height: 3,),
-          Row(
-            children: [
+              const SizedBox(height: 2,),
               RegularText(
                 text: 'address',
                 fontSize: 13.sp,
                 textColor: primaryColor,
                 fontFamily: regular,
               ),
-              // const PlatformAdaptiveIcon(cupertinoIcon: Icons.keyboard_arrow_down_sharp, materialIcon: Icons.keyboard_arrow_down_sharp,color: primaryColor,),
-              const Spacer(),
-              const PlatformAdaptiveIcon(cupertinoIcon: Icons.notifications_none_outlined, materialIcon: Icons.notifications_none_outlined,color: primaryColor,)
-
             ],
           ),
+        const Spacer(),
+      const AboutButton()
         ],
       ),
     );

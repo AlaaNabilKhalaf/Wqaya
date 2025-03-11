@@ -14,7 +14,6 @@ class AuthSwitchBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 47.h,
-      // width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.symmetric(horizontal: 22.w),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30.r),

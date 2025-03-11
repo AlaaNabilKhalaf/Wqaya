@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:wqaya/Features/Auth/Presentation/Views/following_up_view.dart';
 
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/widgets/custom_ alert.dart';
 
 class PinCodeWidget extends StatelessWidget {
-  const PinCodeWidget({super.key});
-
+  const PinCodeWidget({super.key , required this.nextScreen});
+final Function nextScreen ;
   @override
   Widget build(BuildContext context) {
     return
@@ -17,9 +18,11 @@ class PinCodeWidget extends StatelessWidget {
         onCompleted: (v){
           showDialog(
             context: context,
-            barrierDismissible: false, // Prevent dismissing by tapping outside
+            barrierDismissible: true,
             builder: (BuildContext context) {
-              return const CustomAlert();
+              return  CustomAlert(nextScreenFunction: (){
+         nextScreen();
+              });
             },
           );
         },

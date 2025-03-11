@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 
+import 'about_button.dart';
+
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({super.key, this.title, this.leading, this.actions});
   final String? title;
@@ -18,9 +20,7 @@ class CustomAppBar extends StatelessWidget {
         title ?? "",
 ),
       leading: leading ??
-          GestureDetector(
-          child: const Icon(Icons.info_outlined, color: primaryColor,size: 28,),
-          ),
+          const AboutButton(),
 
       actions: actions ??
           [

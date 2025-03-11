@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wqaya/Features/Profile/Presentation/Views/profile_view.dart';
 
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/custom_home_app_bar.dart';
 import '../../../../Core/widgets/custom_ alert.dart';
+import '../../../../Core/widgets/password_icon.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
 import '../Widgets/profile_card.dart';
@@ -18,6 +20,7 @@ class EditNameView extends StatefulWidget {
 TextEditingController passwordController = TextEditingController();
 TextEditingController newNameController = TextEditingController();
 TextEditingController confirmNewNameController = TextEditingController();
+bool passwordIsVisible = false;
 
 class _EditNameViewState extends State<EditNameView> {
   @override
@@ -45,7 +48,16 @@ class _EditNameViewState extends State<EditNameView> {
                   }),
                   Padding(
                     padding: EdgeInsets.only(top: 30.h),
-                    child: CustomTextFormField(fieldController: passwordController, hintText: ' كلمة السر',),
+                    child: CustomTextFormField(
+                      icon: GestureDetector(
+                          onTap: (){
+                            setState(() {
+                              passwordIsVisible = !passwordIsVisible;
+                            });
+                          },
+                          child: PasswordIcon(isVisible: passwordIsVisible )),
+                      isPasswordVisible: passwordIsVisible,
+                      fieldController: passwordController, hintText: ' كلمة السر',),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 30.h),
@@ -61,7 +73,10 @@ class _EditNameViewState extends State<EditNameView> {
                       context: context,
                       barrierDismissible: false, // Prevent dismissing by tapping outside
                       builder: (BuildContext context) {
-                        return const CustomAlert();
+                        return CustomAlert(nextScreenFunction: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> const ProfileView()));
+                        },nextText: 'back',);
+
                       },
                     );
 

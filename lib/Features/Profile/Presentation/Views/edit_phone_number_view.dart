@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/widgets/custom_dropdown_phones.dart';
+import 'package:wqaya/Features/Profile/Presentation/Views/profile_view.dart';
 
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/custom_home_app_bar.dart';
 import '../../../../Core/widgets/custom_ alert.dart';
+import '../../../../Core/widgets/password_icon.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
 import '../Widgets/profile_card.dart';
@@ -19,6 +21,8 @@ class EditPhoneNumberView extends StatefulWidget {
 TextEditingController oldPasswordController = TextEditingController();
 TextEditingController phoneNumberController = TextEditingController();
 TextEditingController confirmNewPhoneNumberController = TextEditingController();
+bool passwordIsVisible = false;
+
 class _EditPhoneNumberViewState extends State<EditPhoneNumberView> {
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,16 @@ class _EditPhoneNumberViewState extends State<EditPhoneNumberView> {
                 }),
                 Padding(
                   padding: EdgeInsets.only(top: 30.h),
-                  child: CustomTextFormField(fieldController: oldPasswordController, hintText: 'كلمة السر الحالية',),
+                  child: CustomTextFormField(
+                    icon: GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            passwordIsVisible = !passwordIsVisible;
+                          });
+                        },
+                        child: PasswordIcon(isVisible: passwordIsVisible )),
+                    isPasswordVisible: passwordIsVisible,
+                    fieldController: oldPasswordController, hintText: 'كلمة السر الحالية',),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 30.h),
@@ -91,7 +104,10 @@ class _EditPhoneNumberViewState extends State<EditPhoneNumberView> {
                     context: context,
                     barrierDismissible: false, // Prevent dismissing by tapping outside
                     builder: (BuildContext context) {
-                      return const CustomAlert();
+                      return CustomAlert(nextScreenFunction: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ProfileView()));
+                      },nextText: 'back',);
+
                     },
                   );
 

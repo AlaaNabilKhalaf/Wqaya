@@ -5,10 +5,12 @@ import 'package:wqaya/Features/Auth/Presentation/Widgets/social_login_widget.dar
 
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
+import '../../../../Core/widgets/password_icon.dart';
 import '../../../../Core/widgets/regular_button.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
 import '../../../../Core/widgets/custom_dropdown_phones.dart';
+import '../Views/forget_password_view.dart';
 
 class LoginViewBody extends StatefulWidget {
   const LoginViewBody({super.key});
@@ -18,6 +20,7 @@ class LoginViewBody extends StatefulWidget {
 }
 TextEditingController phoneNumberController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
+bool passwordIsVisible = false;
 class _LoginViewBodyState extends State<LoginViewBody> {
   @override
   Widget build(BuildContext context) {
@@ -57,15 +60,31 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               ),
               SizedBox(height: 19.h,),
 
-              CustomTextFormField(fieldController: passwordController, hintText: 'الرقم السري'),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 19.h,horizontal: 5.w),
-                child: RegularText(text: 'forgetPassword', fontSize: 12.sp, textColor: bottomColor, fontFamily: medium),
+              CustomTextFormField(
+                fieldController: passwordController, hintText: 'الرقم السري',
+                icon: GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      passwordIsVisible = !passwordIsVisible;
+                    });
+                  },
+                  child: PasswordIcon(isVisible: passwordIsVisible )),
+                isPasswordVisible: passwordIsVisible,
+
+              ),
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const ForgetPasswordView()));
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 19.h,horizontal: 5.w),
+                  child: RegularText(text: 'forgetPassword', fontSize: 14.sp, textColor: bottomColor, fontFamily: medium),
+                ),
               ),
               RegularButton(
                   height: 55.h,
                   buttonColor: primaryColor, borderRadius: 20.r, onTap: (){
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const FollowingUpView()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const FollowingUpView()));
               }, child: RegularText(text: 'login', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: semiBold))
 
             ],

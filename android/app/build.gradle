@@ -1,3 +1,14 @@
+buildscript {
+    ext.kotlin_version = '1.8.10'
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -7,7 +18,7 @@ plugins {
 
 android {
     namespace = "com.wqaya.wqaya"
-    compileSdk = 34
+    compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -25,7 +36,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -42,3 +53,8 @@ android {
 flutter {
     source = "../.."
 }
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.10"
+}
+
+

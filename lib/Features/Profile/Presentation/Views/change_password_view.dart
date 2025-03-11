@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wqaya/Features/Profile/Presentation/Views/profile_view.dart';
 
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/custom_home_app_bar.dart';
 import '../../../../Core/widgets/custom_ alert.dart';
+import '../../../../Core/widgets/password_icon.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
 import '../Widgets/profile_card.dart';
@@ -18,6 +20,10 @@ class ChangePasswordView extends StatefulWidget {
 TextEditingController oldPasswordController = TextEditingController();
 TextEditingController newPasswordController = TextEditingController();
 TextEditingController confirmNewPasswordController = TextEditingController();
+bool currentPasswordIsVisible = false;
+bool newPasswordIsVisible = false;
+bool confirmNewPasswordIsVisible = false;
+
 class _ChangePasswordViewState extends State<ChangePasswordView> {
   @override
   Widget build(BuildContext context) {
@@ -41,15 +47,42 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 }),
                 Padding(
                   padding: EdgeInsets.only(top: 30.h),
-                  child: CustomTextFormField(fieldController: oldPasswordController, hintText: 'كلمة السر الحالية',),
+                  child: CustomTextFormField(
+                    icon: GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            currentPasswordIsVisible = !currentPasswordIsVisible;
+                          });
+                        },
+                        child: PasswordIcon(isVisible: currentPasswordIsVisible )),
+                    isPasswordVisible: currentPasswordIsVisible,
+                    fieldController: oldPasswordController, hintText: 'كلمة السر الحالية',),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 30.h),
-                  child: CustomTextFormField(fieldController: newPasswordController, hintText: 'كلمة السر الجديدة',),
+                  child: CustomTextFormField(
+                    icon: GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            newPasswordIsVisible = !newPasswordIsVisible;
+                          });
+                        },
+                        child: PasswordIcon(isVisible: newPasswordIsVisible )),
+                    isPasswordVisible: newPasswordIsVisible,
+                    fieldController: newPasswordController, hintText: 'كلمة السر الجديدة',),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 30.h),
-                  child: CustomTextFormField(fieldController: confirmNewPasswordController, hintText: 'اعادة كتابة كلمة السر الجديدة',),
+                  child: CustomTextFormField(
+                    icon: GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            confirmNewPasswordIsVisible = !confirmNewPasswordIsVisible;
+                          });
+                        },
+                        child: PasswordIcon(isVisible: confirmNewPasswordIsVisible )),
+                    isPasswordVisible: confirmNewPasswordIsVisible,
+                    fieldController: confirmNewPasswordController, hintText: 'اعادة كتابة كلمة السر الجديدة',),
                 ),
                 // SizedBox(width: 100.h,),
 
@@ -58,7 +91,9 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     context: context,
                     barrierDismissible: false, // Prevent dismissing by tapping outside
                     builder: (BuildContext context) {
-                      return const CustomAlert();
+                      return CustomAlert(nextScreenFunction: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ProfileView()));
+                      },nextText: 'back',);
                     },
                   );
 

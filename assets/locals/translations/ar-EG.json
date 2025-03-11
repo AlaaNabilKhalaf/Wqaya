@@ -82,6 +82,10 @@
   "chooseSurgeryDate": "اختار معاد العملية",
   "xrayType": "نوع الاشعة",
   "xrayReason": "سبب الاشعة",
-  "chooseXrayDate": "اختار معاد الاشعة"
+  "chooseXrayDate": "اختار معاد الاشعة",
+  "back" : "العودة",
+  "backToLogin" : "العودة لتسجيل الدخول",
+  "enterPhoneNumber" : "من فضلك ادخل رقم الهاتف",
+  "resetPassword": "اعادة تعيين كلمة المرور"
 
 }

@@ -8,6 +8,8 @@ import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/chronic_diseases_view.dart';
 import 'package:wqaya/Features/Home/Presentation/Widgets/symptoms_container.dart';
 
+import '../../../../Core/widgets/custom_app_bar.dart' ;
+
 class SymptomsSufferedView extends StatefulWidget {
   const SymptomsSufferedView({super.key});
 
@@ -65,26 +67,9 @@ class _SymptomsSufferedViewState extends State<SymptomsSufferedView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: myWhiteColor,
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: Icon(Icons.arrow_forward),
-          ),
-        ],
-        leading: Padding(
-          padding: const EdgeInsets.only(right: 10.0),
-          child: Center(
-            child: RegularText(
-              text: 'more',
-              fontSize: 15.sp,
-              textColor: primaryColor,
-              fontFamily: black,
-            ),
-          ),
-        ),
-      ),
+      appBar: const PreferredSize(preferredSize: Size.fromHeight(kToolbarHeight),
+          child: CustomAppBar()),
+
       body: Column(
         children: [
           Center(

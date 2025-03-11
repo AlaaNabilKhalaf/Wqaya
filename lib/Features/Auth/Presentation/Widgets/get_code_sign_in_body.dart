@@ -4,9 +4,10 @@ import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Features/Auth/Presentation/Widgets/pin_code_widget.dart';
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/widgets/texts.dart';
+import '../Views/following_up_view.dart';
 
-class GetCodeBody extends StatelessWidget {
-  const GetCodeBody({super.key});
+class GetCodeSignInBody extends StatelessWidget {
+  const GetCodeSignInBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,15 @@ class GetCodeBody extends StatelessWidget {
           SizedBox(height: 10.h),
           RegularText(text: 'codeIsSent', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
           SizedBox(height: 30.h),
-          const PinCodeWidget(),
+           PinCodeWidget(nextScreen:
+          (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FollowingUpView()), // Replace with your next screen
+            )
+            ;
+          }
+          ),
           const Spacer(),
         ],
       ),

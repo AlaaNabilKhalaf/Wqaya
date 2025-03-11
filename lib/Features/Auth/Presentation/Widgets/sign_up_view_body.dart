@@ -4,9 +4,10 @@ import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Core/widgets/text_form_fields.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
-import 'package:wqaya/Features/Auth/Presentation/Views/get_code_view.dart';
+import 'package:wqaya/Features/Auth/Presentation/Views/get_code_to_sign_in.dart';
 import 'package:wqaya/Features/Auth/Presentation/Widgets/social_login_widget.dart';
 
+import '../../../../Core/widgets/password_icon.dart';
 import '../../../../Core/widgets/regular_button.dart';
 import '../../../../Core/widgets/custom_dropdown_phones.dart';
 
@@ -20,6 +21,8 @@ TextEditingController phoneNumberController = TextEditingController();
 TextEditingController passwordConfirmController = TextEditingController();
 TextEditingController nameController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
+bool passwordIsVisible = false;
+bool confirmPasswordIsVisible = false;
 
 class _SignUpViewBodyState extends State<SignUpViewBody> {
   @override
@@ -63,16 +66,38 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
               ),
               SizedBox(height: 30.h,),
 
-              CustomTextFormField(fieldController: passwordController, hintText: 'الرقم السري'),
+              CustomTextFormField(
+                isPasswordVisible: passwordIsVisible,
+                fieldController: passwordController, hintText: 'الرقم السري',
+
+                icon: GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      passwordIsVisible = !passwordIsVisible;
+                    });
+                  },
+                  child: PasswordIcon(isVisible: passwordIsVisible )),
+              ),
+
               SizedBox(height: 30.h,),
 
-              CustomTextFormField(fieldController: passwordConfirmController, hintText: 'تاكيد الرقم السري'),
+              CustomTextFormField(
+                  isPasswordVisible: confirmPasswordIsVisible,
+                  icon: GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          confirmPasswordIsVisible = !confirmPasswordIsVisible;
+                        });
+                      },
+                      child: PasswordIcon(isVisible: confirmPasswordIsVisible )),
+
+                  fieldController: passwordConfirmController, hintText: 'تاكيد الرقم السري'),
               SizedBox(height: 30.h,),
 
               RegularButton(
                   height: 55.h,
                   buttonColor: primaryColor, borderRadius: 20.r, onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const GetCodeView()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const GetCodeToSignIn()));
 
               }, child: RegularText(text: 'getCode', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: semiBold))
 
