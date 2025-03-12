@@ -29,6 +29,9 @@ class AssetsData{
 
   // PROFILE VIEW
   static const String imagePicking = "assets/images/profile_view/imagePicking.png" ;
+  static const String about = "assets/images/profile_view/about.png";
+  static const String bigDot = "assets/images/profile_view/bigDot.png";
+  static const String smallDot = "assets/images/profile_view/smallDot.png";
 
 
 

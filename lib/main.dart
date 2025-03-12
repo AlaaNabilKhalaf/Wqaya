@@ -20,10 +20,6 @@ void main() async {
       path: "assets/locals/translations",
       saveLocale: true,
       fallbackLocale: const Locale('ar', 'EG'),
-      // child: BlocProvider(
-      //   create: (context) => BottomNavCubit(),
-      //
-      // ),
       child: MultiBlocProvider(providers: [
 
         BlocProvider<BottomNavCubit>(

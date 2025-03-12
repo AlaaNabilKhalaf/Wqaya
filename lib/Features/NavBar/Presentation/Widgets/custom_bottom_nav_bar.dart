@@ -23,7 +23,7 @@ class CustomBottomNavBar extends StatelessWidget {
       child: BlocBuilder<BottomNavCubit, int>(
         builder: (context, currentIndex) {
           return Container(
-            padding: EdgeInsets.symmetric(vertical: 10.h),
+            padding: EdgeInsets.symmetric(vertical: 8.h),
             color: primaryColor,
             height: 86.h,
             child: Row(
