@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wqaya/Core/cache/cache_helper.dart';
+import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
 import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
 import 'Core/bloc_observer/bloc_observer.dart';
@@ -11,6 +13,7 @@ import 'Features/Profile/Controller/profile_image_cubit.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  await CacheHelper().init();
   Bloc.observer = MyBlocObserver();
   await ScreenUtil.ensureScreenSize();
 
@@ -26,6 +29,8 @@ void main() async {
           create: (context) => BottomNavCubit(),),
         BlocProvider<ProfileImageCubit>(
             create: (context) => ProfileImageCubit()),
+        BlocProvider<AuthCubit>(
+            create: (context) => AuthCubit()),
       ],
         child: const Wqaya(),
       ),

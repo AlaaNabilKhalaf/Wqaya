@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wqaya/Core/cache/cache_helper.dart';
+import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dart';
 import 'package:wqaya/Features/Auth/Presentation/Widgets/social_login_widget.dart';
 
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/custom_app_bar.dart';
-import '../../../../Core/widgets/custom_dropdown_phones.dart';
 import '../../../../Core/widgets/regular_button.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
@@ -17,14 +19,16 @@ class ForgetPasswordView extends StatefulWidget {
   @override
   State<ForgetPasswordView> createState() => _ForgetPasswordViewState();
 }
-TextEditingController phoneNumberController = TextEditingController();
+
+TextEditingController emailController = TextEditingController();
 
 class _ForgetPasswordViewState extends State<ForgetPasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: myWhiteColor,
-        appBar: const PreferredSize(preferredSize: Size.fromHeight(kToolbarHeight),
+        appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(kToolbarHeight),
             child: CustomAppBar()),
         body: Padding(
           padding: const EdgeInsets.all(18.0),
@@ -33,44 +37,102 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-
-              RegularText(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
-              RegularText(text: 'enterPhoneNumber', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
+              RegularText(
+                  text: 'welcomeToYou',
+                  fontSize: 70.sp,
+                  textColor: primaryColor,
+                  fontFamily: bold),
+              RegularText(
+                  text: 'enterEmail',
+                  fontSize: 30.sp,
+                  textColor: primaryColor,
+                  fontFamily: medium),
               Padding(
-                padding: const EdgeInsets.only(top: 40,bottom: 19),
+                padding: const EdgeInsets.only(top: 40, bottom: 19),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                        width: MediaQuery.of(context).size.width*0.64,
-                        child: CustomTextFormField(
-                            textInputType: TextInputType.phone,
-                            fieldController: phoneNumberController, hintText: 'رقم الهاتف')),
-                    Container(
-                      alignment: Alignment.center,
-                      height: 55.h,
-                      width: MediaQuery.of(context).size.width*0.25,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: bottomColor,width:2),
-                          color: textFormBackgroundColor,
-                          boxShadow: [BoxShadow(color:Colors.grey.shade300,blurRadius: 10.r,)],
-                          borderRadius: BorderRadius.circular(20.r)),
-                      child: const CustomDropdownPhones(),
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.9,
+                      child: CustomTextFormField(
+                          textInputType: TextInputType.phone,
+                          fieldController: emailController,
+                          hintText: 'البريد الالكتروني'),
                     ),
                   ],
                 ),
               ),
-              RegularButton(
-                  height: 55.h,
-                  buttonColor: primaryColor, borderRadius: 20.r, onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> const GetCodeToResetPassword()));
+              BlocConsumer<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if(emailController.text.isEmpty){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: RegularText(
+                          text: "ادخل البريد الالكتروني",
+                          fontSize: 15.sp,
+                          textColor: Colors.white,
+                          fontFamily: bold,
+                        ),
+                        backgroundColor: Colors.red,
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );                  }
+                  else {
+                    if(state is ForgotPasswordSuccessState){
+                      CacheHelper().saveData(key: 'emailToResetPass', value: emailController.text);
+                      if(context.mounted){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                const GetCodeToResetPassword()));
+                      } else if(state is ForgotPasswordFailureState){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: RegularText(
+                              text: state.message,
+                              fontSize: 15.sp,
+                              textColor: Colors.white,
+                              fontFamily: bold,
+                            ),
+                            backgroundColor: Colors.green,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
 
-              }, child: RegularText(text: 'getCode', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: semiBold)),
-const Spacer(),
+                    }
+
+                  }
+                },
+                builder: (context, state) {
+                  var aCubit = context.read<AuthCubit>();
+                  return state is !ForgotPasswordLoadingState ?
+                  RegularButton(
+                      height: 55.h,
+                      buttonColor: primaryColor,
+                      borderRadius: 20.r,
+                      onTap: () {
+                        aCubit.forgotPassword(email: emailController.text);
+                      },
+                      child: RegularText(
+                          text: 'getCode',
+                          fontSize: 20.sp,
+                          textColor: myWhiteColor,
+                          fontFamily: semiBold)) :const Center(
+                    child: CircularProgressIndicator(
+                      color: primaryColor,
+                    ),
+                  );
+                },
+              ),
+              const Spacer(),
               const SocialLoginWidget()
             ],
           ),
-        )
-    );
+        ));
   }
 }

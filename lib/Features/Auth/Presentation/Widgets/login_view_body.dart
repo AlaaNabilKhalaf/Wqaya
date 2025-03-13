@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wqaya/Features/Auth/Presentation/Views/following_up_view.dart';
+import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dart';
 import 'package:wqaya/Features/Auth/Presentation/Widgets/social_login_widget.dart';
+import 'package:wqaya/Features/Home/Presentation/Views/symptoms_suffered.dart';
 
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
@@ -18,12 +20,15 @@ class LoginViewBody extends StatefulWidget {
   @override
   State<LoginViewBody> createState() => _LoginViewBodyState();
 }
+
 TextEditingController phoneNumberController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 bool passwordIsVisible = false;
+
 class _LoginViewBodyState extends State<LoginViewBody> {
   @override
   Widget build(BuildContext context) {
+    var aCubit = context.read<AuthCubit>();
     return Padding(
       padding: const EdgeInsets.all(18.0),
       child: Column(
@@ -31,11 +36,18 @@ class _LoginViewBodyState extends State<LoginViewBody> {
         children: [
           Column(
             children: [
-              RegularText(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
-              RegularText(text: 'startLogin', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
+              RegularText(
+                  text: 'welcomeToYou',
+                  fontSize: 70.sp,
+                  textColor: primaryColor,
+                  fontFamily: bold),
+              RegularText(
+                  text: 'startLogin',
+                  fontSize: 30.sp,
+                  textColor: primaryColor,
+                  fontFamily: medium),
             ],
           ),
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -43,56 +55,110 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                      width: MediaQuery.of(context).size.width*0.64,
+                      width: MediaQuery.of(context).size.width * 0.64,
                       child: CustomTextFormField(
                           textInputType: TextInputType.phone,
-                          fieldController: phoneNumberController, hintText: 'رقم الهاتف')),
+                          fieldController: phoneNumberController,
+                          hintText: 'رقم الهاتف')),
                   Container(
                     alignment: Alignment.center,
                     height: 55.h,
-                    width: MediaQuery.of(context).size.width*0.25,
+                    width: MediaQuery.of(context).size.width * 0.25,
                     decoration: BoxDecoration(
-                        border: Border.all(color: bottomColor,width:2),
+                        border: Border.all(color: bottomColor, width: 2),
                         color: textFormBackgroundColor,
-                        boxShadow: [BoxShadow(color:Colors.grey.shade300,blurRadius: 10.r,)],
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            blurRadius: 10.r,
+                          )
+                        ],
                         borderRadius: BorderRadius.circular(20.r)),
                     child: const CustomDropdownPhones(),
                   ),
                 ],
               ),
-              SizedBox(height: 19.h,),
-
+              SizedBox(
+                height: 19.h,
+              ),
               CustomTextFormField(
-                fieldController: passwordController, hintText: 'الرقم السري',
+                fieldController: passwordController,
+                hintText: 'الرقم السري',
                 icon: GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      passwordIsVisible = !passwordIsVisible;
-                    });
-                  },
-                  child: PasswordIcon(isVisible: passwordIsVisible )),
+                    onTap: () {
+                      setState(() {
+                        passwordIsVisible = !passwordIsVisible;
+                      });
+                    },
+                    child: PasswordIcon(isVisible: passwordIsVisible)),
                 isPasswordVisible: passwordIsVisible,
-
               ),
               GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const ForgetPasswordView()));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ForgetPasswordView()));
                 },
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 19.h,horizontal: 5.w),
-                  child: RegularText(text: 'forgetPassword', fontSize: 14.sp, textColor: bottomColor, fontFamily: medium),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 19.h, horizontal: 5.w),
+                  child: RegularText(
+                      text: 'forgetPassword',
+                      fontSize: 14.sp,
+                      textColor: bottomColor,
+                      fontFamily: medium),
                 ),
               ),
-              RegularButton(
-                  height: 55.h,
-                  buttonColor: primaryColor, borderRadius: 20.r, onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const FollowingUpView()));
-              }, child: RegularText(text: 'login', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: semiBold))
-
+              BlocListener<AuthCubit, AuthState>(
+                listener: (context, state) {
+                  if (state is SigninSuccessState) {
+                    print("Signed in");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SymptomsSufferedView()));
+                  } else if (state is SigninFailureState) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: RegularText(
+                          text: state.error,
+                          fontSize: 15.sp,
+                          textColor: Colors.white,
+                          fontFamily: bold,
+                        ),
+                        backgroundColor: Colors.red,
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                },
+                child: BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, state) {
+                    return state is !SigninLoadingState?
+                    RegularButton(
+                        height: 55.h,
+                        buttonColor: primaryColor,
+                        borderRadius: 20.r,
+                        onTap: () async {
+                          await aCubit.signIn(
+                              phoneNumber: phoneNumberController.text,
+                              password: passwordController.text);
+                        },
+                        child: RegularText(
+                            text: 'login',
+                            fontSize: 20.sp,
+                            textColor: myWhiteColor,
+                            fontFamily: semiBold)) : const Center(
+                              child: CircularProgressIndicator(
+                                                    color: primaryColor,
+                                                  ),
+                            );
+                  },
+                ),
+              )
             ],
           ),
-
-
           const SocialLoginWidget()
         ],
       ),
