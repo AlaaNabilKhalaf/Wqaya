@@ -43,3 +43,4 @@ class PlatformAdaptiveIcon extends StatelessWidget {
     );
   }
 }
+

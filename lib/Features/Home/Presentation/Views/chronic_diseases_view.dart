@@ -52,7 +52,7 @@ class _ChronicDiseasesViewState extends State<ChronicDiseasesView> {
     "فشل القلب المزمن",
   ];
 
-  Set<int> selectedDiseases = {}; // Track selected symptoms
+  Set<int> selectedDiseases = {};
 
   void toggleSymptomSelection(int index) {
     setState(() {

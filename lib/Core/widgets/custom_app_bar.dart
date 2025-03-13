@@ -16,6 +16,7 @@ class CustomAppBar extends StatelessWidget {
       leadingWidth: 59.w,
       elevation: 0,
       backgroundColor: myWhiteColor,
+      forceMaterialTransparency: true,
       title: Text(
         title ?? "",
 ),

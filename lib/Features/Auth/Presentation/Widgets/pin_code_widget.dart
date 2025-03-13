@@ -1,31 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:wqaya/Features/Auth/Presentation/Views/following_up_view.dart';
 
 import '../../../../Core/Utils/colors.dart';
-import '../../../../Core/widgets/custom_ alert.dart';
 
 class PinCodeWidget extends StatelessWidget {
-  const PinCodeWidget({super.key , required this.nextScreen, this.nextText});
-  final Function nextScreen ;
-  final String? nextText ;
+  const PinCodeWidget({
+    super.key,
+    required this.nextScreen,
+    required this.verifyEmail, // Add this parameter
+    this.nextText,
+  });
+
+  final Function nextScreen;
+  final Function(String) verifyEmail; // Method to verify email
+  final String? nextText;
+
   @override
   Widget build(BuildContext context) {
-    return
-      PinCodeTextField(
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: PinCodeTextField(
         appContext: context,
         length: 4,
-        onCompleted: (v){
+        onCompleted: (verificationCode) {
+          verifyEmail(verificationCode);
+
           showDialog(
             context: context,
             barrierDismissible: false,
             builder: (BuildContext context) {
-              return CustomAlert(
-                  nextText: nextText,
-                  nextScreenFunction: (){
-         nextScreen();
-              });
+              return const Center(
+                child: CircularProgressIndicator(), // Show a loading indicator
+              );
             },
           );
         },
@@ -35,7 +42,7 @@ class PinCodeWidget extends StatelessWidget {
           borderWidth: 0,
           fieldHeight: 60,
           fieldWidth: 60,
-          inactiveFillColor:const Color(0xffEBF0F5),
+          inactiveFillColor: const Color(0xffEBF0F5),
           activeFillColor: primaryColor,
           selectedFillColor: const Color(0xffEBF0F5),
           inactiveColor: const Color(0xffEBF0F5),
@@ -44,6 +51,7 @@ class PinCodeWidget extends StatelessWidget {
         ),
         keyboardType: TextInputType.number,
         enableActiveFill: true,
-      );
+      ),
+    );
   }
 }

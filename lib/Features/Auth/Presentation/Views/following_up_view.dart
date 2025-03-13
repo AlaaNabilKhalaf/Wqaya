@@ -10,13 +10,9 @@ import '../Widgets/social_login_widget.dart';
 
 class FollowingUpView extends StatelessWidget {
   const FollowingUpView({super.key});
-
-
-
-  @override
+ @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-
     return Form(
       key: formKey,
       child: Scaffold(
