@@ -22,6 +22,7 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
   final TextEditingController idController = TextEditingController();
   final TextEditingController ageController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
+
   bool userKindIsMale = true;
   String selectedGovernorate = 'Cairo'; // Track selected governorate
 
@@ -31,6 +32,7 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+
         // National ID Field
         CustomTextFormField(
           textInputType: TextInputType.phone,
@@ -73,7 +75,7 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
                     ],
                     borderRadius: BorderRadius.circular(20.r),
                   ),
-                  child: RegularText(
+                  child: RegularTextWithLocalization(
                     text: userKindIsMale ? 'male' : 'female',
                     fontSize: 20.sp,
                     textColor: bottomColor,
@@ -152,7 +154,7 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
                   governorate: selectedGovernorate,
                 );
               },
-              child: RegularText(
+              child: RegularTextWithLocalization(
                 text: 'next',
                 fontSize: 20.sp,
                 textColor: myWhiteColor,

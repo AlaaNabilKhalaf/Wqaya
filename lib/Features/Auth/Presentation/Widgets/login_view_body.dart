@@ -36,12 +36,12 @@ class _LoginViewBodyState extends State<LoginViewBody> {
         children: [
           Column(
             children: [
-              RegularText(
+              RegularTextWithLocalization(
                   text: 'welcomeToYou',
                   fontSize: 70.sp,
                   textColor: primaryColor,
                   fontFamily: bold),
-              RegularText(
+              RegularTextWithLocalization(
                   text: 'startLogin',
                   fontSize: 30.sp,
                   textColor: primaryColor,
@@ -103,7 +103,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 19.h, horizontal: 5.w),
-                  child: RegularText(
+                  child: RegularTextWithLocalization(
                       text: 'forgetPassword',
                       fontSize: 14.sp,
                       textColor: bottomColor,
@@ -113,7 +113,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               BlocListener<AuthCubit, AuthState>(
                 listener: (context, state) {
                   if (state is SigninSuccessState) {
-                    print("Signed in");
+                    debugPrint("Signed in");
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -121,7 +121,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   } else if (state is SigninFailureState) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: RegularText(
+                        content: RegularTextWithLocalization(
                           text: state.error,
                           fontSize: 15.sp,
                           textColor: Colors.white,
@@ -145,7 +145,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                               phoneNumber: phoneNumberController.text,
                               password: passwordController.text);
                         },
-                        child: RegularText(
+                        child: RegularTextWithLocalization(
                             text: 'login',
                             fontSize: 20.sp,
                             textColor: myWhiteColor,

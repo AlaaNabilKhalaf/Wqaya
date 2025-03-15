@@ -61,7 +61,7 @@ class HomeView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    RegularText(
+                    RegularTextWithLocalization(
                       text: 'currentComplain',
                       fontSize: 20.sp,
                       textColor: primaryColor,
@@ -74,14 +74,14 @@ class HomeView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    RegularText(
+                    RegularTextWithLocalization(
                       text: "complainReason",
                       fontSize: 20.sp,
                       textColor: primaryColor,
                       fontFamily: medium,
                     ),
                     const Spacer(),
-                    RegularText(
+                    RegularTextWithLocalization(
                       text: "symptoms",
                       fontSize: 20.sp,
                       textColor: primaryColor,
@@ -120,7 +120,7 @@ class HomeView extends StatelessWidget {
                                     decoration: InputDecoration(
                                       fillColor: Colors.red,
                                       border: InputBorder.none,
-                                      label: RegularText(
+                                      label: RegularTextWithLocalization(
                                         text: "enterReason",
                                         fontSize: 10.sp,
                                         textColor: unselectedContainerColor,
@@ -182,7 +182,7 @@ class HomeView extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: RegularText(
+                        child: RegularTextWithLocalization(
                           text: "showDetails",
                           fontSize: 20.sp,
                           textColor: primaryColor,

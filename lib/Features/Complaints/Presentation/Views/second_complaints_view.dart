@@ -37,7 +37,7 @@ class _SecondComplaintsViewState extends State<SecondComplaintsView> {
             children: [
               const PainWidgets(),
               const SizedBox(height: 10,),
-              RegularText(
+              RegularTextWithLocalization(
                 text: 'foodSensitivity',
                 fontSize: 20.sp,
                 textColor: primaryColor,

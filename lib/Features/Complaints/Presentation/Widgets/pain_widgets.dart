@@ -29,7 +29,7 @@ class _PainWidgetsState extends State<PainWidgets> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            RegularText(
+            RegularTextWithLocalization(
               text: "painScale",
               fontSize: 20.sp,
               textColor: primaryColor,
@@ -46,7 +46,7 @@ class _PainWidgetsState extends State<PainWidgets> {
         ),
         Row(
           children: [
-            RegularText(
+            RegularTextWithLocalization(
               text: "painDuration",
               fontSize: 20.sp,
               textColor: primaryColor,
@@ -76,7 +76,7 @@ class _PainWidgetsState extends State<PainWidgets> {
                             color: unselectedContainerColor)),
                     child: Row(
                       children: [
-                        RegularText(
+                        RegularTextWithLocalization(
                           text: durations[index],
                           fontSize: 20.sp,
                           textColor: primaryColor,

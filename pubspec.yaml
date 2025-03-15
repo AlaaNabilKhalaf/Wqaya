@@ -49,6 +49,7 @@ flutter:
     - assets/images/splash_view/
     - assets/locals/translations/
     - assets/images/profile_view/
+    - assets/images/chat_view/
   fonts:
     - family: cairoBlack
       fonts:

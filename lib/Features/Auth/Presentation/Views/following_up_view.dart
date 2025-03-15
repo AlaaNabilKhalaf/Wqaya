@@ -32,7 +32,7 @@ class FollowingUpView extends StatelessWidget {
             //Text
             Column(
               children: [
-                RegularText(text:'followingUp', fontSize: 40.sp, textColor: primaryColor, fontFamily: bold),
+                RegularTextWithLocalization(text:'followingUp', fontSize: 40.sp, textColor: primaryColor, fontFamily: bold),
 
                 //Dots Image
                 Padding(

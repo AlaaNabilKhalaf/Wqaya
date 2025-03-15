@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:wqaya/Features/Chat/Presentation/Views/chat_welcome_view.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/home_view.dart';
-import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
-
 import '../../../Profile/Presentation/Views/profile_view.dart';
 
 class BottomNavCubit extends Cubit<int> {
@@ -14,7 +13,7 @@ class BottomNavCubit extends Cubit<int> {
   }
   final List<Widget> pages = [
     const HomeView(),
-    const BotView(),
+    const ChatWelcomeView(),
     const ProfileView(),
 
   ];

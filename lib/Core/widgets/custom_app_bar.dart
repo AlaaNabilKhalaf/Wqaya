@@ -5,9 +5,10 @@ import 'package:wqaya/Core/utils/colors.dart';
 import 'about_button.dart';
 
 class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({super.key, this.title, this.leading, this.actions});
+  const CustomAppBar({super.key, this.title, this.leading, this.actions, this.backButtonFunction});
   final String? title;
   final Widget? leading;
+  final Function? backButtonFunction;
   final List<Widget>? actions;
 
   @override
@@ -26,8 +27,14 @@ class CustomAppBar extends StatelessWidget {
       actions: actions ??
           [
             IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed:  () {
+                  if(backButtonFunction!= null){
+                     backButtonFunction!();
+                  }else{
+
+                    Navigator.pop(context);
+
+                  }
                 },
                 icon: const Icon(
                   // size: 20,

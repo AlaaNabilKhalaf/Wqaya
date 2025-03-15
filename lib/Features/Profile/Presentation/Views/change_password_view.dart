@@ -38,8 +38,8 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
               children: [
                 SizedBox(height: 100.h,),
 
-                RegularText(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
-                RegularText(text: 'inYourProfile', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
+                RegularTextWithLocalization(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
+                RegularTextWithLocalization(text: 'inYourProfile', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
                 SizedBox(height: 38.h,),
                 ProfileCard(cardAction: 'changePassword', textColor: myWhiteColor,cardColor: primaryColor, onTap: (){
                 }),

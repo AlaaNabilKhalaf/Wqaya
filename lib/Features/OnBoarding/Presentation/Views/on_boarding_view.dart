@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/utils/colors.dart';
-import 'package:wqaya/Core/widgets/regular_button.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/image_container.dart';
 import '../../../../Core/utils/fonts.dart';
-import '../../../Auth/Presentation/Views/following_up_view.dart';
 import '../Widgets/auth_switch_bottom.dart';
 
 class OnBoardingView extends StatelessWidget {
@@ -22,19 +20,21 @@ class OnBoardingView extends StatelessWidget {
           SizedBox(height: 70.h,),
           Expanded(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 const  AuthSwitchBottom(),
-                RegularText(text:'ifYouDonNotWantToLogin', fontSize: 20.sp, textColor: primaryColor, fontFamily: bold),
-                Padding(
-                  padding:  EdgeInsets.only(bottom: 48.h),
-                  child: RegularButton(
-                      width: 45.w, height: 45.h, buttonColor: primaryColor, borderRadius: 15.r, onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const FollowingUpView()));
+                SizedBox(height: 80.h,),
+                RegularTextWithLocalization(text:'pleaseCreateYourAccount', fontSize: 20.sp, textColor: primaryColor, fontFamily: bold),
 
-                  },
-                      child: const Icon(Icons.arrow_back_rounded,color: myWhiteColor,)),
-                ),
+                // Padding(
+                //   padding:  EdgeInsets.only(bottom: 48.h),
+                //   child: RegularButton(
+                //       width: 45.w, height: 45.h, buttonColor: primaryColor, borderRadius: 15.r, onTap: (){
+                //     Navigator.push(context, MaterialPageRoute(builder: (context)=> const NavBarView()));
+                //
+                //   },
+                //       child: const Icon(Icons.arrow_back_rounded,color: myWhiteColor,)),
+                // ),
               ],
             ),
           )

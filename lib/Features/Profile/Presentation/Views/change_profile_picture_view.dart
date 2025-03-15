@@ -30,14 +30,14 @@ class _ChangeProfilePictureViewState extends State<ChangeProfilePictureView> {
             preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
         body:SingleChildScrollView(
           child: Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 18.w),
+            padding: const EdgeInsets.all(18.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 100.h,),
 
-                RegularText(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
-                RegularText(text: 'inYourProfile', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
+                RegularTextWithLocalization(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
+                RegularTextWithLocalization(text: 'inYourProfile', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
                 SizedBox(height: 38.h,),
                 ProfileCard(cardAction: 'changeProfilePicture', textColor: myWhiteColor,cardColor: primaryColor, onTap: (){
                 }),

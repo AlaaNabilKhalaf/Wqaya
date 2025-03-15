@@ -41,7 +41,7 @@ final Function nextScreenFunction;
                 ),
                 SizedBox(height: 20.h),
                 // Confirmation Text
-                RegularText(text: confirmText??'confirmed', fontSize: 40.sp, textColor: Colors.white, fontFamily: bold),
+                RegularTextWithLocalization(text: confirmText??'confirmed', fontSize: 40.sp, textColor: Colors.white, fontFamily: bold),
                 Padding(
                   padding: const EdgeInsets.only(top: 15,bottom: 10),
                   child: GestureDetector(
@@ -53,7 +53,7 @@ final Function nextScreenFunction;
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        RegularText(text:nextText?? 'next', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: bold),
+                        RegularTextWithLocalization(text:nextText?? 'next', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: bold),
                         nextText != '' ?const Icon(Icons.arrow_forward_rounded, color: myWhiteColor,size: 23,) : const SizedBox()
                       ],),
                   ),

@@ -29,7 +29,7 @@ class DeveloperNamesWidget extends StatelessWidget {
 
         Padding(
           padding: const EdgeInsets.only(top:5,bottom: 3,right: 5),
-          child: RegularText(
+          child: RegularTextWithLocalization(
               text:name1,
               fontSize: 18.sp, textColor: primaryColor, fontFamily: light),
         ),
@@ -37,14 +37,14 @@ class DeveloperNamesWidget extends StatelessWidget {
         name2 != ""?
         Padding(
           padding: const EdgeInsets.only(top:5,bottom: 3,right: 5),
-          child: RegularText(
+          child: RegularTextWithLocalization(
               text:name2,
               fontSize: 18.sp, textColor: primaryColor, fontFamily: light),
         ) : const SizedBox(),
         name3 != ""?
         Padding(
           padding: const EdgeInsets.only(top:5,bottom: 3,right:30,),
-          child: RegularText(
+          child: RegularTextWithLocalization(
               text: name3,
               fontSize: 18.sp, textColor: primaryColor, fontFamily: light),
         ) : const SizedBox(),

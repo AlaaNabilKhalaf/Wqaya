@@ -31,14 +31,14 @@ class _EditNameViewState extends State<EditNameView> {
           preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
       body:SingleChildScrollView(
         child: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 18.w),
+          padding: const EdgeInsets.all(18.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 100.h,),
 
-              RegularText(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
-              RegularText(text: 'inYourProfile', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
+              RegularTextWithLocalization(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
+              RegularTextWithLocalization(text: 'inYourProfile', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
               Column(
                 children: [
                   SizedBox(height: 38.h,),

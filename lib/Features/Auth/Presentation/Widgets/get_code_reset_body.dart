@@ -21,13 +21,13 @@ class GetCodeResetBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Spacer(),
-          RegularText(
+          RegularTextWithLocalization(
               text: 'welcomeToYou',
               fontSize: 70.sp,
               textColor: primaryColor,
               fontFamily: bold),
           SizedBox(height: 10.h),
-          RegularText(
+          RegularTextWithLocalization(
               text: 'codeIsSent',
               fontSize: 30.sp,
               textColor: primaryColor,
@@ -48,7 +48,7 @@ class GetCodeResetBody extends StatelessWidget {
               return PinCodeWidget(
                 verifyEmail: (verificationCode) {
                   authCubit.checkCode(code: verificationCode);
-                  print("bbbb");
+                  debugPrint("bbbb");
 
                 },
                 nextScreen: () {

@@ -23,13 +23,13 @@ class BetterHealthPoster extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                RegularText(
+                RegularTextWithLocalization(
                   text: "get",
                   fontSize: 20.sp,
                   textColor: myWhiteColor,
                   fontFamily: black,
                 ),
-                RegularText(
+                RegularTextWithLocalization(
                   text: "betterHealth",
                   fontSize: 20.sp,
                   textColor: myWhiteColor,

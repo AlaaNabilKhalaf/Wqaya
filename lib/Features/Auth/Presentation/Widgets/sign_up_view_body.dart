@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +9,6 @@ import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Auth/Presentation/Views/get_code_to_sign_in.dart';
 import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dart';
 import 'package:wqaya/Features/Auth/Presentation/Widgets/social_login_widget.dart';
-
 import '../../../../Core/widgets/password_icon.dart';
 import '../../../../Core/widgets/regular_button.dart';
 import '../../../../Core/widgets/custom_dropdown_phones.dart';
@@ -21,9 +21,10 @@ class SignUpViewBody extends StatefulWidget {
 }
 TextEditingController phoneNumberController = TextEditingController();
 TextEditingController passwordConfirmController = TextEditingController();
-TextEditingController nameController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 TextEditingController emailController = TextEditingController();
+TextEditingController nameController = TextEditingController();
+
 bool passwordIsVisible = false;
 bool confirmPasswordIsVisible = false;
 
@@ -33,19 +34,34 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
     return Padding(
       padding: const EdgeInsets.all(18.0),
       child: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // TEXTS
             Column(
               children: [
-                RegularText(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
-                RegularText(text: 'startSignUp', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
+                RegularTextWithLocalization(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
+                RegularTextWithLocalization(text: 'startSignUp', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
               ],
             ),
+SizedBox(height: 30.h,),
+            //TEXT FIELDS
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextFormField(fieldController: nameController, hintText: 'الاسم'),
+                SizedBox(height: 15.h,),
+                CustomTextFormField(
+                  fieldController: emailController, hintText: 'البريد الإلكتروني',
+                  icon: GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          passwordIsVisible = !passwordIsVisible;
+                        });
+                      },
+                      child: PasswordIcon(isVisible: passwordIsVisible )),
+                ),
                 SizedBox(height: 15.h,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,17 +84,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                     ),
                   ],
                 ),
-                SizedBox(height: 15.h,),
-                CustomTextFormField(
-                  fieldController: emailController, hintText: 'البريد الإلكتروني',
-                  icon: GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          passwordIsVisible = !passwordIsVisible;
-                        });
-                      },
-                      child: PasswordIcon(isVisible: passwordIsVisible )),
-                ),
+
                 SizedBox(height: 15.h,),
                 CustomTextFormField(
                   isPasswordVisible: passwordIsVisible,
@@ -108,12 +114,14 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
       BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) async {
           final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-          print(phoneNumberController.text.length);
+          if (kDebugMode) {
+            print(phoneNumberController.text.length);
+          }
           if (state is RegisterFailureState) {
             if (passwordController.text != passwordConfirmController.text) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: RegularText(
+                  content: RegularTextWithoutLocalization(
                     text: "كلمات السر غير متطابقة",
                     fontSize: 15.sp,
                     textColor: Colors.white,
@@ -128,7 +136,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
               {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: RegularText(
+                    content: RegularTextWithoutLocalization(
                       text: "ahmed@example.com\nالبريد الالكتروني يجب أن يكون بهذه الصورة",
                       fontSize: 15.sp,
                       textColor: Colors.white,
@@ -145,7 +153,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
               {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: RegularText(
+                    content: RegularTextWithoutLocalization(
                       text: "ادخل رقم هاتف صحيح",
                       fontSize: 15.sp,
                       textColor: Colors.white,
@@ -161,7 +169,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
             else{
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: RegularText(
+                  content: RegularTextWithoutLocalization(
                     text: "كلمة السر يجب ان تكون 8 احرف\n و تشمل حرف 'Capital' ",
                     fontSize: 15.sp,
                     textColor: Colors.white,
@@ -175,7 +183,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
           } else if (state is RegisterSuccessState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: RegularText(
+                content: RegularTextWithoutLocalization(
                   text: state.message,
                   fontSize: 15.sp,
                   textColor: Colors.white,
@@ -215,13 +223,13 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
               );
 
               // Debug prints
-              print(nameController.text);
-              print(phoneNumberController.text);
-              print(passwordController.text);
-              print(passwordConfirmController.text);
-              print(emailController.text);
+              // debugPrint(nameController.text);
+              debugPrint(phoneNumberController.text);
+              debugPrint(passwordController.text);
+              debugPrint(passwordConfirmController.text);
+              debugPrint(emailController.text);
             },
-            child: RegularText(
+            child: RegularTextWithLocalization(
               text: 'getCode',
               fontSize: 20.sp,
               textColor: myWhiteColor,
@@ -235,6 +243,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
         },
       ),              ],
             ),
+            SizedBox(height: 60.h,),
 
            const SocialLoginWidget()
 

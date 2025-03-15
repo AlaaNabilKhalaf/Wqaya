@@ -49,7 +49,7 @@ endSplash();
                   height: 208.h,width: 189.w,
                   child: Image.asset(AssetsData.splashLogo )),
               // SvgImage(imagePath: AssetsData.splashLogo,height: 208.h,width: 189.w,),
-              RegularText(text:'logo', fontSize: 30.sp, textColor: myWhiteColor, fontFamily: regular),
+              RegularTextWithLocalization(text:'logo', fontSize: 30.sp, textColor: myWhiteColor, fontFamily: regular),
 
             ],
           ),

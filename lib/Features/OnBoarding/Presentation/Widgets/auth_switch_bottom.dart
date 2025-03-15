@@ -30,7 +30,7 @@ class AuthSwitchBottom extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginView()));
 
         },
-            child: RegularText(text: 'login', fontSize: 16.sp, textColor: myWhiteColor, fontFamily: bold))),
+            child: RegularTextWithLocalization(text: 'login', fontSize: 16.sp, textColor: myWhiteColor, fontFamily: bold))),
 
         Expanded(child: RegularButton(
           borderColor: Colors.transparent,
@@ -39,7 +39,7 @@ class AuthSwitchBottom extends StatelessWidget {
           Navigator.push(context, MaterialPageRoute(builder: (context)=> const SignUpView()));
 
         },
-            child: RegularText(text: 'signup', fontSize: 16.sp, textColor: myWhiteColor, fontFamily: bold))),
+            child: RegularTextWithLocalization(text: 'signup', fontSize: 16.sp, textColor: myWhiteColor, fontFamily: bold))),
       ],
       ),
     );

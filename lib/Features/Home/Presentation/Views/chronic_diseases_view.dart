@@ -89,7 +89,7 @@ class _ChronicDiseasesViewState extends State<ChronicDiseasesView> {
       body: Column(
         children: [
           Center(
-            child: RegularText(
+            child: RegularTextWithLocalization(
               text: 'chronicDiseases',
               fontSize: 20.sp,
               textColor: primaryColor,
@@ -130,7 +130,7 @@ class _ChronicDiseasesViewState extends State<ChronicDiseasesView> {
                   _showSuccessDialog(context);
                 }
               },
-              child: RegularText(
+              child: RegularTextWithLocalization(
                 text: 'goToHome',
                 fontSize: 15.sp,
                 fontFamily: black,

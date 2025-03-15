@@ -28,7 +28,7 @@ class GetCodeToSignIn extends StatelessWidget {
 
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: RegularText(
+                content: RegularTextWithLocalization(
                   text: state.message,
                   fontSize: 15.sp,
                   textColor: Colors.white,
@@ -51,7 +51,7 @@ class GetCodeToSignIn extends StatelessWidget {
             // Show an error snackbar
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: RegularText(
+                content: RegularTextWithLocalization(
                   text: state.error,
                   fontSize: 15.sp,
                   textColor: Colors.white,

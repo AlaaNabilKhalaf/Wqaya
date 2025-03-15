@@ -31,7 +31,7 @@ final String cardAction;
             onTap: (){
           onTap();
         }, child:
-            RegularText(text: cardAction, fontSize: 16.sp, textColor: textColor??primaryColor, fontFamily: bold)),
+            RegularTextWithLocalization(text: cardAction, fontSize: 16.sp, textColor: textColor??primaryColor, fontFamily: bold)),
       ),
     );
   }

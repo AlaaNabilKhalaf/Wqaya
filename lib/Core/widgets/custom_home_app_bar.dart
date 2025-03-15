@@ -39,14 +39,14 @@ class HomeCustomAppBar extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RegularText(
+              RegularTextWithLocalization(
                 text: 'name',
                 fontSize: 15.sp,
                 textColor: primaryColor,
                 fontFamily: black,
               ),
               const SizedBox(height: 2,),
-              RegularText(
+              RegularTextWithLocalization(
                 text: 'address',
                 fontSize: 13.sp,
                 textColor: primaryColor,

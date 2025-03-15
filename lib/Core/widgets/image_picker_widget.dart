@@ -41,7 +41,7 @@ class ImagePickerWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(AssetsData.imagePicking),
-                  RegularText(text: 'pickTheImage', fontSize: 16.sp, textColor: primaryColor, fontFamily: regular)
+                  RegularTextWithLocalization(text: 'pickTheImage', fontSize: 16.sp, textColor: primaryColor, fontFamily: regular)
                 ],
               ),
             ),

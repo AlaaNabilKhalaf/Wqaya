@@ -22,7 +22,7 @@ class HomeContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(image,width: 100.w,fit: BoxFit.contain,),
-          RegularText(
+          RegularTextWithLocalization(
             text: text,
             fontSize: 25.sp,
             textColor: myWhiteColor,

@@ -16,15 +16,14 @@ class WelcomeView extends StatelessWidget {
     return Scaffold(
       backgroundColor: myWhiteColor,
       body: Column(
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
       const ImageContainer(image: AssetsData.boarding1),
 
           Column(
             children: [
-              RegularText(text: 'welcome', fontSize: 30.sp, textColor: primaryColor, fontFamily: black),
-              RegularText(
+              RegularTextWithLocalization(text: 'welcome', fontSize: 30.sp, textColor: primaryColor, fontFamily: black),
+              RegularTextWithLocalization(
                   text: 'weAimeTo', fontSize: 25.sp,
                   textAlign: TextAlign.center,
                   textColor: primaryColor, fontFamily: medium),

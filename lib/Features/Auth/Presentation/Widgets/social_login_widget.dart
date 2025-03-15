@@ -16,7 +16,7 @@ class SocialLoginWidget extends StatelessWidget {
         SizedBox(height: 40.h,),
 
         //Others Bottom
-        RegularText(text: 'other', fontSize: 16.sp, textColor: primaryColor, fontFamily: semiBold),
+        RegularTextWithLocalization(text: 'other', fontSize: 16.sp, textColor: primaryColor, fontFamily: semiBold),
 SizedBox(height: 20.h,),
         //Social Bottoms
         SizedBox(

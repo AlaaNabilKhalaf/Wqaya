@@ -37,12 +37,12 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              RegularText(
+              RegularTextWithLocalization(
                   text: 'welcomeToYou',
                   fontSize: 70.sp,
                   textColor: primaryColor,
                   fontFamily: bold),
-              RegularText(
+              RegularTextWithLocalization(
                   text: 'enterEmail',
                   fontSize: 30.sp,
                   textColor: primaryColor,
@@ -70,7 +70,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                   if(emailController.text.isEmpty){
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: RegularText(
+                        content: RegularTextWithLocalization(
                           text: "ادخل البريد الالكتروني",
                           fontSize: 15.sp,
                           textColor: Colors.white,
@@ -92,7 +92,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                       } else if(state is ForgotPasswordFailureState){
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: RegularText(
+                            content: RegularTextWithLocalization(
                               text: state.message,
                               fontSize: 15.sp,
                               textColor: Colors.white,
@@ -118,7 +118,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                       onTap: () {
                         aCubit.forgotPassword(email: emailController.text);
                       },
-                      child: RegularText(
+                      child: RegularTextWithLocalization(
                           text: 'getCode',
                           fontSize: 20.sp,
                           textColor: myWhiteColor,

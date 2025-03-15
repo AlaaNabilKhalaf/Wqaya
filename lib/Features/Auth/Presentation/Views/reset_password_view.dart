@@ -43,12 +43,12 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              RegularText(
+              RegularTextWithLocalization(
                   text: 'welcomeToYou',
                   fontSize: 70.sp,
                   textColor: primaryColor,
                   fontFamily: bold),
-              RegularText(
+              RegularTextWithLocalization(
                   text: 'resetPassword',
                   fontSize: 30.sp,
                   textColor: primaryColor,
@@ -115,7 +115,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                         } else if (state is ResetPasswordFailure){
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: RegularText(
+                              content: RegularTextWithLocalization(
                                 text: state.error,
                                 fontSize: 15.sp,
                                 textColor: Colors.white,
@@ -130,7 +130,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: RegularText(
+                              content: RegularTextWithLocalization(
                                 text: "كلمات السر غير متطابقة",
                                 fontSize: 15.sp,
                                 textColor: Colors.white,

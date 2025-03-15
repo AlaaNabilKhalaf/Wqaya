@@ -4,7 +4,6 @@ import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
-
 import '../Widgets/developer_names_widget.dart';
 
 
@@ -25,24 +24,18 @@ class AboutView extends StatelessWidget {
       backgroundColor: myWhiteColor,
       appBar: PreferredSize(preferredSize: const Size.fromHeight(kToolbarHeight),
           child: AppBar(
-        leadingWidth: 59.w,
         elevation: 0,
         backgroundColor: myWhiteColor,
+        leading:  IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              // size: 20,
+              Icons.arrow_back,
+              color: primaryColor,
+            )),
 
-
-        actions:
-            [
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(
-                    // size: 20,
-                    Icons.arrow_forward_rounded,
-                    color: primaryColor,
-                  )),
-            ],
-        centerTitle: true,
       )),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
@@ -53,7 +46,7 @@ class AboutView extends StatelessWidget {
             // const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(top: 10,bottom: 10),
-              child: RegularText(
+              child: RegularTextWithLocalization(
                   text:'programmers',
                   fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
             ),
@@ -75,7 +68,7 @@ class AboutView extends StatelessWidget {
                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 12,bottom: 3,right: 5),
-                            child: RegularText(
+                            child: RegularTextWithLocalization(
                                 text:programmers[index]["role"],
                                  fontSize: 20.sp, textColor: primaryColor, fontFamily: medium),
                           ),

@@ -35,7 +35,7 @@ class _ComplaintsViewState extends State<NewComplaintView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            RegularText(
+            RegularTextWithLocalization(
               text: "newComplain",
               fontSize: 20.sp,
               textColor: primaryColor,
@@ -44,7 +44,7 @@ class _ComplaintsViewState extends State<NewComplaintView> {
             const SizedBox(
               height: 15,
             ),
-            RegularText(
+            RegularTextWithLocalization(
               text: "complainReason",
               fontSize: 20.sp,
               textColor: primaryColor,
@@ -77,7 +77,7 @@ class _ComplaintsViewState extends State<NewComplaintView> {
                                     decoration: InputDecoration(
                                       fillColor: Colors.red,
                                       border: InputBorder.none,
-                                      label: RegularText(
+                                      label: RegularTextWithLocalization(
                                         text: "enterReason",
                                         fontSize: 10.sp,
                                         textColor: unselectedContainerColor,
@@ -99,7 +99,7 @@ class _ComplaintsViewState extends State<NewComplaintView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                RegularText(
+                RegularTextWithLocalization(
                   text: "painScale",
                   fontSize: 20.sp,
                   textColor: primaryColor,
@@ -116,7 +116,7 @@ class _ComplaintsViewState extends State<NewComplaintView> {
             ),
             Row(
               children: [
-                RegularText(
+                RegularTextWithLocalization(
                   text: "painScale",
                   fontSize: 20.sp,
                   textColor: primaryColor,
@@ -146,7 +146,7 @@ class _ComplaintsViewState extends State<NewComplaintView> {
                                 color: unselectedContainerColor)),
                         child: Row(
                           children: [
-                            RegularText(
+                            RegularTextWithLocalization(
                               text: durations[index],
                               fontSize: 20.sp,
                               textColor: primaryColor,

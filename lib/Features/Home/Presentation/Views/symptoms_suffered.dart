@@ -73,7 +73,7 @@ class _SymptomsSufferedViewState extends State<SymptomsSufferedView> {
       body: Column(
         children: [
           Center(
-            child: RegularText(
+            child: RegularTextWithLocalization(
               text: 'symptomsSuffer',
               fontSize: 20.sp,
               textColor: primaryColor,
@@ -111,7 +111,7 @@ class _SymptomsSufferedViewState extends State<SymptomsSufferedView> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const ChronicDiseasesView(),));
                 }
               },
-              child: RegularText(
+              child: RegularTextWithLocalization(
                 text: "next",
                 fontSize: 15.sp,
                 fontFamily: black,

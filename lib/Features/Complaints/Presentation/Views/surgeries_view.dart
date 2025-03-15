@@ -49,7 +49,7 @@ class _SurgeriesViewState extends State<SurgeriesView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RegularText(
+              RegularTextWithLocalization(
                 text: "surgery",
                 fontSize: 20.sp,
                 textColor: primaryColor,

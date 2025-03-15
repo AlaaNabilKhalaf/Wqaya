@@ -21,7 +21,7 @@ class SymOrMedSearch extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                RegularText(
+                RegularTextWithLocalization(
                   text: isSym?"symptoms":"medicine",
                   fontSize: 20.sp,
                   textColor: primaryColor,
@@ -46,7 +46,7 @@ class SymOrMedSearch extends StatelessWidget {
                           decoration:  InputDecoration(
                               fillColor: Colors.red,
                               border: InputBorder.none,
-                              label: RegularText(
+                              label: RegularTextWithLocalization(
                                 text: isSym?"symptomSearch":"medicineSearch",
                                 fontSize: 13.sp,
                                 textColor: unselectedContainerColor,

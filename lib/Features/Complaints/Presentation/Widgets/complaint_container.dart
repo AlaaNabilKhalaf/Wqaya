@@ -23,7 +23,7 @@ class _ComplaintContainerState extends State<ComplaintContainer> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        isMainTextRequired==true ?RegularText(
+        isMainTextRequired==true ?RegularTextWithLocalization(
           text: widget.mainText,
           fontSize: 20.sp,
           textColor: primaryColor,
@@ -32,7 +32,7 @@ class _ComplaintContainerState extends State<ComplaintContainer> {
          SizedBox(
           height: isMainTextRequired==false ? 0 : 15,
         ),
-        RegularText(
+        RegularTextWithLocalization(
           text: widget.containerText,
           fontSize: 20.sp,
           textColor: primaryColor,
@@ -65,7 +65,7 @@ class _ComplaintContainerState extends State<ComplaintContainer> {
                                 decoration: InputDecoration(
                                   fillColor: Colors.red,
                                   border: InputBorder.none,
-                                  label: RegularText(
+                                  label: RegularTextWithLocalization(
                                     text: "enterReason",
                                     fontSize: 10.sp,
                                     textColor: unselectedContainerColor,

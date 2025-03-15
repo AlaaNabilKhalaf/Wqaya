@@ -34,7 +34,7 @@ class _FirstComplaintsViewState extends State<ContagiousDiseaseView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RegularText(
+              RegularTextWithLocalization(
                 text: "contagiousDiseases",
                 fontSize: 20.sp,
                 textColor: primaryColor,

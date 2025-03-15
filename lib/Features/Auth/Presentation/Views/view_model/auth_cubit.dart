@@ -103,7 +103,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void register(
-      {required String name,
+      {
+        required String name,
       required String email,
       required String password,
       required String phoneNumber,
@@ -117,7 +118,7 @@ class AuthCubit extends Cubit<AuthState> {
           'accept': '*/*',
         }),
         data: {
-          'displayedName': name,
+          // 'displayedName': name,
           'email': email,
           'password': password,
           'phoneNumber': phoneNumber,

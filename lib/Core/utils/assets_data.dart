@@ -33,6 +33,13 @@ class AssetsData{
   static const String bigDot = "assets/images/profile_view/bigDot.png";
   static const String smallDot = "assets/images/profile_view/smallDot.png";
 
+  //CHAT VIEW
+  static const String chatMainIcon = "assets/images/chat_view/chat_main_icon.png";
+  static const String chatIcon = "assets/images/chat_view/chat_icon.png";
+  static const String sendIcon = "assets/images/chat_view/send_icon.png";
+
+
+
 
 
 

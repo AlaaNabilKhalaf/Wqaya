@@ -37,7 +37,7 @@ class SearchComplaintSection extends StatelessWidget {
                       decoration:  InputDecoration(
                           fillColor: Colors.red,
                           border: InputBorder.none,
-                          label: RegularText(
+                          label: RegularTextWithLocalization(
                             text: searchText,
                             fontSize: 13.sp,
                             textColor: unselectedContainerColor,

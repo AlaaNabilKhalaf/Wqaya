@@ -31,7 +31,7 @@ class _ComplaintsButtonState extends State<ComplaintsButton> {
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child:RegularText(
+            child:RegularTextWithLocalization(
               text: widget.text,
               fontSize: widget.fontSize,
               textColor: widget.textColor,

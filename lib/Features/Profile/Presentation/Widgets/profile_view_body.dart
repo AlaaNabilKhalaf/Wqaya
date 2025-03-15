@@ -21,22 +21,23 @@ class ProfileViewBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          RegularText(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
-          RegularText(text: 'inYourProfile', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
+          RegularTextWithLocalization(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
+          RegularTextWithLocalization(text: 'inYourProfile', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
           SizedBox(height: 38.h,),
-          ProfileCard(cardAction: 'editName', onTap: (){
+          ProfileCard(cardAction: 'editProfile', onTap: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=> const EditNameView()));
           }),
+          ProfileCard(cardAction: 'changeProfilePicture', onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> const ChangeProfilePictureView()));
+
+          }),
+
           ProfileCard(cardAction: 'changePassword', onTap: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=> const ChangePasswordView()));
 
           }),
-          ProfileCard(cardAction: 'editPhoneNumber', onTap: (){
+          ProfileCard(cardAction: 'exist', onTap: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=> const EditPhoneNumberView()));
-
-          }),
-          ProfileCard(cardAction: 'changeProfilePicture', onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> const ChangeProfilePictureView()));
 
           }),
 

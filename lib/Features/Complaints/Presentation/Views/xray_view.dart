@@ -47,7 +47,7 @@ class _XrayViewState extends State<XrayView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RegularText(
+              RegularTextWithLocalization(
                 text: "xray",
                 fontSize: 20.sp,
                 textColor: primaryColor,

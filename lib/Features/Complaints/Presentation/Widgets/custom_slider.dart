@@ -61,7 +61,7 @@ class _CustomSliderState extends State<CustomSlider> {
         ),
         Positioned(
           right: 10,
-          child: RegularText(
+          child: RegularTextWithLocalization(
             text: "0",
             fontSize: 10.sp,
             textColor: myWhiteColor,
@@ -70,7 +70,7 @@ class _CustomSliderState extends State<CustomSlider> {
         ),
         Positioned(
           left: 10,
-          child: RegularText(
+          child: RegularTextWithLocalization(
             text: "10",
             fontSize: 10.sp,
             textColor: myWhiteColor,
