@@ -34,7 +34,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
     return Padding(
       padding: const EdgeInsets.all(18.0),
       child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

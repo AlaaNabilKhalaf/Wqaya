@@ -26,6 +26,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         backgroundColor: myWhiteColor,
         appBar: const PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight),
@@ -58,7 +59,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                           .size
                           .width * 0.9,
                       child: CustomTextFormField(
-                          textInputType: TextInputType.phone,
+                          textInputType: TextInputType.emailAddress,
                           fieldController: emailController,
                           hintText: 'البريد الالكتروني'),
                     ),

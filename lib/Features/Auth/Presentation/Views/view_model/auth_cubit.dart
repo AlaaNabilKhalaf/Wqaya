@@ -78,7 +78,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(SigninLoadingState());
       final response = await Dio().post(
-        'https://wqaya.runasp.net/api/Patient/LoginPatient',
+        'https://wqaya.runasp.net/api/Authentication/Login',
         data: {
           'phone': phoneNumber,
           'password': password,
@@ -118,7 +118,7 @@ class AuthCubit extends Cubit<AuthState> {
           'accept': '*/*',
         }),
         data: {
-          // 'displayedName': name,
+          'displayedName': name,
           'email': email,
           'password': password,
           'phoneNumber': phoneNumber,
@@ -152,12 +152,14 @@ class AuthCubit extends Cubit<AuthState> {
   void verifyEmail({required String verificationCode}) async {
     try {
       emit(VerificationLoadingState());
-      final storedUserId = CacheHelper.sharedPreferences.get('UserId');
+      final storedUserId = CacheHelper().getData(key: 'UserId');
+      print(storedUserId);
+      print(verificationCode);
       final response = await Dio().post(
-        'https://wqaya.runasp.net/api/Patient/VerifyEmail',
+        'https://wqaya.runasp.net/api/Patient/VerifyPatient',
         queryParameters: {
           'UserId': storedUserId,
-          'verifiedcode': verificationCode,
+          'verificationCode': verificationCode,
         },
       );
       if (response.statusCode == 200) {
@@ -247,10 +249,11 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(ForgotPasswordLoadingState());
       final response = await Dio().post(
-        'https://wqaya.runasp.net/api/Patient/ForgetPassword?Email=$email',
+        'https://wqaya.runasp.net/api/Authentication/RequestResetPassword?email=$email',
         options: Options(headers: {'accept': '*/*'}),
       );
       if (response.statusCode == 200) {
+        CacheHelper().saveData(key: 'emailToResetPass',value: email);
         emit(ForgotPasswordSuccessState(message: 'Please check your email'));
       } else {
         print(response.data['message']);
@@ -275,7 +278,7 @@ class AuthCubit extends Cubit<AuthState> {
       print("Sending Code: $code");
 
       final response = await Dio().post(
-        'https://wqaya.runasp.net/api/Patient/CheckCode',
+        'https://wqaya.runasp.net/api/Authentication/CheckCode',
         queryParameters: {
           'Email': CacheHelper().getData(key: 'emailToResetPass'),
           'Code': code,
@@ -318,7 +321,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(ResetPasswordLoading());
       final response = await Dio().post(
-        'https://wqaya.runasp.net/api/Patient/ResetPassword',
+        'https://wqaya.runasp.net/api/Authentication/ResetPassword',
         options: Options(
           headers: {
             'accept': '*/*',
