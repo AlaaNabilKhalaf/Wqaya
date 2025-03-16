@@ -5,16 +5,6 @@ import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Features/NavBar/Presentation/Widgets/custom_bottom_nav_bar.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
 
-
-class BotView extends StatelessWidget {
-  const BotView({super.key});
-
-  @override
-  Widget build(BuildContext context) => const Center(child: Text("Chat Bot"));
-}
-
-
-
 class NavBarView extends StatelessWidget {
   const NavBarView({super.key});
 
@@ -42,7 +32,7 @@ class NavBarView extends StatelessWidget {
                 return Offstage(
                   offstage: bottomNavCubit.state != index,
                   child: Navigator(
-                    key: bottomNavCubit.navigatorKeys[index], // Preserve state per tab
+                    key: bottomNavCubit.navigatorKeys[index],
                     onGenerateRoute: (settings) => MaterialPageRoute(
                       builder: (_) => bottomNavCubit.pages[index],
                     ),
@@ -51,9 +41,10 @@ class NavBarView extends StatelessWidget {
               }),
             ),
             bottomNavigationBar: CustomBottomNavBar(
-              icons: BottomNavCubit().icons,
-              labels: BottomNavCubit().labels,
+              icons: bottomNavCubit.icons, // Use the existing cubit
+              labels: bottomNavCubit.labels,
             ),
+
           ),
         );
       },
