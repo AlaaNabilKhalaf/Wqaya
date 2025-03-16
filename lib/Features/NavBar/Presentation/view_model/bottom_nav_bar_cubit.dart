@@ -15,19 +15,20 @@ class BottomNavCubit extends Cubit<int> {
     const HomeView(),
     const ChatWelcomeView(),
     const ProfileView(),
-
   ];
-  final List<String> labels =[
+
+  final List<String> labels = [
     'home'.tr(),
-    'chat'.tr(),
+    'chat'.tr(),  // Chatbot at index 1
     'profile'.tr(),
   ];
 
   final List<IconData> icons = [
     Icons.home_filled,
-    Icons.mark_unread_chat_alt_outlined,
+    Icons.mark_unread_chat_alt_outlined,  // Chatbot icon
     Icons.person_outline,
   ];
+
   final List<GlobalKey<NavigatorState>> navigatorKeys = [
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
