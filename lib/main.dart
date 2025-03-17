@@ -61,7 +61,7 @@ class Wqaya extends StatelessWidget {
           locale: const Locale('ar', 'EG'),
           // Force Arabic
           debugShowCheckedModeBanner: false,
-          home: const NavBarView(), // Updated to use bottom navigation
+          home: const SplashView(), // Updated to use bottom navigation
         );
       },
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
@@ -18,7 +17,7 @@ class ImagePickerWidget extends StatelessWidget {
       builder: (context , _){
         return  GestureDetector(
           onTap: (){
-            context.read<ProfileImageCubit>().takeImageFromGallery(ImageSource.gallery);
+            context.read<ProfileImageCubit>().takeImageFromGallery();
             context.read<ProfileImageCubit>().imagePicked = true;
           },
           child: Container(

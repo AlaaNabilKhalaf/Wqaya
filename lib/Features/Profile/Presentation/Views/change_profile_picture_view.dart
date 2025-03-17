@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wqaya/Core/cache/cache_helper.dart';
+import 'package:wqaya/Core/utils/global_variables.dart';
+import 'package:wqaya/Features/Profile/Controller/profile_image_cubit.dart';
+import 'package:wqaya/Features/Profile/Controller/profile_image_states.dart';
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/custom_ alert.dart';
@@ -21,10 +26,16 @@ bool passwordIsVisible = false;
 
 
 class _ChangeProfilePictureViewState extends State<ChangeProfilePictureView> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    currentPassword = CacheHelper().getData(key: 'currentPassword');
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
         backgroundColor: myWhiteColor,
         appBar: const PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
@@ -54,20 +65,66 @@ class _ChangeProfilePictureViewState extends State<ChangeProfilePictureView> {
                 ),
                 const ImagePickerWidget(),
 
-                ProfileCard(cardAction: 'confirm', onTap: (){
-                  showDialog(
-                    context: context,
-                    barrierDismissible: true, // Prevent dismissing by tapping outside
-                    builder: (BuildContext context) {
-                      return CustomAlert (
-                        nextText: '',
-                        nextScreenFunction: (){},);
+                BlocConsumer<ProfileImageCubit,ProfileImageStates>(
+                  listener: (context , state){
+                    if (state is UploadProfilePictureFailState){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: RegularTextWithoutLocalization(
+                            text: state.message,
+                            fontSize: 15.sp,
+                            textColor: Colors.white,
+                            fontFamily: bold,
+                          ),
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  },
+                builder: (context , state ){
+                  return state is !UploadProfilePictureLoadingState?
+                  ProfileCard(cardAction: 'confirm',
+                  onTap: (){
+                  if(currentPassword == currentPasswordController.text.toString()){
 
-                    },
+
+                  //
+                  // showDialog(
+                  //   context: context,
+                  //   barrierDismissible: true, // Prevent dismissing by tapping outside
+                  //   builder: (BuildContext context) {
+                  //     return CustomAlert (
+                  //       nextText: '',
+                  //       nextScreenFunction: (){},);
+                  //
+                  //   },
+                  // );
+                  }
+                  else{
+                  ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                  content: RegularTextWithoutLocalization(
+                  text: "كلمة السر الحالية خاطئة",
+                  fontSize: 15.sp,
+                  textColor: Colors.white,
+                  fontFamily: bold,
+                  ),
+                  backgroundColor: Colors.red,
+                  behavior: SnackBarBehavior.floating,
+                  ),
                   );
+                  }
 
+                  },cardColor: primaryColor,textColor: myWhiteColor,)  :
+                  const Center(
+                  child: CircularProgressIndicator(
+                  color: primaryColor,
+                  ),
+                  );
+                },
 
-                },cardColor: primaryColor,textColor: myWhiteColor,)
+                )
 
 
 
