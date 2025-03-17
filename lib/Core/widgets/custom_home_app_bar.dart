@@ -31,7 +31,7 @@ class HomeCustomAppBar extends StatelessWidget {
               border: Border.all(color: const Color(0xff0094FD),width: 1)
           ),
           child:  cubit.imgFile!=null? Image.file(
-              cubit.imgFile!)  : const Icon(Icons.person , color: myWhiteColor,size: 35,),
+              cubit.imgFile!, fit: BoxFit.cover,)  : const Icon(Icons.person , color: myWhiteColor,size: 35,),
         ),
       ),
       title:  Row(

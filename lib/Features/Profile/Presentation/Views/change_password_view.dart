@@ -26,17 +26,16 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // resizeToAvoidBottomInset: false,
         backgroundColor: myWhiteColor,
         appBar: const PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
         body:SingleChildScrollView(
           child: Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 18.w),
+            padding:  const EdgeInsets.all(18.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 100.h,),
+                SizedBox(height: 80.h,),
 
                 RegularTextWithLocalization(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
                 RegularTextWithLocalization(text: 'inYourProfile', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),

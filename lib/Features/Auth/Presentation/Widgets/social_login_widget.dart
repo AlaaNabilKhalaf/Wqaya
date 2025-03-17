@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Features/Auth/Presentation/Widgets/social_bottoms_container.dart';
-import '../../../../Core/Utils/assets_data.dart';
+import '../../../../Core/utils/assets_data.dart';
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/texts.dart';

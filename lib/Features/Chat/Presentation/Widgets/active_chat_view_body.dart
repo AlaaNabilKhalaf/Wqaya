@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
-import '../../../../Core/Utils/assets_data.dart';
+import '../../../../Core/utils/assets_data.dart';
 import 'chat_text_field.dart';
 
 class ActiveChatViewBody extends StatefulWidget {

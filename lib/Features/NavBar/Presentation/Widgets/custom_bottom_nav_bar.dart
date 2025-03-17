@@ -6,6 +6,8 @@ import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Features/Chat/Presentation/Views/chat_welcome_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
 
+import '../../../../Core/utils/assets_data.dart';
+
 class CustomBottomNavBar extends StatelessWidget {
   final List<IconData> icons;
   final List<String> labels;
@@ -69,12 +71,9 @@ class CustomBottomNavBar extends StatelessWidget {
               child: GestureDetector(
                 onTap: () async {
                   if(context.mounted) {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (_) => const ChatWelcomeView()),
-                    );
-                    context.read<BottomNavCubit>().updateIndex(
-                        0); // Return to home on pop
+                    await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => const ChatWelcomeView()),);
+                    context.read<BottomNavCubit>().updateIndex(0); // Return to home on pop
                   }},
                 child: Container(
                   width: 70.w,
@@ -86,15 +85,16 @@ class CustomBottomNavBar extends StatelessWidget {
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),
                         blurRadius: 8,
-                        offset: Offset(0, 4),
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
-                  child: Icon(
-                    icons[1], // Chatbot icon
-                    color: currentIndex == 1 ? Colors.white : Colors.white70,
-                    size: 28,
-                  ),
+                  child: Image.asset(AssetsData.chatBotIcon),
+                  // child: Icon(
+                  //   icons[1], // Chatbot icon
+                  //   color: currentIndex == 1 ? Colors.white : Colors.white70,
+                  //   size: 28,
+                  // ),
                 ),
               ),
             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wqaya/Core/Utils/assets_data.dart';
+import '../../../../Core/utils/assets_data.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
@@ -17,8 +17,6 @@ class FollowingUpView extends StatelessWidget {
       key: formKey,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        // extendBodyBehindAppBar: true,
-        // extendBody: true,
         backgroundColor: myWhiteColor,
         appBar: const PreferredSize(preferredSize: Size.fromHeight(kToolbarHeight),
             child: CustomAppBar()),

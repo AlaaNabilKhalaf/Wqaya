@@ -37,6 +37,7 @@ class AssetsData{
   static const String chatMainIcon = "assets/images/chat_view/chat_main_icon.png";
   static const String chatIcon = "assets/images/chat_view/chat_icon.png";
   static const String sendIcon = "assets/images/chat_view/send_icon.png";
+  static const String chatBotIcon = "assets/images/chat_view/chatBot_icon.png";
 
 
 

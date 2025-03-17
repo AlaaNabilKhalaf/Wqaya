@@ -34,8 +34,6 @@ class _ChangeProfilePictureViewState extends State<ChangeProfilePictureView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 100.h,),
-
                 RegularTextWithLocalization(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
                 RegularTextWithLocalization(text: 'inYourProfile', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
                 SizedBox(height: 38.h,),
