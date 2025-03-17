@@ -3,11 +3,10 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:meta/meta.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wqaya/Core/cache/cache_helper.dart';
-import 'package:wqaya/Features/Auth/Presentation/Views/view_model/Models/updateUserResponse.dart';
-import 'Models/UserModel.dart';
+import 'package:wqaya/Features/Auth/Presentation/Views/view_model/Models/update_user_response.dart';
+import 'Models/user_model.dart';
 import 'Models/register.dart';
 
 part 'auth_state.dart';
@@ -15,6 +14,7 @@ part 'auth_state.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
   LoginResponse? loginResponse;
+
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId:
         '163119622890-p749ij53hmaapfagn9lpapps0j9phf32.apps.googleusercontent.com',
@@ -85,11 +85,11 @@ class AuthCubit extends Cubit<AuthState> {
         },
       );
       if(response.statusCode==200){
-        print(response.data);
+        debugPrint(response.data);
         CacheHelper().saveData(key: 'token', value: response.data['token']);
         emit(SigninSuccessState(token: response.data['token']));
       }else{
-        print("here ${response.data}");
+        debugPrint("here ${response.data}");
       emit(SigninFailureState(error: response.data['message']));
     }} catch (e) {
       String serverError = "خطأ غير معروف من السيرفر";
@@ -97,7 +97,7 @@ class AuthCubit extends Cubit<AuthState> {
         serverError =
             e.response?.data['message'].toString() ?? "خطأ من السيرفر بدون تفاصيل";
       }
-      print("serverError :$serverError");
+      debugPrint("serverError :$serverError");
       emit(SigninFailureState(error: serverError));
     }
   }
@@ -126,15 +126,15 @@ class AuthCubit extends Cubit<AuthState> {
         },
       );
       if (response.statusCode == 200) {
-        print("here");
-        print(response.data);
+        debugPrint("here");
+        debugPrint(response.data);
         final verificationResponse =
             VerificationResponse.fromJson(jsonEncode(response.data));
         CacheHelper()
             .saveData(key: 'UserId', value: verificationResponse.userId);
         emit(RegisterSuccessState(message: verificationResponse.message));
       } else {
-        print(response.data['message']);
+        debugPrint(response.data['message']);
         emit(RegisterFailureState(error: response.data['message']));
       }
     } catch (e) {
@@ -142,9 +142,9 @@ class AuthCubit extends Cubit<AuthState> {
       if (e is DioException) {
         serverError = e.response?.data['errors'].toString() ??
             "خطأ من السيرفر بدون تفاصيل";
-        print(e.response?.data);
+        debugPrint(e.response?.data);
       }
-      print(e.toString());
+      debugPrint(e.toString());
       emit(RegisterFailureState(error: serverError));
     }
   }
@@ -153,8 +153,8 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(VerificationLoadingState());
       final storedUserId = CacheHelper().getData(key: 'UserId');
-      print(storedUserId);
-      print(verificationCode);
+      debugPrint(storedUserId);
+      debugPrint(verificationCode);
       final response = await Dio().post(
         'https://wqaya.runasp.net/api/Patient/VerifyPatient',
         queryParameters: {
@@ -163,11 +163,11 @@ class AuthCubit extends Cubit<AuthState> {
         },
       );
       if (response.statusCode == 200) {
-        print(response.data);
+        debugPrint(response.data);
         CacheHelper().saveData(key: 'token', value: response.data['token']);
         emit(VerificationSuccessState(message: "تم التأكيد بنجاح"));
       } else {
-        print(response.data);
+        debugPrint(response.data);
         emit(VerificationFailureState(
             error: "Unexpected status code: ${response.statusCode}"));
       }
@@ -177,9 +177,9 @@ class AuthCubit extends Cubit<AuthState> {
         print(1);
         serverError =
             e.response?.data.toString() ?? "خطأ من السيرفر بدون تفاصيل";
-        print(serverError);
+        debugPrint(serverError);
       }
-      print(serverError);
+      debugPrint(serverError);
       emit(VerificationFailureState(error: serverError));
     }
   }
@@ -225,23 +225,23 @@ class AuthCubit extends Cubit<AuthState> {
       if (response.statusCode == 200) {
         print(4);
         final responseData = response.data;
-        print('Update User Response: $responseData');
+        debugPrint('Update User Response: $responseData');
         emit(FollowUpSuccessState());
         final updateResponse = UpdateUserResponse.fromJson(responseData);
         if (updateResponse.succeeded) {
-          print('User updated successfully: ${updateResponse.message}');
+          debugPrint('User updated successfully: ${updateResponse.message}');
         } else {
           print(5);
           emit(FollowUpFailureState());
-          print('Failed to update user: ${updateResponse.message}');
+          debugPrint('Failed to update user: ${updateResponse.message}');
         }
       } else {
         print(6);
         emit(FollowUpFailureState());
-        print('Failed to update user. Status code: ${response.statusCode}');
+        debugPrint('Failed to update user. Status code: ${response.statusCode}');
       }
     } catch (e) {
-      print('Unexpected error: $e');
+      debugPrint('Unexpected error: $e');
     }
   }
 
@@ -256,7 +256,7 @@ class AuthCubit extends Cubit<AuthState> {
         CacheHelper().saveData(key: 'emailToResetPass',value: email);
         emit(ForgotPasswordSuccessState(message: 'Please check your email'));
       } else {
-        print(response.data['message']);
+        debugPrint(response.data['message']);
         emit(ForgotPasswordFailureState(error: 'Failed to send OTP'));
       }
     } catch (e) {
@@ -265,7 +265,7 @@ class AuthCubit extends Cubit<AuthState> {
         serverError =
             e.response?.data['message'].toString() ?? "خطأ من السيرفر بدون تفاصيل";
       }
-      print("server :$serverError");
+      debugPrint("server :$serverError");
       emit(ForgotPasswordFailureState(error: serverError));
     }
   }
@@ -274,8 +274,8 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(CheckCodeLoadingState());
 
-      print("Sending Email: ${CacheHelper().getData(key: 'emailToResetPass')}");
-      print("Sending Code: $code");
+      debugPrint("Sending Email: ${CacheHelper().getData(key: 'emailToResetPass')}");
+      debugPrint("Sending Code: $code");
 
       final response = await Dio().post(
         'https://wqaya.runasp.net/api/Authentication/CheckCode',
@@ -290,7 +290,7 @@ class AuthCubit extends Cubit<AuthState> {
         ),
       );
 
-      print(" Server Response: ${response.data}");
+      debugPrint(" Server Response: ${response.data}");
       CacheHelper().saveData(key: 'resetPassCode', value:code );
       emit(CheckCodeSuccessState(message: 'Code verified successfully'));
     } catch (e) {
@@ -299,7 +299,7 @@ class AuthCubit extends Cubit<AuthState> {
         serverError =
             e.response?.data.toString() ?? "خطأ من السيرفر بدون تفاصيل";
       }
-      print(" CheckCode Error: $serverError");
+      debugPrint(" CheckCode Error: $serverError");
       emit(CheckCodeFailureState(error: serverError));
     }
   }
@@ -309,10 +309,10 @@ class AuthCubit extends Cubit<AuthState> {
     required String? newPassword,
   }) async {
     try {
-      print("Resetting password with: ");
-      print("Email: ${CacheHelper().getData(key: 'emailToResetPass')}");
-      print("Code: $code");
-      print("New Password: $newPassword");
+      debugPrint("Resetting password with: ");
+      debugPrint("Email: ${CacheHelper().getData(key: 'emailToResetPass')}");
+      debugPrint("Code: $code");
+      debugPrint("New Password: $newPassword");
 
       if (CacheHelper().getData(key: 'emailToResetPass') == null) {
         emit(ResetPasswordFailure(error: "No saved email found in Cubit!"));
@@ -334,7 +334,7 @@ class AuthCubit extends Cubit<AuthState> {
           'newpassword': newPassword,
         },
       );
-      print("Response data: ${response.data}");
+      debugPrint("Response data: ${response.data}");
       final Map<String, dynamic> data = response.data;
       if (data.containsKey('succeeded') && data['succeeded'] == true) {
         final String msg = data['message'] ?? 'Password reset successfully';
@@ -346,10 +346,9 @@ class AuthCubit extends Cubit<AuthState> {
     } catch (e) {
       String serverError = "خطأ غير معروف من السيرفر";
       if (e is DioException) {
-        serverError =
-            e.response?.data['message'].toString() ?? "خطأ من السيرفر بدون تفاصيل";
+        serverError = e.response?.data['message'].toString() ?? "خطأ من السيرفر بدون تفاصيل";
       }
-      print(serverError);
+      debugPrint(serverError);
       emit(ResetPasswordFailure(error: serverError));
     }
   }
@@ -359,11 +358,11 @@ class AuthCubit extends Cubit<AuthState> {
       await FirebaseAuth.instance.signOut();
       await GoogleSignIn().signOut();
       await CacheHelper().clearData();
-      print("done");
+      debugPrint("done");
       if (context.mounted) {}
       emit(AuthInitial());
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

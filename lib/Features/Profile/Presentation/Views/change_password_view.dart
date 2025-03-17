@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
-import '../../../../Core/widgets/custom_home_app_bar.dart';
+import '../../../../Core/cache/cache_helper.dart';
+import '../../../../Core/utils/global_variables.dart';
 import '../../../../Core/widgets/custom_ alert.dart';
+import '../../../../Core/widgets/custom_home_app_bar.dart';
 import '../../../../Core/widgets/password_icon.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
+import '../../Controller/api_profile_cubit.dart';
+import '../../Controller/api_profile_states.dart';
 import '../Widgets/profile_card.dart';
 
 class ChangePasswordView extends StatefulWidget {
@@ -24,6 +29,13 @@ bool confirmNewPasswordIsVisible = false;
 
 class _ChangePasswordViewState extends State<ChangePasswordView> {
   @override
+  void initState() async{
+    super.initState();
+   await CacheHelper().getData(key:'currentPassword');
+   currentPassword = CacheHelper().getData(key:'currentPassword');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: myWhiteColor,
@@ -31,7 +43,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
             preferredSize: Size.fromHeight(kToolbarHeight), child: HomeCustomAppBar()),
         body:SingleChildScrollView(
           child: Padding(
-            padding:  const EdgeInsets.all(18.0),
+            padding: const EdgeInsets.all(18.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -83,20 +95,89 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 ),
                 // SizedBox(width: 100.h,),
 
-                ProfileCard(cardAction: 'confirm', onTap: (){
+                BlocConsumer<ApiProfileCubit, ApiProfileStates>(
+                  listener: (context, state) {
+
+
+                    if(currentPassword! == oldPasswordController.text.toString()){
+                      if (newPasswordController.text == confirmNewPasswordController.text){
+
+                if(state is ChangePasswordSuccessState){
                   showDialog(
                     context: context,
-                    barrierDismissible: true, // Prevent dismissing by tapping outside
+                    barrierDismissible: true,
                     builder: (BuildContext context) {
-                      return CustomAlert (
+                      return CustomAlert(
+                        nextScreenFunction: () {},
                         nextText: '',
-                        nextScreenFunction: (){},);
-
+                      );
                     },
                   );
+                }
 
+                else if(state is ChangePasswordFailState){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: RegularTextWithLocalization(
+                        text: state.message,
+                        fontSize: 15.sp,
+                        textColor: Colors.white,
+                        fontFamily: bold,
+                      ),
+                      backgroundColor: Colors.green,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
 
-                },cardColor: primaryColor,textColor: myWhiteColor,)
+                      }
+                      else {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: RegularTextWithoutLocalization(
+                                text: "كلمات السر الجديدة غير متطابقة",
+                                fontSize: 15.sp,
+                                textColor: Colors.white,
+                                fontFamily: bold,
+                              ),
+                              backgroundColor: Colors.red,
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      }
+                    }
+                    else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: RegularTextWithoutLocalization(
+                            text: "كلمة السر الحالية خاطئة",
+                            fontSize: 15.sp,
+                            textColor: Colors.white,
+                            fontFamily: bold,
+                          ),
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return ProfileCard(
+                      cardAction: 'confirm',
+                      onTap: (){
+                        context.read<ApiProfileCubit>().changePassword(
+                            oldPasswordController.text,
+                            newPasswordController.text,
+                            confirmNewPasswordController.text);
+                      } ,
+                      cardColor: primaryColor,
+                      textColor: myWhiteColor,
+                    );
+                  },
+                )
+
 
 
 

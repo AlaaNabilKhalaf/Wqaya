@@ -88,7 +88,6 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                       hintText: 'اعادة كتابة كلمة السر الجديدة',
                     ),
                   ),
-                  // SizedBox(width: 100.h,),
 
                   BlocConsumer<AuthCubit, AuthState>(
                     listener: (context, state) {
@@ -150,8 +149,9 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                       return ProfileCard(
                         cardAction: 'confirm',
                         onTap: (){
-
                          aCubit.resetPassword(code: CacheHelper().getData(key: 'resetPassCode'), newPassword:newPasswordController.text );
+                         CacheHelper().saveData(key: 'currentPassword', value: newPasswordController.text);
+
                         } ,
                         cardColor: primaryColor,
                         textColor: myWhiteColor,

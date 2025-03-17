@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
+import 'package:wqaya/Core/cache/cache_helper.dart';
+import 'package:wqaya/Core/utils/global_variables.dart';
 import 'package:wqaya/Core/widgets/text_form_fields.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Auth/Presentation/Views/get_code_to_sign_in.dart';
@@ -45,7 +47,8 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                 RegularTextWithLocalization(text: 'startSignUp', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
               ],
             ),
-SizedBox(height: 30.h,),
+             SizedBox(height: 30.h,),
+
             //TEXT FIELDS
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,6 +114,8 @@ SizedBox(height: 30.h,),
 
                     fieldController: passwordConfirmController, hintText: 'تاكيد الرقم السري'),
                 SizedBox(height: 15.h,),
+
+      // Here is The
       BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) async {
           final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -180,7 +185,8 @@ SizedBox(height: 30.h,),
                 ),
               );
             }
-          } else if (state is RegisterSuccessState) {
+          }
+          else if (state is RegisterSuccessState) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: RegularTextWithoutLocalization(
@@ -211,7 +217,8 @@ SizedBox(height: 30.h,),
             height: 55.h,
             buttonColor: primaryColor,
             borderRadius: 20.r,
-            onTap: () {
+            onTap: ()
+            {
               aCubit.register(
                 name: nameController.text,
                 email: emailController.text,
@@ -222,6 +229,9 @@ SizedBox(height: 30.h,),
                 confirmedPassword: passwordConfirmController.text,
               );
 
+              // This Method Is For Caching The Password ONLY
+                CacheHelper().saveData(key: 'currentPassword', value: passwordController.text);
+
               // Debug prints
               // debugPrint(nameController.text);
               debugPrint(phoneNumberController.text);
@@ -229,13 +239,15 @@ SizedBox(height: 30.h,),
               debugPrint(passwordConfirmController.text);
               debugPrint(emailController.text);
             },
+
             child: RegularTextWithLocalization(
               text: 'getCode',
               fontSize: 20.sp,
               textColor: myWhiteColor,
               fontFamily: semiBold,
             ),
-          ) : const Center(
+          ) :
+          const Center(
             child: CircularProgressIndicator(
               color: primaryColor,
             ),
