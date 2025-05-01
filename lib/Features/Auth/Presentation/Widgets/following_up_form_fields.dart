@@ -24,15 +24,15 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
   final TextEditingController addressController = TextEditingController();
 
   bool userKindIsMale = true;
-  String selectedGovernorate = 'Cairo'; // Track selected governorate
+  String selectedGovernorate = 'Cairo';
 
   @override
   Widget build(BuildContext context) {
     var aCubit = context.read<AuthCubit>();
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-
+        const SizedBox(height: 80,),
         // National ID Field
         CustomTextFormField(
           textInputType: TextInputType.phone,
@@ -123,11 +123,11 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
             ),
           ],
         ),
-
         // Next Button
+        const Spacer(),
         BlocListener<AuthCubit, AuthState>(
           listener: (context, state) {
-            if (state is FollowUpSuccessState){
+            if (state is FollowUpSuccessState) {
               if (context.mounted) {
                 Navigator.push(
                   context,
@@ -139,30 +139,72 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
           },
           child: Padding(
             padding: EdgeInsets.only(top: 30.h),
-            child: RegularButton(
-              height: 55.h,
-              buttonColor: primaryColor,
-              borderRadius: 20.r,
-              onTap: () async {
-                await aCubit.updateUser(
-                  token: CacheHelper().getData(key: 'token'),
-                  displayedName: 'MALEK',
-                  nationalId: idController.text,
-                  age: int.parse(ageController.text),
-                  gender: userKindIsMale ? 'Male' : 'Female',
-                  address: addressController.text,
-                  governorate: selectedGovernorate,
-                );
+            child: BlocBuilder<AuthCubit, AuthState>(
+              builder: (context, state) {
+                return state is !FollowUpLoadingState ?
+                RegularButton(
+                  height: 55.h,
+                  buttonColor: primaryColor,
+                  borderRadius: 20.r,
+                  onTap: () async {
+                    final nationalId = idController.text.trim();
+                    final ageText = ageController.text.trim();
+                    final address = addressController.text.trim();
+
+                    if (nationalId.isEmpty ||
+                        ageText.isEmpty ||
+                        address.isEmpty ||
+                        selectedGovernorate.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('من فضلك املأ جميع الحقول المطلوبة'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return; // Stop execution
+                    }
+
+                    // Try parsing age
+                    int? age = int.tryParse(ageText);
+                    if (age == null || age <= 0) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('يرجى إدخال عمر صالح'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    }
+                    print(CacheHelper().getData(key: 'token'));
+                    print(CacheHelper().getData(key: 'name'));
+                    print(nationalId);
+                    print(age);
+                    print(userKindIsMale ? 'Male' : 'Female');
+                    print(address);
+                    print(selectedGovernorate);
+
+                    await aCubit.updateUser(
+                      token: CacheHelper().getData(key: 'token'),
+                      displayedName: CacheHelper().getData(key: 'name'),
+                      nationalId: nationalId,
+                      age: age,
+                      gender: userKindIsMale ? 'Male' : 'Female',
+                      address: address,
+                      governorate: selectedGovernorate,
+                    );
+                  },
+                  child: RegularTextWithLocalization(
+                    text: 'next',
+                    fontSize: 20.sp,
+                    textColor: myWhiteColor,
+                    fontFamily: semiBold,
+                  ),
+                ) : const CircularProgressIndicator(backgroundColor: primaryColor,);
               },
-              child: RegularTextWithLocalization(
-                text: 'next',
-                fontSize: 20.sp,
-                textColor: myWhiteColor,
-                fontFamily: semiBold,
-              ),
             ),
           ),
         ),
+        const SizedBox(height: 100,),
       ],
     );
   }

@@ -19,13 +19,13 @@ final class SigninFailureState extends AuthState {
 final class RegisterLoadingState extends AuthState {}
 final class RegisterSuccessState extends AuthState {
   final String message;
+  final String userId;
 
-  RegisterSuccessState({required this.message});
+  RegisterSuccessState({required this.message, required this.userId});
 }
 final class RegisterFailureState extends AuthState {
-  final String error;
-
-  RegisterFailureState({required this.error});
+  final String message;
+  RegisterFailureState({required this.message});
 }
 final class VerificationLoadingState extends AuthState {}
 final class VerificationSuccessState extends AuthState {
@@ -75,4 +75,8 @@ final class FollowUpLoadingState extends AuthState {}
 final class FollowUpSuccessState extends AuthState {
 }
 final class FollowUpFailureState extends AuthState {
+  final String error;
+
+  FollowUpFailureState({required this.error});
+
 }

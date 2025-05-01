@@ -51,34 +51,10 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.64,
-                      child: CustomTextFormField(
-                          textInputType: TextInputType.phone,
-                          fieldController: phoneNumberController,
-                          hintText: 'رقم الهاتف')),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 55.h,
-                    width: MediaQuery.of(context).size.width * 0.25,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: bottomColor, width: 2),
-                        color: textFormBackgroundColor,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            blurRadius: 10.r,
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(20.r)),
-                    child: const CustomDropdownPhones(),
-                  ),
-                ],
-              ),
-              SizedBox(
+              CustomTextFormField(
+                  textInputType: TextInputType.phone,
+                  fieldController: phoneNumberController,
+                  hintText: 'رقم الهاتف'),              SizedBox(
                 height: 19.h,
               ),
               CustomTextFormField(

@@ -24,28 +24,23 @@ class FollowingUpView extends StatelessWidget {
           padding: const EdgeInsets.all(18.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
 
             //Text
             Column(
               children: [
                 RegularTextWithLocalization(text:'followingUp', fontSize: 40.sp, textColor: primaryColor, fontFamily: bold),
-
                 //Dots Image
                 Padding(
-                  padding:  EdgeInsets.only(top: 30.h, bottom: 50.h),
+                  padding:  EdgeInsets.only(top: 30.h, bottom: 10.h),
                   child: SizedBox(
                       height: 8.h,width: 36.w,
                       child: Image.asset(AssetsData.dots)),
                 ),
               ],
             ),
-
             //Text Form Fields
-                      const FollowingUpFormFields(),
-           const SocialLoginWidget()
-
+                      Expanded(child: const FollowingUpFormFields()),
           ],
           ),
         ),

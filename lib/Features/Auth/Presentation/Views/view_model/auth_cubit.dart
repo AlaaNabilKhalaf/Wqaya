@@ -77,114 +77,140 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signIn({required String phoneNumber, required String password}) async {
     try {
       emit(SigninLoadingState());
+
       final response = await Dio().post(
         'https://wqaya.runasp.net/api/Authentication/Login',
         data: {
           'phone': phoneNumber,
           'password': password,
         },
+        options: Options(validateStatus: (status) => true), // allow capturing all status codes
       );
-      if(response.statusCode==200){
-        debugPrint(response.data);
+
+      if (response.statusCode == 200 && response.data['succeeded'] == true) {
+        debugPrint(response.data.toString());
         CacheHelper().saveData(key: 'token', value: response.data['token']);
         emit(SigninSuccessState(token: response.data['token']));
-      }else{
-        debugPrint("here ${response.data}");
-      emit(SigninFailureState(error: response.data['message']));
-    }} catch (e) {
+      } else {
+        final errorMessage = response.data['message'] ?? 'فشل تسجيل الدخول';
+        debugPrint("Sign-in failed: $errorMessage");
+        emit(SigninFailureState(error: errorMessage));
+      }
+
+    } catch (e) {
       String serverError = "خطأ غير معروف من السيرفر";
       if (e is DioException) {
-        serverError =
-            e.response?.data['message'].toString() ?? "خطأ من السيرفر بدون تفاصيل";
+        serverError = e.response?.data['message']?.toString() ?? "خطأ من السيرفر بدون تفاصيل";
       }
-      debugPrint("serverError :$serverError");
+      debugPrint("Server error: $serverError");
       emit(SigninFailureState(error: serverError));
     }
   }
 
-  void register(
-      {
-        required String name,
-      required String email,
-      required String password,
-      required String phoneNumber,
-      required String confirmedPassword}) async {
+  final Dio _dio = Dio();
+
+  Future<void> registerPatient({
+    required String email,
+    required String displayedName,
+    required String phoneNumber,
+    required String password,
+    required String confirmedPassword,
+    required BuildContext context,
+  }) async {
+    // Input validation
+    if (email.isEmpty || !email.contains('@')) {
+      emit(RegisterFailureState(message: "يرجى إدخال بريد إلكتروني صالح"));
+      return;
+    }
+
+    if (displayedName.isEmpty) {
+      emit(RegisterFailureState(message: "الاسم مطلوب"));
+      return;
+    }
+
+    if (phoneNumber.isEmpty || phoneNumber.length < 10) {
+      emit(RegisterFailureState(message: "يرجى إدخال رقم هاتف صالح"));
+      return;
+    }
+
+    if (password.length < 6) {
+      emit(RegisterFailureState(message: "الرقم السري يجب أن يحتوي على 6 أحرف على الأقل"));
+      return;
+    }
+
+    if (password != confirmedPassword) {
+      emit(RegisterFailureState(message: "كلمتا المرور غير متطابقتين"));
+      return;
+    }
+
+    emit(RegisterLoadingState());
+
     try {
-      emit(RegisterLoadingState());
-      final response = await Dio().post(
+      final response = await _dio.post(
         'https://wqaya.runasp.net/api/Patient/RegisterPatient',
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'accept': '*/*',
-        }),
         data: {
-          'displayedName': name,
-          'email': email,
-          'password': password,
-          'phoneNumber': phoneNumber,
-          'confirmedPassword': confirmedPassword
+          "email": email,
+          "displayedName": displayedName,
+          "phoneNumber": phoneNumber,
+          "password": password,
+          "confirmedPassword": confirmedPassword,
         },
+        options: Options(
+          validateStatus: (status) => true,
+        )
       );
-      if (response.statusCode == 200) {
-        debugPrint("here");
-        debugPrint(response.data);
-        final verificationResponse =
-            VerificationResponse.fromJson(jsonEncode(response.data));
-        CacheHelper()
-            .saveData(key: 'UserId', value: verificationResponse.userId);
-        emit(RegisterSuccessState(message: verificationResponse.message));
+
+      final data = response.data;
+      if (data['succeeded'] == true) {
+        CacheHelper().saveData(key: 'UserId', value: data['userId']);
+        final storedUserId = CacheHelper().getData(key: 'UserId');
+        print(storedUserId);
+        CacheHelper().saveData(key: 'name', value: displayedName.toString());
+        CacheHelper().saveData(key: 'phoneNumber', value: data['phoneNumber'].toString());
+        CacheHelper().saveData(key: 'email', value: data['email'].toString());
+        emit(RegisterSuccessState(message: data['message'], userId: data['userId'].toString()));
       } else {
-        debugPrint(response.data['message']);
-        emit(RegisterFailureState(error: response.data['message']));
+        emit(RegisterFailureState(message :data['message'] ?? 'فشل التسجيل'));
       }
     } catch (e) {
-      String serverError = "خطأ غير معروف من السيرفر";
-      if (e is DioException) {
-        serverError = e.response?.data['errors'].toString() ??
-            "خطأ من السيرفر بدون تفاصيل";
-        debugPrint(e.response?.data);
-      }
-      debugPrint(e.toString());
-      emit(RegisterFailureState(error: serverError));
+      emit(RegisterFailureState(message: "حدث خطأ أثناء الاتصال بالخادم"));
     }
-  }
+}
 
   void verifyEmail({required String verificationCode}) async {
     try {
       emit(VerificationLoadingState());
+
       final storedUserId = CacheHelper().getData(key: 'UserId');
-      debugPrint(storedUserId);
-      debugPrint(verificationCode);
+      debugPrint('UserId: $storedUserId');
+      debugPrint('VerificationCode: $verificationCode');
+
       final response = await Dio().post(
-        'https://wqaya.runasp.net/api/Patient/VerifyPatient',
-        queryParameters: {
-          'UserId': storedUserId,
-          'verificationCode': verificationCode,
-        },
+        'https://wqaya.runasp.net/api/Patient/VerifyPatient?userId=$storedUserId&verificationCode=$verificationCode',
+        options: Options(
+          validateStatus: (status) => true, // Accept all status codes
+        ),
       );
-      if (response.statusCode == 200) {
-        debugPrint(response.data);
-        CacheHelper().saveData(key: 'token', value: response.data['token']);
-        emit(VerificationSuccessState(message: "تم التأكيد بنجاح"));
+
+      final responseData = response.data;
+      debugPrint('Response: $responseData');
+
+      if (response.statusCode == 200 && responseData['succeeded'] == true) {
+        CacheHelper().saveData(key: 'token', value: responseData['token']);
+        emit(VerificationSuccessState(message: responseData['message'] ?? "تم التأكيد بنجاح"));
       } else {
-        debugPrint(response.data);
-        emit(VerificationFailureState(
-            error: "Unexpected status code: ${response.statusCode}"));
+        final errorMessage = responseData['message'] ?? "حدث خطأ غير متوقع";
+        emit(VerificationFailureState(error: errorMessage));
       }
+
     } catch (e) {
-      String serverError = "";
+      String serverError = "خطأ غير متوقع من الخادم";
       if (e is DioException) {
-        print(1);
-        serverError =
-            e.response?.data.toString() ?? "خطأ من السيرفر بدون تفاصيل";
-        debugPrint(serverError);
+        serverError = e.response?.data['message'] ?? "خطأ من السيرفر بدون تفاصيل";
       }
-      debugPrint(serverError);
       emit(VerificationFailureState(error: serverError));
     }
   }
-
-  final Dio _dio = Dio();
 
   Future<void> updateUser({
     required String token,
@@ -196,8 +222,8 @@ class AuthCubit extends Cubit<AuthState> {
     required String governorate,
   }) async {
     try {
-      print(1);
       emit(FollowUpLoadingState());
+
       const url = 'https://wqaya.runasp.net/api/Patient/UpdateUser';
       final headers = {
         'accept': '*/*',
@@ -205,7 +231,6 @@ class AuthCubit extends Cubit<AuthState> {
         'Content-Type': 'application/json',
       };
 
-      // Define the request body
       final body = {
         'displayedName': displayedName,
         'nationalId': nationalId,
@@ -214,36 +239,35 @@ class AuthCubit extends Cubit<AuthState> {
         'adress': address,
         'governorate': governorate,
       };
-      print(2);
+
       final response = await _dio.put(
         url,
-        options: Options(headers: headers),
+        options: Options(headers: headers, validateStatus: (status) => true),
         data: body,
       );
-      print(3);
-      // Check if the request was successful
-      if (response.statusCode == 200) {
-        print(4);
-        final responseData = response.data;
-        debugPrint('Update User Response: $responseData');
+
+      final responseData = response.data;
+      debugPrint('Update User Response: $responseData');
+
+      if (response.statusCode == 200 && responseData['succeeded'] == true) {
         emit(FollowUpSuccessState());
-        final updateResponse = UpdateUserResponse.fromJson(responseData);
-        if (updateResponse.succeeded) {
-          debugPrint('User updated successfully: ${updateResponse.message}');
-        } else {
-          print(5);
-          emit(FollowUpFailureState());
-          debugPrint('Failed to update user: ${updateResponse.message}');
-        }
+        debugPrint('User updated successfully: ${responseData['message']}');
       } else {
-        print(6);
-        emit(FollowUpFailureState());
-        debugPrint('Failed to update user. Status code: ${response.statusCode}');
+        final errorMessage = responseData['message'] ?? 'فشل في تحديث البيانات';
+        emit(FollowUpFailureState(error: errorMessage));
+        debugPrint('Failed to update user: $errorMessage');
       }
     } catch (e) {
-      debugPrint('Unexpected error: $e');
+      String serverError = 'حدث خطأ غير متوقع';
+      if (e is DioException) {
+        serverError = e.response?.data['message'] ?? 'خطأ من السيرفر بدون تفاصيل';
+      }
+      emit(FollowUpFailureState(error: serverError));
+      debugPrint('Unexpected error: $serverError');
     }
   }
+
+
 
   void forgotPassword({required String email}) async {
     try {

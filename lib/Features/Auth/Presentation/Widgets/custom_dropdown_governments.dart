@@ -13,14 +13,43 @@ class CustomDropdownButton extends StatefulWidget {
 }
 
 class _CustomDropdownButtonState extends State<CustomDropdownButton> {
-  List<String> governorates = [
-    "Alexandria", "Aswan", "Asyut", "Beheira", "BeniSuef", "Cairo", "Dakahlia",
-    "Damietta", "Fayoum", "Gharbia", "Giza", "Ismailia", "KafrElSheikh", "Luxor",
-    "Matruh", "Minya", "Monufia", "NewValley", "NorthSinai", "PortSaid", "Qalyubia",
-    "Qena", "RedSea", "Sharqia", "Sohag", "SouthSinai", "Suez"
-  ];
+  final Map<String, String> governoratesMap = {
+    "الإسكندرية": "Alexandria",
+    "أسوان": "Aswan",
+    "أسيوط": "Asyut",
+    "البحيرة": "Beheira",
+    "بني سويف": "BeniSuef",
+    "القاهرة": "Cairo",
+    "الدقهلية": "Dakahlia",
+    "دمياط": "Damietta",
+    "الفيوم": "Fayoum",
+    "الغربية": "Gharbia",
+    "الجيزة": "Giza",
+    "الإسماعيلية": "Ismailia",
+    "كفر الشيخ": "KafrElSheikh",
+    "الأقصر": "Luxor",
+    "مطروح": "Matruh",
+    "المنيا": "Minya",
+    "المنوفية": "Monufia",
+    "الوادي الجديد": "NewValley",
+    "شمال سيناء": "NorthSinai",
+    "بورسعيد": "PortSaid",
+    "القليوبية": "Qalyubia",
+    "قنا": "Qena",
+    "البحر الأحمر": "RedSea",
+    "الشرقية": "Sharqia",
+    "سوهاج": "Sohag",
+    "جنوب سيناء": "SouthSinai",
+    "السويس": "Suez",
+  };
 
-  String selectedGovernorate = 'Cairo';
+  late String selectedArabicName;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedArabicName = governoratesMap.keys.firstWhere((k) => governoratesMap[k] == "Cairo");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +62,17 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
           menuWidth: MediaQuery.of(context).size.width * 0.30,
           elevation: 2,
           borderRadius: BorderRadius.circular(25.r),
-          value: selectedGovernorate,
+          value: selectedArabicName,
           icon: const Icon(
             Icons.keyboard_arrow_down,
             color: bottomColor,
           ),
           underline: const SizedBox(),
-          items: governorates.map((String governorate) {
+          items: governoratesMap.keys.map((String arabicName) {
             return DropdownMenuItem<String>(
-              value: governorate,
+              value: arabicName,
               child: Text(
-                governorate,
+                arabicName,
                 style: TextStyle(
                   color: bottomColor,
                   fontSize: 12.sp,
@@ -52,11 +81,14 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
               ),
             );
           }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              selectedGovernorate = newValue!;
-            });
-            widget.onGovernorateChanged(newValue!); // Notify parent widget
+          onChanged: (String? newArabicName) {
+            if (newArabicName != null) {
+              setState(() {
+                selectedArabicName = newArabicName;
+              });
+              String englishValue = governoratesMap[newArabicName]!;
+              widget.onGovernorateChanged(englishValue); // Send English to backend
+            }
           },
         ),
       ],

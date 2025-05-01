@@ -13,7 +13,6 @@ import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dar
 import 'package:wqaya/Features/Auth/Presentation/Widgets/social_login_widget.dart';
 import '../../../../Core/widgets/password_icon.dart';
 import '../../../../Core/widgets/regular_button.dart';
-import '../../../../Core/widgets/custom_dropdown_phones.dart';
 
 class SignUpViewBody extends StatefulWidget {
   const SignUpViewBody({super.key});
@@ -21,6 +20,7 @@ class SignUpViewBody extends StatefulWidget {
   @override
   State<SignUpViewBody> createState() => _SignUpViewBodyState();
 }
+
 TextEditingController phoneNumberController = TextEditingController();
 TextEditingController passwordConfirmController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
@@ -43,222 +43,117 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
             // TEXTS
             Column(
               children: [
-                RegularTextWithLocalization(text: 'welcomeToYou', fontSize: 70.sp, textColor: primaryColor, fontFamily: bold),
-                RegularTextWithLocalization(text: 'startSignUp', fontSize: 30.sp, textColor: primaryColor, fontFamily: medium),
+                RegularTextWithLocalization(
+                    text: 'welcomeToYou',
+                    fontSize: 70.sp,
+                    textColor: primaryColor,
+                    fontFamily: bold),
+                RegularTextWithLocalization(
+                    text: 'startSignUp',
+                    fontSize: 30.sp,
+                    textColor: primaryColor,
+                    fontFamily: medium),
               ],
             ),
-             SizedBox(height: 30.h,),
+            SizedBox(
+              height: 30.h,
+            ),
 
             //TEXT FIELDS
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomTextFormField(fieldController: nameController, hintText: 'الاسم'),
-                SizedBox(height: 15.h,),
                 CustomTextFormField(
-                  fieldController: emailController, hintText: 'البريد الإلكتروني',
+                    fieldController: nameController, hintText: 'الاسم'),
+                SizedBox(
+                  height: 15.h,
+                ),
+                CustomTextFormField(
+                  fieldController: emailController,
+                  hintText: 'البريد الإلكتروني',
                   icon: GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         setState(() {
                           passwordIsVisible = !passwordIsVisible;
                         });
                       },
-                      child: PasswordIcon(isVisible: passwordIsVisible )),
+                      child: PasswordIcon(isVisible: passwordIsVisible)),
                 ),
-                SizedBox(height: 15.h,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width*0.64,
-                        child: CustomTextFormField(
-                            textInputType: TextInputType.phone,
-                            fieldController: phoneNumberController, hintText: 'رقم الهاتف')),
-                    Container(
-                      alignment: Alignment.center,
-                      height: 55.h,
-                      width: MediaQuery.of(context).size.width*0.25,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: bottomColor,width:2),
-                          color: textFormBackgroundColor,
-                          boxShadow: [BoxShadow(color:Colors.grey.shade300,blurRadius: 10.r,)],
-                          borderRadius: BorderRadius.circular(20.r)),
-                      child: const CustomDropdownPhones(),
-                    ),
-                  ],
+                SizedBox(
+                  height: 15.h,
                 ),
+                CustomTextFormField(
+                    textInputType: TextInputType.phone,
+                    fieldController: phoneNumberController,
+                    hintText: 'رقم الهاتف'),
 
-                SizedBox(height: 15.h,),
+                SizedBox(
+                  height: 15.h,
+                ),
                 CustomTextFormField(
                   isPasswordVisible: passwordIsVisible,
-                  fieldController: passwordController, hintText: 'الرقم السري',
-
+                  fieldController: passwordController,
+                  hintText: 'الرقم السري',
                   icon: GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        passwordIsVisible = !passwordIsVisible;
-                      });
-                    },
-                    child: PasswordIcon(isVisible: passwordIsVisible )),
+                      onTap: () {
+                        setState(() {
+                          passwordIsVisible = !passwordIsVisible;
+                        });
+                      },
+                      child: PasswordIcon(isVisible: passwordIsVisible)),
                 ),
-                SizedBox(height: 15.h,),
+                SizedBox(
+                  height: 15.h,
+                ),
                 CustomTextFormField(
                     isPasswordVisible: confirmPasswordIsVisible,
                     icon: GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           setState(() {
-                            confirmPasswordIsVisible = !confirmPasswordIsVisible;
+                            confirmPasswordIsVisible =
+                                !confirmPasswordIsVisible;
                           });
                         },
-                        child: PasswordIcon(isVisible: confirmPasswordIsVisible )),
-
-                    fieldController: passwordConfirmController, hintText: 'تاكيد الرقم السري'),
-                SizedBox(height: 15.h,),
-
-      // Here is The
-      BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) async {
-          final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-          if (kDebugMode) {
-            print(phoneNumberController.text.length);
-          }
-          if (state is RegisterFailureState) {
-            if (passwordController.text != passwordConfirmController.text) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: RegularTextWithoutLocalization(
-                    text: "كلمات السر غير متطابقة",
-                    fontSize: 15.sp,
-                    textColor: Colors.white,
-                    fontFamily: bold,
-                  ),
-                  backgroundColor: Colors.red,
-                  behavior: SnackBarBehavior.floating,
+                        child:
+                            PasswordIcon(isVisible: confirmPasswordIsVisible)),
+                    fieldController: passwordConfirmController,
+                    hintText: 'تاكيد الرقم السري'),
+                SizedBox(
+                  height: 15.h,
                 ),
-              );
-            }
-            else if (!emailRegex.hasMatch(emailController.text)){
-              {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: RegularTextWithoutLocalization(
-                      text: "ahmed@example.com\nالبريد الالكتروني يجب أن يكون بهذه الصورة",
-                      fontSize: 15.sp,
-                      textColor: Colors.white,
-                      fontFamily: bold,
-                    ),
-                    backgroundColor: Colors.red,
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-
-              }
-            }
-            else if (phoneNumberController.text.length!=10||phoneNumberController.text.length!=11){
-              {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: RegularTextWithoutLocalization(
-                      text: "ادخل رقم هاتف صحيح",
-                      fontSize: 15.sp,
-                      textColor: Colors.white,
-                      fontFamily: bold,
-                    ),
-                    backgroundColor: Colors.red,
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-
-              }
-            }
-            else{
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: RegularTextWithoutLocalization(
-                    text: "كلمة السر يجب ان تكون 8 احرف\n و تشمل حرف 'Capital' ",
-                    fontSize: 15.sp,
-                    textColor: Colors.white,
-                    fontFamily: bold,
-                  ),
-                  backgroundColor: Colors.red,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            }
-          }
-          else if (state is RegisterSuccessState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: RegularTextWithoutLocalization(
-                  text: state.message,
-                  fontSize: 15.sp,
-                  textColor: Colors.white,
-                  fontFamily: bold,
-                ),
-                backgroundColor: Colors.green,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            Future.delayed(const Duration(seconds: 2), () {
-              if (context.mounted) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const GetCodeToSignIn()),
-                );
-              }
-            });
-          }
-        },
-        builder: (context, state) {
-          var aCubit = context.read<AuthCubit>();
-          return state is !RegisterLoadingState?
-          RegularButton(
-            height: 55.h,
-            buttonColor: primaryColor,
-            borderRadius: 20.r,
-            onTap: ()
-            {
-              aCubit.register(
-                name: nameController.text,
-                email: emailController.text,
-                password: passwordController.text,
-                phoneNumber: phoneNumberController.text.startsWith('0')
-                    ? phoneNumberController.text
-                    : "0${phoneNumberController.text}",
-                confirmedPassword: passwordConfirmController.text,
-              );
-
-              // This Method Is For Caching The Password ONLY
-                CacheHelper().saveData(key: 'currentPassword', value: passwordController.text);
-
-              // Debug prints
-              // debugPrint(nameController.text);
-              debugPrint(phoneNumberController.text);
-              debugPrint(passwordController.text);
-              debugPrint(passwordConfirmController.text);
-              debugPrint(emailController.text);
-            },
-
-            child: RegularTextWithLocalization(
-              text: 'getCode',
-              fontSize: 20.sp,
-              textColor: myWhiteColor,
-              fontFamily: semiBold,
+                // Here is The
+                BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, state) {
+                    return state is RegisterLoadingState ?
+                      const Center(child: CircularProgressIndicator(color: primaryColor,)):
+                    RegularButton(
+                      height: 55.h,
+                      buttonColor: primaryColor,
+                      borderRadius: 20.r,
+                      onTap: () {
+                        BlocProvider.of<AuthCubit>(context).registerPatient(
+                          email: emailController.text,
+                          displayedName: nameController.text,
+                          phoneNumber: phoneNumberController.text,
+                          password: passwordController.text,
+                          confirmedPassword: passwordConfirmController.text,
+                          context: context,
+                        );
+                      },
+                      child: RegularTextWithLocalization(
+                        text: 'getCode',
+                        fontSize: 20.sp,
+                        textColor: myWhiteColor,
+                        fontFamily: semiBold,
+                      ),
+                    );
+                  },
+                )
+              ],
             ),
-          ) :
-          const Center(
-            child: CircularProgressIndicator(
-              color: primaryColor,
+            SizedBox(
+              height: 60.h,
             ),
-          );
-        },
-      ),              ],
-            ),
-            SizedBox(height: 60.h,),
-
-           const SocialLoginWidget()
-
           ],
         ),
       ),

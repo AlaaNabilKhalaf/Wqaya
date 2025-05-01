@@ -21,11 +21,9 @@ class GetCodeToSignIn extends StatelessWidget {
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is VerificationLoadingState) {
-            // Show a loading indicator (already handled in PinCodeWidget)
-          } else if (state is VerificationSuccessState) {
-            // Close the loading dialog
-            Navigator.pop(context);
 
+          } else if (state is VerificationSuccessState) {
+            Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: RegularTextWithLocalization(
@@ -45,10 +43,7 @@ class GetCodeToSignIn extends StatelessWidget {
               ),
             );
           } else if (state is VerificationFailureState) {
-            // Close the loading dialog
             Navigator.pop(context);
-
-            // Show an error snackbar
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: RegularTextWithLocalization(
