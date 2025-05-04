@@ -5,6 +5,9 @@ import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/first_complaints_view.dart';
+import 'package:wqaya/Features/Complaints/Presentation/Views/surgeries_view.dart';
+import 'package:wqaya/Features/Home/Presentation/Views/analysis_view.dart';
+import 'package:wqaya/Features/Home/Presentation/Views/medicine_view.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/x_ray_view.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/better_health_poster.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/home_container.dart';
@@ -23,7 +26,12 @@ class HomeView extends StatelessWidget {
       "medicine": AssetsData.medicineBottle,
       "surgery": AssetsData.surgeryPicture,
     };
-
+    final Set<StatefulWidget> homeScreens = {
+      const AnalysisView(),
+      const XRayScreen(),
+      const MedicineView(),
+      const SurgeriesView(),
+    };
     final List<MapEntry<String, String>> itemsList = homeContainerItems.entries.toList();
 
     return  Scaffold(
@@ -43,7 +51,7 @@ class HomeView extends StatelessWidget {
                     separatorBuilder: (context, index) => const SizedBox(width: 10),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => InkWell(
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const XRayScreen() ,)),
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) =>  homeScreens.toList()[index] ,)),
                       child: HomeContainer(
                         text: itemsList[index].key,
                         image: itemsList[index].value,

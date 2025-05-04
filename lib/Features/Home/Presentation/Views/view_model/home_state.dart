@@ -18,7 +18,19 @@ class SubmitUserDiseasesLoadingState extends HomeState {}
 class SubmitUserDiseasesSuccessfulState extends HomeState {}
 class SubmitUserDiseasesFailureState extends HomeState {}
 
+class UserMedicineLoading extends HomeState {}
 
+class UserMedicineLoaded extends HomeState {
+  final List<MedicineModel> medicines;
+
+  UserMedicineLoaded(this.medicines);
+}
+
+class UserMedicineError extends HomeState {
+  final String message;
+
+  UserMedicineError(this.message);
+}
 class SymptomLoaded extends HomeState {
   final List<SymptomCategory> categories;
 
