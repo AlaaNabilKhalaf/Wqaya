@@ -39,6 +39,14 @@ class SymptomLoaded extends HomeState {
   @override
   List<Object> get props => [categories];
 }
+class SymptomError extends HomeState {
+  final String message;
+
+  SymptomError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
 class ChronicDiseasesLoaded extends HomeState {
   final List<ChronicDiseaseModel> diseases;
 
@@ -48,12 +56,14 @@ class ChronicDiseasesLoaded extends HomeState {
   @override
   List<Object> get props => [diseases];
 }
+class RayLoading extends HomeState {}
 
-class SymptomError extends HomeState {
+class RaySuccess extends HomeState {
+  final List<RayModel> rays;
+  RaySuccess(this.rays);
+}
+
+class RayError extends HomeState {
   final String message;
-
-  SymptomError(this.message);
-
-  @override
-  List<Object> get props => [message];
+  RayError(this.message);
 }

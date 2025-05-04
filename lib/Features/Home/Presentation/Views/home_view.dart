@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/utils/colors.dart';
@@ -9,6 +10,7 @@ import 'package:wqaya/Features/Complaints/Presentation/Views/surgeries_view.dart
 import 'package:wqaya/Features/Home/Presentation/Views/analysis_view.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/medicine_view.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/x_ray_view.dart';
+import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/better_health_poster.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/home_container.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/symptom_container.dart';
@@ -28,30 +30,55 @@ class HomeView extends StatelessWidget {
     };
     final Set<StatefulWidget> homeScreens = {
       const AnalysisView(),
-      const XRayScreen(),
+      const RayView(),
       const MedicineView(),
       const SurgeriesView(),
     };
-    final List<MapEntry<String, String>> itemsList = homeContainerItems.entries.toList();
+    final List<MapEntry<String, String>> itemsList =
+        homeContainerItems.entries.toList();
 
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: myWhiteColor,
-      appBar: const PreferredSize(preferredSize:Size.fromHeight(kToolbarHeight),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
           child: HomeCustomAppBar()),
-      body:  Padding(
-          padding:  const EdgeInsets.all(8.0),
-          child:
-          CustomScrollView(
+      body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
                 child: SizedBox(
                   height: 200.h,
                   child: ListView.separated(
                     physics: const BouncingScrollPhysics(),
-                    separatorBuilder: (context, index) => const SizedBox(width: 10),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 10),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => InkWell(
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) =>  homeScreens.toList()[index] ,)),
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) =>
+                            homeScreens.toList()[index],
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              const begin = Offset(1.0, 0.0); // Slide from right
+                              const end = Offset.zero;
+                              const curve = Curves.ease;
+
+                              final tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+
+                              return SlideTransition(
+                                position: animation.drive(tween),
+                                child: child,
+                              );
+                            },
+                            transitionDuration: const Duration(milliseconds: 400),
+                          ),
+                        )
+                            .then((_) => context.read<BottomNavVisibilityCubit>().show());
+                      },
                       child: HomeContainer(
                         text: itemsList[index].key,
                         image: itemsList[index].value,
@@ -115,20 +142,22 @@ class HomeView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: textFieldColor,
                                   borderRadius: BorderRadius.circular(15),
                                   border: Border.all(
-                                      color: unselectedContainerColor
-                                  ),
+                                      color: unselectedContainerColor),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: TextField(
                                     keyboardType: TextInputType.multiline,
-                                    onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                                    onTapOutside: (event) => FocusManager
+                                        .instance.primaryFocus
+                                        ?.unfocus(),
                                     maxLines: null,
                                     decoration: InputDecoration(
                                       fillColor: Colors.red,
@@ -155,11 +184,14 @@ class HomeView extends StatelessWidget {
                           children: [
                             Flexible(
                               child: Padding(
-                                padding: const EdgeInsets.only(top: 0.0, right: 5),
+                                padding:
+                                    const EdgeInsets.only(top: 0.0, right: 5),
                                 child: ListView.separated(
                                   physics: const BouncingScrollPhysics(),
-                                  separatorBuilder: (context, index) => const SizedBox(height: 6),
-                                  itemBuilder: (context, index) => const SymptomContainer(),
+                                  separatorBuilder: (context, index) =>
+                                      const SizedBox(height: 6),
+                                  itemBuilder: (context, index) =>
+                                      const SymptomContainer(),
                                   itemCount: 5,
                                 ),
                               ),
@@ -171,8 +203,6 @@ class HomeView extends StatelessWidget {
                   ],
                 ),
               ),
-
-
               SliverToBoxAdapter(
                 child: InkWell(
                   onTap: () => Navigator.push(
@@ -189,9 +219,7 @@ class HomeView extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: textFieldColor,
                         borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                            color: unselectedContainerColor
-                        ),
+                        border: Border.all(color: unselectedContainerColor),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -207,11 +235,7 @@ class HomeView extends StatelessWidget {
                 ),
               ),
             ],
-          )
-      ),
+          )),
     );
   }
 }
-
-
-

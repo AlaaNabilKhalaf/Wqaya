@@ -181,5 +181,23 @@ class HomeCubit extends Cubit<HomeState> {
       emit(UserMedicineError('Failed to load medicines'));
     }
   }
+  Future<void> getUserRays() async {
+    emit(RayLoading());
+    try {
+      final response = await Dio().get(
+        'https://wqaya.runasp.net/api/Ray/GetByMhId',
+        options: Options(headers: {
+          'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+          'accept': '*/*',
+        }),
+      );
+
+      final data = response.data['data'] as List;
+      final rays = data.map((json) => RayModel.fromJson(json)).toList();
+      emit(RaySuccess(rays));
+    } catch (e) {
+      emit(RayError('فشل في جلب الأشعة'));
+    }
+  }
 
 }

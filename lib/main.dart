@@ -8,6 +8,7 @@ import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dar
 import 'package:wqaya/Features/Home/Presentation/Views/view_model/home_cubit.dart';
 import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
+import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
 import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
 import 'Core/bloc_observer/bloc_observer.dart';
 import 'Features/Profile/Controller/profile_image_cubit.dart';
@@ -29,6 +30,8 @@ void main() async {
 
         BlocProvider<BottomNavCubit>(
           create: (context) => BottomNavCubit(),),
+        BlocProvider<BottomNavVisibilityCubit>(
+          create: (context) => BottomNavVisibilityCubit(),),
         BlocProvider<ProfileImageCubit>(
             create: (context) => ProfileImageCubit()),
         BlocProvider<AuthCubit>(
@@ -64,7 +67,7 @@ class Wqaya extends StatelessWidget {
           locale: const Locale('ar', 'EG'),
           // Force Arabic
           debugShowCheckedModeBanner: false,
-          home: CacheHelper().getData(key: 'token').toString().isNotEmpty? const NavBarView() :const SplashView(), // Updated to use bottom navigation
+          home: CacheHelper().getData(key: 'token').toString().isEmpty? const NavBarView() :const SplashView(), // Updated to use bottom navigation
         );
       },
     );

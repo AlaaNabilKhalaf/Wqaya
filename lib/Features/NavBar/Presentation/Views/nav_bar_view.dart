@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Features/NavBar/Presentation/Widgets/custom_bottom_nav_bar.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
+import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
 
 class NavBarView extends StatelessWidget {
   const NavBarView({super.key});
@@ -40,9 +41,15 @@ class NavBarView extends StatelessWidget {
                 );
               }),
             ),
-            bottomNavigationBar: CustomBottomNavBar(
-              icons: bottomNavCubit.icons, // Use the existing cubit
-              labels: bottomNavCubit.labels,
+            bottomNavigationBar: BlocBuilder<BottomNavVisibilityCubit, bool>(
+              builder: (context, isVisible) {
+                return isVisible
+                    ? CustomBottomNavBar(
+                  icons: bottomNavCubit.icons,
+                  labels: bottomNavCubit.labels,
+                )
+                    : const SizedBox.shrink();
+              },
             ),
 
           ),
