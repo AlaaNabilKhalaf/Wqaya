@@ -11,6 +11,13 @@ final class HomeInitial extends HomeState {}
 class SymptomInitial extends HomeState {}
 
 class SymptomLoading extends HomeState {}
+class SubmitUserSymptomsLoadingState extends HomeState {}
+class SubmitUserSymptomsSuccessfulState extends HomeState {}
+class SubmitUserSymptomsFailureState extends HomeState {}
+class SubmitUserDiseasesLoadingState extends HomeState {}
+class SubmitUserDiseasesSuccessfulState extends HomeState {}
+class SubmitUserDiseasesFailureState extends HomeState {}
+
 
 class SymptomLoaded extends HomeState {
   final List<SymptomCategory> categories;

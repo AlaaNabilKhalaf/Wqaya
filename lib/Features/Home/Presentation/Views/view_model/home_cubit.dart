@@ -10,10 +10,10 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
 
+  List<dynamic> cachedDiseases = [];
 
   Future<void> fetchSymptomCategories() async {
     emit(SymptomLoading());
-
     try {
       final response = await Dio().get(
         'https://wqaya.runasp.net/api/SymptomsCategories/page',
@@ -47,6 +47,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(SymptomError('Unexpected error: $e'));
     }
   }
+
   void fetchChronicDiseases() async {
     emit(SymptomLoading());
     try {
@@ -64,4 +65,100 @@ class HomeCubit extends Cubit<HomeState> {
       emit(SymptomError('Failed to load chronic diseases'));
     }
   }
+
+  Future<SymptomSubmissionResponse> submitUserSymptoms({
+    required List<int> symptomIds,
+  }) async {
+
+    const String url = 'https://wqaya.runasp.net/api/MedicalHistory/symptom';
+    try {
+      emit (SubmitUserSymptomsLoadingState()) ;
+      final response = await Dio().post(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+            'Content-Type': 'application/json',
+            'accept': '*/*',
+          },
+        ),
+        data: symptomIds.map((id) => {'symptomId': id}).toList(),
+      );
+
+      if (response.statusCode == 200) {
+        print(response.data);
+        emit (SubmitUserSymptomsSuccessfulState()) ;
+        return SymptomSubmissionResponse.fromJson(response.data);
+
+      } else {
+        print(response.data);
+        emit (SubmitUserSymptomsFailureState()) ;
+
+      throw Exception('Unexpected status code: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print(e.response.toString());
+        emit (SubmitUserSymptomsFailureState()) ;
+        throw Exception('Dio error: ${e.response?.data?['message'] ?? 'Unknown error'}');
+      } else {
+
+        emit (SubmitUserSymptomsFailureState()) ;
+        throw Exception('Network error: ${e.message}');
+      }
+    } catch (e) {
+      emit (SubmitUserSymptomsFailureState()) ;
+      throw Exception('Something went wrong: $e');
+    }
+  }
+  Future<SymptomSubmissionResponse> submitUserDiseases({
+    required List<int> diseaseIds,
+  }) async {
+    const String url = 'https://wqaya.runasp.net/api/MedicalHistory/disease';
+    final currentState = state;
+    if (currentState is ChronicDiseasesLoaded) {
+      cachedDiseases = currentState.diseases;
+    }
+    try {
+      emit(SubmitUserDiseasesLoadingState());
+
+      final response = await Dio().post(
+        url,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+            'Content-Type': 'application/json',
+            'accept': '*/*',
+          },
+        ),
+        data: diseaseIds.map((id) => {
+          'diseaseId': id,
+          'medicineId': 0,
+        }).toList(),
+      );
+
+      if (response.statusCode == 200) {
+        print(response.data);
+        emit(SubmitUserDiseasesSuccessfulState());
+        return SymptomSubmissionResponse.fromJson(response.data);
+      } else {
+        print(response.data);
+        emit(SubmitUserDiseasesFailureState());
+        throw Exception('Unexpected status code: ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print(e.response.toString());
+        emit(SubmitUserDiseasesFailureState());
+        throw Exception('Dio error: ${e.response?.data?['message'] ?? 'Unknown error'}');
+      } else {
+        emit(SubmitUserDiseasesFailureState());
+        throw Exception('Network error: ${e.message}');
+      }
+    } catch (e) {
+      emit(SubmitUserDiseasesFailureState());
+      throw Exception('Something went wrong: $e');
+    }
+  }
+
 }

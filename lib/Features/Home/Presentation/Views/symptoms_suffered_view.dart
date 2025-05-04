@@ -19,7 +19,8 @@ class SymptomsSufferedView extends StatefulWidget {
 }
 
 class _SymptomsSufferedViewState extends State<SymptomsSufferedView> {
-  final Set<int> selectedSymptomIds = {};
+  final Map<int, int> selectedSymptomCategoryMap =
+      {}; // symptomId -> categoryId
 
   @override
   void initState() {
@@ -27,107 +28,139 @@ class _SymptomsSufferedViewState extends State<SymptomsSufferedView> {
     context.read<HomeCubit>().fetchSymptomCategories(); // Call Cubit method
   }
 
-  void toggleSymptomSelection(int symptomId) {
+  void toggleSymptomSelection(int symptomId, int categoryId) {
     setState(() {
-      if (selectedSymptomIds.contains(symptomId)) {
-        selectedSymptomIds.remove(symptomId);
+      if (selectedSymptomCategoryMap.containsKey(symptomId)) {
+        selectedSymptomCategoryMap.remove(symptomId);
       } else {
-        selectedSymptomIds.add(symptomId);
+        selectedSymptomCategoryMap[symptomId] = categoryId;
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: myWhiteColor,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: CustomAppBar(),
-      ),
-      body: Column(
-        children: [
-          Center(
-            child: RegularTextWithLocalization(
-              text: 'symptomsSuffer',
-              fontSize: 20.sp,
-              textColor: primaryColor,
-              fontFamily: black,
-            ),
+    var hCubit = context.read<HomeCubit>();
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: myWhiteColor,
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: SizedBox(
+            height: kToolbarHeight,
           ),
-          const SizedBox(height: 15,),
-          Expanded(
-            child: BlocBuilder<HomeCubit, HomeState>(
-              builder: (context, state) {
-                if (state is SymptomLoading) {
-                  return const Center(child: CircularProgressIndicator(
-                    backgroundColor: primaryColor,
-                  ));
-                } else if (state is SymptomLoaded) {
-                  final categories = state.categories;
-                  final allSymptoms =
-                      categories.expand((cat) => cat.symptoms).toList();
-
-                  return SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: AlignedGridView.count(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: allSymptoms.length,
-                        itemBuilder: (context, index) {
-                          final symptom = allSymptoms[index];
-                          return SymptomsContainer(
-                            text: symptom.name,
-                            isSelected: selectedSymptomIds.contains(symptom.id),
-                            onSelected: () =>
-                                toggleSymptomSelection(symptom.id),
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                } else if (state is SymptomError) {
-                  return Center(child: Text(state.message));
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: RegularButton(
-              width: double.infinity,
-              height: 50.h,
-              buttonColor: selectedSymptomIds.isEmpty
-                  ? unselectedContainerColor
-                  : primaryColor,
-              borderRadius: 10,
-              onTap: () {
-                if (selectedSymptomIds.isNotEmpty) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ChronicDiseasesView(),
-                    ),
-                  );
-                  print(selectedSymptomIds);
-                }
-              },
+        ),
+        body: Column(
+          children: [
+            Center(
               child: RegularTextWithLocalization(
-                text: "next",
-                fontSize: 15.sp,
+                text: 'symptomsSuffer',
+                fontSize: 20.sp,
+                textColor: primaryColor,
                 fontFamily: black,
-                textColor: myWhiteColor,
               ),
             ),
-          )
-        ],
+            const SizedBox(
+              height: 15,
+            ),
+            Expanded(
+              child: BlocBuilder<HomeCubit, HomeState>(
+                builder: (context, state) {
+                  if (state is SymptomLoading) {
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      backgroundColor: primaryColor,
+                    ));
+                  } else if (state is SymptomLoaded) {
+                    final categories = state.categories;
+                    return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            for (var category in categories) ...[
+                              if (category.symptoms.isNotEmpty) ...[
+                                Text(
+                                  category.name,
+                                  style: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: primaryColor,
+                                      fontFamily: black),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                AlignedGridView.count(
+                                  crossAxisCount: 3,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: category.symptoms.length,
+                                  itemBuilder: (context, index) {
+                                    final symptom = category.symptoms[index];
+                                    return SymptomsContainer(
+                                      text: symptom.name,
+                                      isSelected: selectedSymptomCategoryMap
+                                          .containsKey(symptom.id),
+                                      onSelected: () => toggleSymptomSelection(
+                                          symptom.id, category.id),
+                                    );
+                                  },
+                                ),
+                                const SizedBox(height: 16),
+                              ],
+                            ],
+                          ],
+                        ),
+                      ),
+                    );
+                  } else if (state is SymptomError) {
+                    return Center(child: Text(state.message));
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+            ),
+            BlocListener<HomeCubit, HomeState>(
+              listener: (context, state) {
+                if (state is SubmitUserSymptomsSuccessfulState ){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) =>const ChronicDiseasesView() ,));
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RegularButton(
+                  width: double.infinity,
+                  height: 50.h,
+                  buttonColor: selectedSymptomCategoryMap.isEmpty
+                      ? unselectedContainerColor
+                      : primaryColor,
+                  borderRadius: 10,
+                  onTap: () async {
+                    if (selectedSymptomCategoryMap.isNotEmpty) {
+
+                      await hCubit.submitUserSymptoms(
+                          symptomIds: selectedSymptomCategoryMap.keys.toList());
+                      print(selectedSymptomCategoryMap.keys
+                          .toList()); // {symptomId: categoryId}
+                    }
+                  },
+                  child: RegularTextWithLocalization(
+                    text: "next",
+                    fontSize: 15.sp,
+                    fontFamily: black,
+                    textColor: myWhiteColor,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

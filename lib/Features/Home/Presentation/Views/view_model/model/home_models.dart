@@ -47,3 +47,22 @@ class ChronicDiseaseModel {
     );
   }
 }
+class SymptomSubmissionResponse {
+  final bool succeeded;
+  final String message;
+  final List<dynamic> data;
+
+  SymptomSubmissionResponse({
+    required this.succeeded,
+    required this.message,
+    required this.data,
+  });
+
+  factory SymptomSubmissionResponse.fromJson(Map<String, dynamic> json) {
+    return SymptomSubmissionResponse(
+      succeeded: json['succeeded'] ?? false,
+      message: json['message'] ?? '',
+      data: json['data'] ?? [],
+    );
+  }
+}
