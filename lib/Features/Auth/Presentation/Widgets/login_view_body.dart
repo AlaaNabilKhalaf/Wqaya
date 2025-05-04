@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dart';
 import 'package:wqaya/Features/Auth/Presentation/Widgets/social_login_widget.dart';
-import 'package:wqaya/Features/Home/Presentation/Views/symptoms_suffered.dart';
+import 'package:wqaya/Features/Home/Presentation/Views/symptoms_suffered_view.dart';
 
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
@@ -11,7 +11,6 @@ import '../../../../Core/widgets/password_icon.dart';
 import '../../../../Core/widgets/regular_button.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
-import '../../../../Core/widgets/custom_dropdown_phones.dart';
 import '../Views/forget_password_view.dart';
 
 class LoginViewBody extends StatefulWidget {

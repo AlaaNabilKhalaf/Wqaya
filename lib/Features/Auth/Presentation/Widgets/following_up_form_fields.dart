@@ -8,7 +8,7 @@ import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/regular_button.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
-import '../../../Home/Presentation/Views/symptoms_suffered.dart';
+import '../../../Home/Presentation/Views/symptoms_suffered_view.dart';
 import 'custom_dropdown_governments.dart';
 
 class FollowingUpFormFields extends StatefulWidget {

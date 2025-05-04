@@ -5,6 +5,7 @@ import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/first_complaints_view.dart';
+import 'package:wqaya/Features/Home/Presentation/Views/x_ray_view.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/better_health_poster.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/home_container.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/symptom_container.dart';
@@ -22,6 +23,7 @@ class HomeView extends StatelessWidget {
       "medicine": AssetsData.medicineBottle,
       "surgery": AssetsData.surgeryPicture,
     };
+
     final List<MapEntry<String, String>> itemsList = homeContainerItems.entries.toList();
 
     return  Scaffold(
@@ -40,9 +42,12 @@ class HomeView extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     separatorBuilder: (context, index) => const SizedBox(width: 10),
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => HomeContainer(
-                      text: itemsList[index].key,
-                      image: itemsList[index].value,
+                    itemBuilder: (context, index) => InkWell(
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const XRayScreen() ,)),
+                      child: HomeContainer(
+                        text: itemsList[index].key,
+                        image: itemsList[index].value,
+                      ),
                     ),
                     itemCount: 4,
                   ),

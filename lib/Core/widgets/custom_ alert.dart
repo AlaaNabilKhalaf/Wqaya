@@ -20,6 +20,7 @@ final Function nextScreenFunction;
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.transparent,
+
       elevation: 0,
       content: GestureDetector(
           onTap: (){
@@ -29,7 +30,7 @@ final Function nextScreenFunction;
             width: 350.w,
             height: 350.h,
             decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.6),
+              color: Colors.blue.withValues(alpha: .6),
               borderRadius: BorderRadius.circular(20.r),
             ),
             child: Column(
@@ -41,7 +42,7 @@ final Function nextScreenFunction;
                 ),
                 SizedBox(height: 20.h),
                 // Confirmation Text
-                RegularTextWithLocalization(text: confirmText??'confirmed', fontSize: 40.sp, textColor: Colors.white, fontFamily: bold),
+                RegularTextWithLocalization(text: confirmText??'confirmed', fontSize: 20.sp, textColor: Colors.white, fontFamily: bold),
                 Padding(
                   padding: const EdgeInsets.only(top: 15,bottom: 10),
                   child: GestureDetector(
@@ -53,7 +54,7 @@ final Function nextScreenFunction;
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        RegularTextWithLocalization(text:nextText?? 'next', fontSize: 20.sp, textColor: myWhiteColor, fontFamily: bold),
+                        RegularTextWithLocalization(text:nextText?? 'next', fontSize: 15.sp, textColor: myWhiteColor, fontFamily: bold),
                         nextText != '' ?const Icon(Icons.arrow_forward_rounded, color: myWhiteColor,size: 23,) : const SizedBox()
                       ],),
                   ),

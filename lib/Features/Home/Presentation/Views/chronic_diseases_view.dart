@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/regular_button.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
+import 'package:wqaya/Features/Home/Presentation/Views/view_model/home_cubit.dart';
 import 'package:wqaya/Features/Home/Presentation/Widgets/symptoms_container.dart';
 import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
 
@@ -19,41 +21,44 @@ class ChronicDiseasesView extends StatefulWidget {
 }
 
 class _ChronicDiseasesViewState extends State<ChronicDiseasesView> {
-  List<String> chronicDiseases = [
-    "داء السكري",
-    "ارتفاع ضغط الدم",
-    "أمراض القلب والأوعية الدموية",
-    "الربو المزمن",
-    "التهاب المفاصل الروماتويدي",
-    "قصور الغدة الدرقية",
-    "فرط نشاط الغدة الدرقية",
-    "أمراض الكلى المزمنة",
-    "أمراض الكبد المزمنة",
-    "التصلب المتعدد",
-    "مرض باركنسون",
-    "مرض الزهايمر",
-    "الصداع النصفي المزمن",
-    "الذئبة الحمراء",
-    "الصدفية",
-    "التهاب القولون التقرحي",
-    "متلازمة القولون العصبي",
-    "مرض كرون",
-    "فقر الدم المنجلي",
-    "الثلاسيميا",
-    "هشاشة العظام",
-    "داء النقرس",
-    "التليف الكيسي",
-    "الأكزيما المزمنة",
-    "اضطراب ثنائي القطب",
-    "الاكتئاب المزمن",
-    "القلق المزمن",
-    "اضطراب نقص الانتباه وفرط النشاط (ADHD)",
-    "مرض اعتلال الشبكية السكري",
-    "فشل القلب المزمن",
-  ];
+  // List<String> chronicDiseases = [
+  //   "داء السكري",
+  //   "ارتفاع ضغط الدم",
+  //   "أمراض القلب والأوعية الدموية",
+  //   "الربو المزمن",
+  //   "التهاب المفاصل الروماتويدي",
+  //   "قصور الغدة الدرقية",
+  //   "فرط نشاط الغدة الدرقية",
+  //   "أمراض الكلى المزمنة",
+  //   "أمراض الكبد المزمنة",
+  //   "التصلب المتعدد",
+  //   "مرض باركنسون",
+  //   "مرض الزهايمر",
+  //   "الصداع النصفي المزمن",
+  //   "الذئبة الحمراء",
+  //   "الصدفية",
+  //   "التهاب القولون التقرحي",
+  //   "متلازمة القولون العصبي",
+  //   "مرض كرون",
+  //   "فقر الدم المنجلي",
+  //   "الثلاسيميا",
+  //   "هشاشة العظام",
+  //   "داء النقرس",
+  //   "التليف الكيسي",
+  //   "الأكزيما المزمنة",
+  //   "اضطراب ثنائي القطب",
+  //   "الاكتئاب المزمن",
+  //   "القلق المزمن",
+  //   "اضطراب نقص الانتباه وفرط النشاط (ADHD)",
+  //   "مرض اعتلال الشبكية السكري",
+  //   "فشل القلب المزمن",
+  // ];
 
   Set<int> selectedDiseases = {};
-
+  void initState() {
+    super.initState();
+    context.read<HomeCubit>().fetchChronicDiseases(); // Call Cubit method
+  }
   void toggleSymptomSelection(int index) {
     setState(() {
       if (selectedDiseases.contains(index)) {
@@ -102,16 +107,29 @@ class _ChronicDiseasesViewState extends State<ChronicDiseasesView> {
               child: Column(
                 children: [
                   const SizedBox(height: 15),
-                  AlignedGridView.count(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 10,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: chronicDiseases.length,
-                    itemBuilder: (context, index) =>
-                        SymptomsContainer(text: chronicDiseases[index],
-                          onSelected: () => toggleSymptomSelection(index),),
-                  ),
+                  BlocBuilder<HomeCubit, HomeState>(
+                    builder: (context, state) {
+                      if (state is SymptomLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (state is ChronicDiseasesLoaded) {
+                        final diseases = state.diseases;
+                        return AlignedGridView.count(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 10,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: diseases.length,
+                          itemBuilder: (context, index) => SymptomsContainer(
+                            text: diseases[index].name,
+                            isSelected: selectedDiseases.contains(diseases[index].id),
+                            onSelected: () => toggleSymptomSelection(diseases[index].id),
+                          ),
+                        );
+                      } else {
+                        return const Center(child: Text('Error loading diseases'));
+                      }
+                    },
+                  )
                 ],
               ),
             ),
