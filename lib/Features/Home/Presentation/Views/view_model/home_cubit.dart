@@ -1,6 +1,8 @@
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:wqaya/Core/cache/cache_helper.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/view_model/model/home_models.dart';
@@ -191,13 +193,73 @@ class HomeCubit extends Cubit<HomeState> {
           'accept': '*/*',
         }),
       );
-
       final data = response.data['data'] as List;
+      print(data);
       final rays = data.map((json) => RayModel.fromJson(json)).toList();
       emit(RaySuccess(rays));
     } catch (e) {
       emit(RayError('فشل في جلب الأشعة'));
     }
   }
+  Future<void> addUserRay({
+    required String rayType , required String reason , required String rayDate , required String bodyPart , required MultipartFile image ,
+}) async {
+    final dio = Dio();
+    final formData = FormData.fromMap({
+      "RayType": rayType,
+      "Reason": reason,
+      "RayDate": rayDate,
+      "BodyPart": bodyPart,
+      "ImageFile": image,
+      "MedicalHistoryId": "",
+    });
+    try {
+      emit (AddRayLoading());
+      final response = await dio.post(
+        'https://wqaya.runasp.net/api/Ray',
+        data: formData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
+      );
+      if (response.data['succeeded'] == true) {
+        emit (AddRaySuccess());
+      } else {
+        emit (AddRayError());
+        throw Exception("Failed to add ray");
+      }
+    } catch (e) {
+      emit (AddRayError());
+    }
+  }
 
+  Future<void> deleteUserRay({required int rayId}) async {
+    final dio = Dio();
+    final String token = CacheHelper().getData(key: 'token');
+
+    try {
+      emit(DeleteRayLoading());
+
+      final response = await dio.delete(
+        'https://wqaya.runasp.net/api/Ray/$rayId',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'accept': '*/*',
+          },
+        ),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        emit(DeleteRaySuccess());
+      } else {
+        emit(DeleteRayError(message: "حدث خلل أثناء الحذف"));
+      }
+    } catch (e) {
+      emit(DeleteRayError(message: "حدث خلل أثناء الحذف"));
+    }
+  }
 }

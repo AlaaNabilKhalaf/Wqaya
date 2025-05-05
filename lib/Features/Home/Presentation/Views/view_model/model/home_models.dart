@@ -95,6 +95,7 @@ class MedicineModel {
   }
 }
 class RayModel {
+  final int id;
   final String rayType;
   final String reason;
   final String rayDate;
@@ -102,6 +103,7 @@ class RayModel {
   final String imageUrl;
 
   RayModel({
+    required this.id,
     required this.rayType,
     required this.reason,
     required this.rayDate,
@@ -111,6 +113,7 @@ class RayModel {
 
   factory RayModel.fromJson(Map<String, dynamic> json) {
     return RayModel(
+      id: json['id'],
       rayType: json['rayType'],
       reason: json['reason'],
       rayDate: json['rayDate'],

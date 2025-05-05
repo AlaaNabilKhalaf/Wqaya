@@ -67,3 +67,20 @@ class RayError extends HomeState {
   final String message;
   RayError(this.message);
 }
+class AddRayLoading extends HomeState {}
+
+class AddRaySuccess extends HomeState {
+}
+
+class AddRayError extends HomeState {
+}class DeleteRayLoading extends HomeState {}
+
+class DeleteRaySuccess extends HomeState {
+}
+
+class DeleteRayError extends HomeState {
+  final String message;
+
+  DeleteRayError({required this.message});
+
+}
