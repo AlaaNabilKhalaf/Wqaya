@@ -67,7 +67,7 @@ class Wqaya extends StatelessWidget {
           locale: const Locale('ar', 'EG'),
           // Force Arabic
           debugShowCheckedModeBanner: false,
-          home: CacheHelper().getData(key: 'token').toString().isEmpty? const NavBarView() :const SplashView(), // Updated to use bottom navigation
+          home: CacheHelper().getData(key: 'token').toString().isNotEmpty? const NavBarView() :const SplashView(), // Updated to use bottom navigation
         );
       },
     );

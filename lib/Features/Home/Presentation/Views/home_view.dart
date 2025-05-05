@@ -52,10 +52,13 @@ class HomeView extends StatelessWidget {
                   child: ListView.separated(
                     physics: const BouncingScrollPhysics(),
                     separatorBuilder: (context, index) =>
-                        const SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) => InkWell(
                       onTap: () {
+                        // Hide the bottom navigation bar
+                        context.read<BottomNavVisibilityCubit>().hide();
+
                         Navigator.of(context)
                             .push(
                           PageRouteBuilder(
@@ -76,8 +79,10 @@ class HomeView extends StatelessWidget {
                             },
                             transitionDuration: const Duration(milliseconds: 400),
                           ),
-                        )
-                            .then((_) => context.read<BottomNavVisibilityCubit>().show());
+                        ).then((_) {
+                          // Show the bottom navigation bar again when returning from the screen
+                          context.read<BottomNavVisibilityCubit>().show();
+                        });
                       },
                       child: HomeContainer(
                         text: itemsList[index].key,
@@ -87,8 +92,7 @@ class HomeView extends StatelessWidget {
                     itemCount: 4,
                   ),
                 ),
-              ),
-              const SliverToBoxAdapter(
+              ),              const SliverToBoxAdapter(
                 child: Column(
                   children: [
                     SizedBox(height: 20),
