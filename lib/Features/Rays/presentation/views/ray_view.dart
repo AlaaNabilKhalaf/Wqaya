@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
-import 'package:wqaya/Features/Home/Presentation/Views/add_ray_view.dart';
+import 'package:wqaya/Features/Rays/presentation/views/add_ray_view.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/view_model/home_cubit.dart';
-import 'package:wqaya/Features/Home/Presentation/Widgets/xray_card.dart';
+import 'package:wqaya/Features/Rays/presentation/widgets/xray_card.dart';
 
 class RayView extends StatefulWidget {
   const RayView({super.key});
