@@ -5,8 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/view_model/home_cubit.dart';
-import 'package:wqaya/Features/Home/Presentation/Views/view_model/model/home_models.dart';
 import 'package:wqaya/Features/Home/Presentation/Widgets/full_screen_image_view.dart';
+import 'package:wqaya/Features/Rays/presentation/views/edit_ray_view.dart';
+import 'package:wqaya/Features/Rays/presentation/views/view_model/models/ray_model.dart';
+import 'package:wqaya/Features/Rays/presentation/views/view_model/ray_cubit.dart';
 
 class XRayCard extends StatelessWidget {
   final RayModel rayModel;
@@ -15,7 +17,7 @@ class XRayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var hCubit = context.read<HomeCubit>();
+    var rCubit = context.read<RayCubit>();
     final formattedDate =
         DateFormat.yMMMMd('ar').format(DateTime.parse(rayModel.rayDate));
     void showOptionsMenu(BuildContext context) {
@@ -43,6 +45,7 @@ class XRayCard extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditRayScreen(rayModel: rayModel),));
                   },
                 ),
                 ListTile(
@@ -58,8 +61,8 @@ class XRayCard extends StatelessWidget {
                   ),
                   onTap: () async {
                     Navigator.pop(context);
-                    await hCubit.deleteUserRay(rayId: rayModel.id);
-                    await hCubit.getUserRays();
+                    await rCubit.deleteUserRay(rayId: rayModel.id);
+                    await rCubit.getUserRays();
 
                   },
                 ),

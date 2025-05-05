@@ -56,31 +56,3 @@ class ChronicDiseasesLoaded extends HomeState {
   @override
   List<Object> get props => [diseases];
 }
-class RayLoading extends HomeState {}
-
-class RaySuccess extends HomeState {
-  final List<RayModel> rays;
-  RaySuccess(this.rays);
-}
-
-class RayError extends HomeState {
-  final String message;
-  RayError(this.message);
-}
-class AddRayLoading extends HomeState {}
-
-class AddRaySuccess extends HomeState {
-}
-
-class AddRayError extends HomeState {
-}class DeleteRayLoading extends HomeState {}
-
-class DeleteRaySuccess extends HomeState {
-}
-
-class DeleteRayError extends HomeState {
-  final String message;
-
-  DeleteRayError({required this.message});
-
-}

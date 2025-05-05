@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Features/Rays/presentation/views/add_ray_view.dart';
-import 'package:wqaya/Features/Home/Presentation/Views/view_model/home_cubit.dart';
+import 'package:wqaya/Features/Rays/presentation/views/view_model/ray_cubit.dart';
 import 'package:wqaya/Features/Rays/presentation/widgets/xray_card.dart';
 
 class RayView extends StatefulWidget {
@@ -14,12 +16,33 @@ class RayView extends StatefulWidget {
 }
 
 class _RayViewState extends State<RayView> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    context.read<HomeCubit>().getUserRays();
+    context.read<RayCubit>().getUserRays();
   }
+  Timer? _debounce;
 
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      if (query.trim().isEmpty) {
+        // If search field is empty, fetch all rays
+        context.read<RayCubit>().getUserRays();
+      } else {
+        // Otherwise perform search
+        context.read<RayCubit>().searchRays(keyword: query);
+      }
+    });
+  }
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +53,7 @@ class _RayViewState extends State<RayView> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         backgroundColor: const Color(0xff0094FD),
+        scrolledUnderElevation: 0,
         title: const Text(
           'سجل الأشعة',
           style: TextStyle(
@@ -45,36 +69,92 @@ class _RayViewState extends State<RayView> {
           _buildHeader(),
           const SizedBox(height: 16),
           Expanded(
-            child: BlocConsumer<HomeCubit, HomeState>(
+            child: BlocConsumer<RayCubit, RayCubitState>(
               builder: (context, state) {
-                if (state is RayLoading) {
-                  return const Center(
-                      child: CircularProgressIndicator(
-                    backgroundColor: primaryColor,
-                  ));
-                } else if (state is RayError) {
-                  return Center(
-                      child: Text('حدث خطأ: ${state.message}',
-                          style: const TextStyle(fontFamily: regular)));
-                } else if (state is RaySuccess) {
-                  final rays = state.rays;
-                  if (rays.isEmpty) {
-                    return const Center(
-                        child: Text('لا توجد أشعة حاليًا.',
-                            style: TextStyle(fontFamily: regular)));
-                  }
-                  return ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: rays.length,
-                    itemBuilder: (context, index) {
-                      return XRayCard(
-                        rayModel: rays[index],
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(0.0, 0.1),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: () {
+                    // Handle loading states
+                    if (state is RayLoading || state is SearchRaysLoading) {
+                      return const Center(
+                        key: ValueKey('loading'),
+                        child: CircularProgressIndicator(
+                          backgroundColor: primaryColor,
+                        ),
                       );
-                    },
-                  );
-                } else {
-                  return const SizedBox();
-                }
+                    }
+                    // Handle error states
+                    else if (state is RayError) {
+                      return Center(
+                        key: const ValueKey('error'),
+                        child: Text(
+                          'حدث خطأ: ${state.message}',
+                          style: const TextStyle(fontFamily: regular),
+                        ),
+                      );
+                    }
+                    else if (state is SearchRaysError) {
+                      return Center(
+                        key: const ValueKey('search_error'),
+                        child: Text(
+                          'حدث خطأ في البحث: ${state.message}',
+                          style: const TextStyle(fontFamily: regular),
+                        ),
+                      );
+                    }
+                    // Handle success states
+                    else if (state is RaySuccess) {
+                      final rays = state.rays;
+                      if (rays.isEmpty) {
+                        return const Center(
+                          key: ValueKey('empty'),
+                          child: Text('لا توجد نتائج.', style: TextStyle(fontFamily: regular)),
+                        );
+                      }
+                      return ListView.builder(
+                        key: const ValueKey('list'),
+                        padding: const EdgeInsets.all(16),
+                        itemCount: rays.length,
+                        itemBuilder: (context, index) {
+                          return XRayCard(rayModel: rays[index]);
+                        },
+                      );
+                    }
+                    // Handle search success state
+                    else if (state is SearchRaysSuccess) {
+                      final rays = state.rays;
+                      if (rays.isEmpty) {
+                        return const Center(
+                          key: ValueKey('empty_search'),
+                          child: Text('لا توجد نتائج للبحث.', style: TextStyle(fontFamily: regular)),
+                        );
+                      }
+                      return ListView.builder(
+                        key: const ValueKey('search_list'),
+                        padding: const EdgeInsets.all(16),
+                        itemCount: rays.length,
+                        itemBuilder: (context, index) {
+                          return XRayCard(rayModel: rays[index]);
+                        },
+                      );
+                    }
+                    else {
+                      return const SizedBox(key: ValueKey('empty_view'));
+                    }
+                  }(),
+                );
               },
               listener: (context, state) {
                 if (state is DeleteRaySuccess) {
@@ -88,17 +168,22 @@ class _RayViewState extends State<RayView> {
                       backgroundColor: primaryColor,
                     ),
                   );
+                  // Refresh the rays list after deletion
+                  context.read<RayCubit>().getUserRays();
                 } else if (state is DeleteRayError) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       behavior: SnackBarBehavior.floating,
                       content: Text(
-                        "حدث خلال أثناء الحذف",
-                        style: TextStyle(fontFamily: regular),
+                        state.message,
+                        style: const TextStyle(fontFamily: regular),
                       ),
                       backgroundColor: errorColor,
                     ),
                   );
+                } else if (state is AddRaySuccess) {
+                  // Refresh rays list after adding a new ray
+                  context.read<RayCubit>().getUserRays();
                 }
               },
             ),
@@ -112,7 +197,9 @@ class _RayViewState extends State<RayView> {
               context,
               MaterialPageRoute(
                 builder: (context) => const AddRayScreen(),
-              ));
+              )).then((_) {
+            context.read<RayCubit>().getUserRays();
+          });
         },
         child: const Icon(Icons.add_photo_alternate, color: Colors.white),
       ),
@@ -141,9 +228,14 @@ class _RayViewState extends State<RayView> {
                 fontSize: 24),
           ),
           const SizedBox(height: 8),
-          BlocBuilder<HomeCubit, HomeState>(
+          BlocBuilder<RayCubit, RayCubitState>(
             builder: (context, state) {
-              final count = (state is RaySuccess) ? state.rays.length : 0;
+              // Update count for both normal and search results
+              final count = (state is RaySuccess)
+                  ? state.rays.length
+                  : (state is SearchRaysSuccess)
+                  ? state.rays.length
+                  : 0;
               return Text(
                 'عدد الأشعة : $count',
                 style: const TextStyle(
@@ -152,7 +244,9 @@ class _RayViewState extends State<RayView> {
             },
           ),
           const SizedBox(height: 16),
-          TextField(
+          TextFormField(
+            controller: _searchController,
+            onTapOutside: (event) =>   FocusManager.instance.primaryFocus?.unfocus(),
             decoration: InputDecoration(
               hintText: 'أبحث في الأشعة',
               hintStyle: const TextStyle(fontFamily: regular),
@@ -163,10 +257,16 @@ class _RayViewState extends State<RayView> {
                 borderSide: BorderSide.none,
               ),
               prefixIcon: const Icon(Icons.search, color: Color(0xff1678F2)),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear, color: Color(0xff1678F2)),
+                onPressed: () {
+                  // Clear the text field and reload all rays
+                  _searchController.clear();
+                  context.read<RayCubit>().getUserRays();
+                },
+              ),
             ),
-            onChanged: (value) {
-              // context.read<HomeCubit>().filterRays(value);
-            },
+            onChanged: _onSearchChanged,
           ),
         ],
       ),

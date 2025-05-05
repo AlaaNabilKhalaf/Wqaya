@@ -9,6 +9,7 @@ import 'package:wqaya/Features/Home/Presentation/Views/view_model/home_cubit.dar
 import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
+import 'package:wqaya/Features/Rays/presentation/views/view_model/ray_cubit.dart';
 import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
 import 'Core/bloc_observer/bloc_observer.dart';
 import 'Features/Profile/Controller/profile_image_cubit.dart';
@@ -38,6 +39,8 @@ void main() async {
             create: (context) => AuthCubit()),
         BlocProvider<HomeCubit>(
             create: (context) => HomeCubit()),
+        BlocProvider<RayCubit>(
+            create: (context) => RayCubit()),
       ],
         child: const Wqaya(),
       ),
