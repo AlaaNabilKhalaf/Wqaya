@@ -6,11 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/cache/cache_helper.dart';
 import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/view_model/home_cubit.dart';
+import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_cubit.dart';
 import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
 import 'package:wqaya/Features/Rays/presentation/views/view_model/ray_cubit.dart';
 import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
+import 'package:wqaya/Features/surgries/presentation/views/view_model/models/surgery_models.dart';
+import 'package:wqaya/Features/surgries/presentation/views/view_model/surgery_cubit.dart';
 import 'Core/bloc_observer/bloc_observer.dart';
 import 'Features/Profile/Controller/profile_image_cubit.dart';
 
@@ -41,6 +44,13 @@ void main() async {
             create: (context) => HomeCubit()),
         BlocProvider<RayCubit>(
             create: (context) => RayCubit()),
+        BlocProvider<MedicineCubit>(
+            create: (context) => MedicineCubit()),
+        BlocProvider<SurgeryCubit>(
+          create: (context) => SurgeryCubit(
+            surgeryRepository: SurgeryRepository(),
+          ),
+        ),
       ],
         child: const Wqaya(),
       ),

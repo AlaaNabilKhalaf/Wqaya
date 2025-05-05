@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
-import 'package:wqaya/Features/Home/Presentation/Views/view_model/model/home_models.dart';
+import 'package:wqaya/Features/Medicine/presentation/views/view_model/models/medicine_model.dart';
 
 class MedicineCard extends StatelessWidget {
   final MedicineModel medicine;

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
-import 'package:wqaya/Features/Home/Presentation/Views/view_model/home_cubit.dart';
-import 'package:wqaya/Features/Home/Presentation/Widgets/medicine_card.dart';
+import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_cubit.dart';
+import 'package:wqaya/Features/Medicine/presentation/widgets/medicine_card.dart';
 
 class MedicineView extends StatefulWidget {
   const MedicineView({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class _MedicineViewState extends State<MedicineView>
   @override
   void initState() {
     super.initState();
-    context.read<HomeCubit>().getUserMedicine();
+    context.read<MedicineCubit>().getUserMedicine();
   }
 
   @override
@@ -43,7 +43,7 @@ class _MedicineViewState extends State<MedicineView>
         elevation: 0,
         centerTitle: true,
       ),
-      body: BlocConsumer<HomeCubit, HomeState>(
+      body: BlocConsumer<MedicineCubit, MedicineState>(
         listener: (context, state) {
           // TODO: implement listener
         },
@@ -52,12 +52,12 @@ class _MedicineViewState extends State<MedicineView>
             children: [
               _buildHeader(),
               state is UserMedicineLoading
-                  ? const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Center(
-                        child: CircularProgressIndicator(
-                            backgroundColor: primaryColor),
-                      ),
+                  ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(
+                          backgroundColor: primaryColor),
+                    ),
                   )
                   : state is UserMedicineLoaded
                       ? Expanded(

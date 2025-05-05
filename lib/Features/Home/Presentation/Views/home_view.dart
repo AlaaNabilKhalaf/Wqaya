@@ -6,14 +6,14 @@ import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/first_complaints_view.dart';
-import 'package:wqaya/Features/Complaints/Presentation/Views/surgeries_view.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/analysis_view.dart';
-import 'package:wqaya/Features/Home/Presentation/Views/medicine_view.dart';
+import 'package:wqaya/Features/Medicine/presentation/views/medicine_view.dart';
 import 'package:wqaya/Features/Rays/presentation/views/ray_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/better_health_poster.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/home_container.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/symptom_container.dart';
+import 'package:wqaya/Features/surgries/presentation/views/surgries_view.dart';
 
 import '../../../../Core/widgets/custom_home_app_bar.dart';
 
@@ -32,7 +32,7 @@ class HomeView extends StatelessWidget {
       const AnalysisView(),
       const RayView(),
       const MedicineView(),
-      const SurgeriesView(),
+      const SurgeryView(),
     };
     final List<MapEntry<String, String>> itemsList =
         homeContainerItems.entries.toList();
