@@ -17,6 +17,7 @@ class AssetsData{
   static const String xrayPicture = "assets/images/home_view/xray.png" ;
   static const String medicineBottle = "assets/images/home_view/medicine_bottle.png" ;
   static const String surgeryPicture = "assets/images/home_view/surgery.png" ;
+  static const String complaints = "assets/images/home_view/complaints.png" ;
 
 
   // AUTHENTICATION VIEW

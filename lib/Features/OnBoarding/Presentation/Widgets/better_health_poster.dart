@@ -5,8 +5,8 @@ import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 
-class BetterHealthPoster extends StatelessWidget {
-  const BetterHealthPoster({
+class ComplaintsHomeWidget extends StatelessWidget {
+  const ComplaintsHomeWidget({
     super.key,
   });
 
@@ -24,21 +24,15 @@ class BetterHealthPoster extends StatelessWidget {
             child: Column(
               children: [
                 RegularTextWithLocalization(
-                  text: "get",
+                  text: "الشكاوى",
                   fontSize: 20.sp,
                   textColor: myWhiteColor,
                   fontFamily: black,
                 ),
-                RegularTextWithLocalization(
-                  text: "betterHealth",
-                  fontSize: 20.sp,
-                  textColor: myWhiteColor,
-                  fontFamily: bold,
-                ),
               ],
             ),
           ),
-          Expanded(child: Image.asset(AssetsData.medicine,)),
+          Expanded(child: Image.asset(AssetsData.complaints,height: 80,)),
 
         ],
       ),
