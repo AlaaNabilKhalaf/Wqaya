@@ -5,7 +5,7 @@ import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Features/surgries/presentation/views/view_model/surgery_cubit.dart';
 import 'package:wqaya/Features/surgries/presentation/views/view_model/surgery_state.dart';
-import 'package:wqaya/Features/surgries/presentation/views/widgets/add_surgery.dart';
+import 'package:wqaya/Features/surgries/presentation/views/add_surgery_view.dart';
 import 'package:wqaya/Features/surgries/presentation/views/widgets/surgery_card.dart';
 
 class SurgeryView extends StatefulWidget {
@@ -132,7 +132,7 @@ class _SurgeryViewState extends State<SurgeryView>
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff0094FD),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const AddSurgeriesScreen(),)).then((_) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const AddSurgeriesView(),)).then((_) {
             context.read<SurgeryCubit>().getUserSurgeries();
           });
         },

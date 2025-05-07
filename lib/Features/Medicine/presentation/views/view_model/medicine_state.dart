@@ -17,3 +17,16 @@ class UserMedicineError extends MedicineState {
 
   UserMedicineError(this.message);
 }
+class SearchMedicineLoading extends MedicineState {}
+
+class SearchMedicineSuccess extends MedicineState {
+  final List<MedicineModel> medicines;
+
+  SearchMedicineSuccess(this.medicines);
+}
+
+class SearchMedicineError extends MedicineState {
+  final String message;
+
+  SearchMedicineError(this.message);
+}

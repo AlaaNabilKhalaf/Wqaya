@@ -6,14 +6,14 @@ import 'package:wqaya/Features/surgries/presentation/views/view_model/models/sur
 import 'package:wqaya/Features/surgries/presentation/views/view_model/surgery_cubit.dart';
 import 'package:wqaya/Features/surgries/presentation/views/view_model/surgery_state.dart';
 
-class AddSurgeriesScreen extends StatefulWidget {
-  const AddSurgeriesScreen({super.key});
+class AddSurgeriesView extends StatefulWidget {
+  const AddSurgeriesView({super.key});
 
   @override
-  State<AddSurgeriesScreen> createState() => _AddSurgeriesScreenState();
+  State<AddSurgeriesView> createState() => _AddSurgeriesViewState();
 }
 
-class _AddSurgeriesScreenState extends State<AddSurgeriesScreen> {
+class _AddSurgeriesViewState extends State<AddSurgeriesView> {
   final _formKey = GlobalKey<FormState>();
   final _surgeryTypeController = TextEditingController();
   final _nameController = TextEditingController();

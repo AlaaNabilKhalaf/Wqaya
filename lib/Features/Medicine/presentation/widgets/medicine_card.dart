@@ -108,6 +108,7 @@ class MedicineCard extends StatelessWidget {
           fontSize: 12,
           fontWeight: FontWeight.w600,
           color: chipColor,
+          fontFamily: regular
         ),
       ),
     );

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dart';
-import 'package:wqaya/Features/Auth/Presentation/Widgets/social_login_widget.dart';
-import 'package:wqaya/Features/Home/Presentation/Views/symptoms_suffered_view.dart';
+import 'package:wqaya/Features/Home/Presentation/Views/home_view.dart';
 
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
@@ -92,7 +91,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SymptomsSufferedView()));
+                            builder: (context) => const HomeView()));
                   } else if (state is SigninFailureState) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -131,10 +130,10 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                             );
                   },
                 ),
-              )
+              ),
+              SizedBox(height: 150,)
             ],
           ),
-          const SocialLoginWidget()
         ],
       ),
     );

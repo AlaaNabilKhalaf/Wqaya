@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
+import 'package:wqaya/Features/surgries/presentation/views/edit_surgeries_view.dart';
 import 'package:wqaya/Features/surgries/presentation/views/view_model/models/surgery_models.dart';
 import 'package:wqaya/Features/surgries/presentation/views/view_model/surgery_cubit.dart';
 
@@ -57,7 +58,7 @@ class SurgeryCard extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    //  Navigator.push(context, MaterialPageRoute(builder: (context) => EditRayScreen(rayModel: rayModel),));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => EditSurgeriesView(surgery: surgery,),));
                   },
                 ),
                 ListTile(

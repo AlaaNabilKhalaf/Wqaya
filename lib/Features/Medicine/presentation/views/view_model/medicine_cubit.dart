@@ -8,6 +8,7 @@ part 'medicine_state.dart';
 
 class MedicineCubit extends Cubit<MedicineState> {
   MedicineCubit() : super(MedicineInitial());
+
   Future<void> getUserMedicine() async {
     emit(UserMedicineLoading());
     try {
@@ -29,4 +30,24 @@ class MedicineCubit extends Cubit<MedicineState> {
     }
   }
 
+  Future<void> searchMedicines({required String keyword}) async {
+    emit(SearchMedicineLoading());
+    try {
+      final response = await Dio().get(
+        'https://wqaya.runasp.net/api/Medicine/search?key=$keyword',
+        options: Options(
+          headers: {
+            'accept': '*/*',
+            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+          },
+        ),
+      );
+
+      final data = response.data['data'] as List;
+      final medicines = data.map((e) => MedicineModel.fromJson(e)).toList();
+      emit(SearchMedicineSuccess(medicines));
+    } catch (e) {
+      emit(SearchMedicineError('Failed to search medicines'));
+    }
+  }
 }
