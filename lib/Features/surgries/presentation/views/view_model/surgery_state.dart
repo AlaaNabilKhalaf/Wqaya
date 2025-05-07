@@ -75,3 +75,17 @@ class DeleteSurgeryError extends SurgeryState {
 
   DeleteSurgeryError(this.error);
 }
+class SearchSurgeriesLoading extends SurgeryState {}
+
+class SearchSurgeriesSuccess extends SurgeryState {
+  final List<Surgery> surgeries;
+
+  SearchSurgeriesSuccess(this.surgeries);
+}
+
+class SearchSurgeriesError extends SurgeryState {
+  final String message;
+
+  SearchSurgeriesError(this.message);
+}
+

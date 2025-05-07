@@ -1,11 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
 import 'package:wqaya/Features/surgries/presentation/views/view_model/models/surgery_models.dart';
 import 'package:wqaya/Features/surgries/presentation/views/view_model/surgery_state.dart';
 
-// Cubit
 class SurgeryCubit extends Cubit<SurgeryState> {
   final SurgeryRepository surgeryRepository;
   List<Surgery> _surgeries = [];
+  Timer? _searchDebounce;
 
   SurgeryCubit({required this.surgeryRepository}) : super(SurgeryInitial());
 
@@ -18,6 +19,40 @@ class SurgeryCubit extends Cubit<SurgeryState> {
     } catch (e) {
       emit(UserSurgeriesError(e.toString()));
     }
+  }
+
+  Future<void> searchUserSurgeries({required String keyword}) async {
+    emit(SearchSurgeriesLoading());
+    try {
+      if (keyword.trim().isEmpty) {
+        // If search is empty, load all surgeries
+        await getUserSurgeries();
+        return;
+      }
+
+      final response = await surgeryRepository.searchUserSurgeries(keyword);
+      emit(SearchSurgeriesSuccess(response));
+    } catch (e) {
+      emit(SearchSurgeriesError('حدث خطأ أثناء تنفيذ البحث: ${e.toString()}'));
+    }
+  }
+
+  void onSearchChanged(String query) {
+    // Cancel previous debounce timer
+    if (_searchDebounce?.isActive ?? false) {
+      _searchDebounce!.cancel();
+    }
+
+    // Setup new timer
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () {
+      if (query.trim().isEmpty) {
+        // If search field is empty, fetch all surgeries
+        getUserSurgeries();
+      } else {
+        // Otherwise perform search
+        searchUserSurgeries(keyword: query);
+      }
+    });
   }
 
   Future<void> addUserSurgery(AddSurgery surgery) async {
@@ -47,6 +82,7 @@ class SurgeryCubit extends Cubit<SurgeryState> {
       }
     }
   }
+
   Future<void> editUserSurgery(Surgery surgery) async {
     // Store the current state to return to after operation
     final currentState = state;
@@ -84,7 +120,7 @@ class SurgeryCubit extends Cubit<SurgeryState> {
 
       if (success) {
         emit(DeleteSurgerySuccess("تم حذف العملية الجراحية بنجاح"));
-       await getUserSurgeries();
+        await getUserSurgeries();
       } else {
         emit(DeleteSurgeryError("فشل في حذف العملية الجراحية"));
         if (currentState is UserSurgeriesLoaded) {
@@ -97,5 +133,11 @@ class SurgeryCubit extends Cubit<SurgeryState> {
         emit(UserSurgeriesLoaded(_surgeries));
       }
     }
+  }
+
+  @override
+  Future<void> close() {
+    _searchDebounce?.cancel();
+    return super.close();
   }
 }

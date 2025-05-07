@@ -1,7 +1,5 @@
-// lib/Features/Surgery/data/models/surgery_model.dart
-
 import 'dart:convert';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:wqaya/Core/cache/cache_helper.dart';
 
 class Surgery {
@@ -47,6 +45,7 @@ class Surgery {
     };
   }
 }
+
 class AddSurgery {
   final String surgeryName;
   final String surgeryReason;
@@ -92,7 +91,6 @@ class SurgeryRepository {
 
   Future<List<Surgery>> getUserSurgeries() async {
     try {
-
       if (CacheHelper().getData(key: 'token') == null) {
         throw Exception('Authentication token not found');
       }
@@ -122,13 +120,44 @@ class SurgeryRepository {
     }
   }
 
-  Future<bool> addUserSurgery(AddSurgery surgery) async {
+  Future<List<Surgery>> searchUserSurgeries(String keyword) async {
     try {
-
       if (CacheHelper().getData(key: 'token') == null) {
         throw Exception('Authentication token not found');
       }
-      print(surgery);
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/search?key=$keyword'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+          'accept': '*/*',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+
+        if (jsonResponse['succeeded'] == true) {
+          final List<dynamic> surgeryJsonList = jsonResponse['data'];
+          return surgeryJsonList.map((json) => Surgery.fromJson(json)).toList();
+        } else {
+          throw Exception(jsonResponse['message'] ?? 'Failed to search surgeries');
+        }
+      } else {
+        throw Exception('Failed to search surgeries: Status code ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to search surgeries: $e');
+    }
+  }
+
+  Future<bool> addUserSurgery(AddSurgery surgery) async {
+    try {
+      if (CacheHelper().getData(key: 'token') == null) {
+        throw Exception('Authentication token not found');
+      }
+
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: {
@@ -137,7 +166,7 @@ class SurgeryRepository {
         },
         body: json.encode(surgery.toJson()),
       );
-      print(response);
+
       if (response.statusCode == 200 || response.statusCode == 201) {
         final jsonResponse = json.decode(response.body);
 
@@ -190,8 +219,7 @@ class SurgeryRepository {
       if (CacheHelper().getData(key: 'token') == null) {
         throw Exception('Authentication token not found');
       }
-      print(surgeryId);
-      print("Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+
       final response = await http.delete(
         Uri.parse('$baseUrl/$surgeryId'),
         headers: {
@@ -199,7 +227,7 @@ class SurgeryRepository {
           'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
         },
       );
-      print(response.body);
+
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
 
