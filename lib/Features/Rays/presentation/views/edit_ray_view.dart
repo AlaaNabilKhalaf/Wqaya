@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,6 +25,7 @@ class _EditRayScreenState extends State<EditRayScreen> {
   File? _selectedImage;
   String? _existingImageUrl;
   bool _imageChanged = false;
+
   @override
   void initState() {
     super.initState();
@@ -85,7 +85,7 @@ class _EditRayScreenState extends State<EditRayScreen> {
           borderSide: BorderSide.none,
         ),
         contentPadding:
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
     );
   }
@@ -93,11 +93,11 @@ class _EditRayScreenState extends State<EditRayScreen> {
   final List<String> rayTypes = [
     'XRay',
     'MRI',
-    'CT Scan',
+    'CTScan',
     'Ultrasound',
-    'PET Scan',
+    'PETScan',
     'Mammogram',
-    'Bone Scan',
+    'BoneScan',
     'Fluoroscopy',
   ];
 
@@ -112,7 +112,7 @@ class _EditRayScreenState extends State<EditRayScreen> {
         elevation: 0,
         title: const Text("تعديل أشعة",
             style:
-            TextStyle(fontFamily: bold, fontSize: 20, color: primaryColor)),
+                TextStyle(fontFamily: bold, fontSize: 20, color: primaryColor)),
         centerTitle: true,
         iconTheme: const IconThemeData(color: primaryColor),
       ),
@@ -131,19 +131,19 @@ class _EditRayScreenState extends State<EditRayScreen> {
                   });
                 },
                 validator: (value) =>
-                value == null || value.isEmpty ? 'مطلوب' : null,
+                    value == null || value.isEmpty ? 'مطلوب' : null,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: textFormBackgroundColor,
                   labelText: "نوع الأشعة",
                   labelStyle:
-                  const TextStyle(fontFamily: regular, color: subTextColor),
+                      const TextStyle(fontFamily: regular, color: subTextColor),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 ),
                 style: const TextStyle(fontFamily: medium, color: Colors.black),
                 icon: const Icon(Icons.keyboard_arrow_down_rounded),
@@ -151,7 +151,7 @@ class _EditRayScreenState extends State<EditRayScreen> {
                   return DropdownMenuItem<String>(
                     value: type,
                     child:
-                    Text(type, style: const TextStyle(fontFamily: medium)),
+                        Text(type, style: const TextStyle(fontFamily: medium)),
                   );
                 }).toList(),
               ),
@@ -177,7 +177,7 @@ class _EditRayScreenState extends State<EditRayScreen> {
                   if (pickedDate != null) {
                     setState(() {
                       _dateController.text =
-                      "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+                          "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
                     });
                   }
                 },
@@ -188,15 +188,15 @@ class _EditRayScreenState extends State<EditRayScreen> {
                   fillColor: textFormBackgroundColor,
                   labelText: "تاريخ الأشعة",
                   labelStyle:
-                  const TextStyle(fontFamily: regular, color: subTextColor),
+                      const TextStyle(fontFamily: regular, color: subTextColor),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   suffixIcon:
-                  const Icon(Icons.calendar_today, color: subTextColor),
+                      const Icon(Icons.calendar_today, color: subTextColor),
                 ),
               ),
               const SizedBox(height: 12),
@@ -230,7 +230,8 @@ class _EditRayScreenState extends State<EditRayScreen> {
                     ),
                   ),
                 )
-              else if (_existingImageUrl != null && _existingImageUrl!.isNotEmpty)
+              else if (_existingImageUrl != null &&
+                  _existingImageUrl!.isNotEmpty)
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 16),
                   height: 180,
@@ -250,7 +251,8 @@ class _EditRayScreenState extends State<EditRayScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         behavior: SnackBarBehavior.floating,
-                        content: Text("تم تعديل الاشعة بنجاح", style: TextStyle(fontFamily: regular)),
+                        content: Text("تم تعديل الاشعة بنجاح",
+                            style: TextStyle(fontFamily: regular)),
                         backgroundColor: primaryColor,
                       ),
                     );
@@ -260,7 +262,17 @@ class _EditRayScreenState extends State<EditRayScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         behavior: SnackBarBehavior.floating,
-                        content: Text(state.message ?? "حدث خلل أثناء التعديل", style: const TextStyle(fontFamily: regular)),
+                        content: Text(state.message ?? "حدث خلل أثناء التعديل",
+                            style: const TextStyle(fontFamily: regular)),
+                        backgroundColor: errorColor,
+                      ),
+                    );
+                  } else if (state is EditRayPictureError) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        behavior: SnackBarBehavior.floating,
+                        content: Text(state.message ?? "حدث خلل أثناء تعديل الصورة",
+                            style: const TextStyle(fontFamily: regular)),
                         backgroundColor: errorColor,
                       ),
                     );
@@ -268,7 +280,7 @@ class _EditRayScreenState extends State<EditRayScreen> {
                 },
                 builder: (context, state) {
                   var rCubit = context.read<RayCubit>();
-                  return state is EditRayLoading
+                  return (state is EditRayLoading || state is EditRayPictureLoading)
                       ? const Center(
                       child: CircularProgressIndicator(
                         backgroundColor: primaryColor,
@@ -289,27 +301,26 @@ class _EditRayScreenState extends State<EditRayScreen> {
                         return;
                       }
 
-                      MultipartFile? imageFile;
+                      // If image has changed, use the editRayPicture method which will handle both
                       if (_imageChanged && _selectedImage != null) {
-                        imageFile = await MultipartFile.fromFile(
-                            _selectedImage!.path,
-                            filename: _selectedImage!.path.split('/').last
+                        await rCubit.editRayPicture(
+                          rayId: widget.rayModel.id,
+                          rayType: _rayTypeController.text,
+                          reason: _reasonController.text,
+                          rayDate: _dateController.text,
+                          bodyPart: _bodyPartController.text,
+                          profilePic: _selectedImage!,
+                        );
+                      } else {
+                        // If no image change, only update text data
+                        rCubit.editUserRayWithoutPicture(
+                          rayId: widget.rayModel.id,
+                          rayType: _rayTypeController.text,
+                          reason: _reasonController.text,
+                          rayDate: _dateController.text,
+                          bodyPart: _bodyPartController.text,
                         );
                       }
-                      print(widget.rayModel.id);
-                      print(_rayTypeController.text);
-                      print(_reasonController.text);
-                      print(_dateController.text);
-                      print(_dateController.text);
-                      print(imageFile?.filename);
-                      rCubit.editUserRay(
-                        rayId: widget.rayModel.id,
-                        rayType: _rayTypeController.text,
-                        reason: _reasonController.text,
-                        rayDate: _dateController.text,
-                        bodyPart: _dateController.text,
-                        image: imageFile,
-                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
@@ -324,8 +335,7 @@ class _EditRayScreenState extends State<EditRayScreen> {
                             color: Colors.white)),
                   );
                 },
-              ),
-            ],
+              )            ],
           ),
         ),
       ),

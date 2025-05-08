@@ -38,6 +38,12 @@ class EditRayError extends RayCubitState {
   final String? message;
   EditRayError({this.message});
 }
+class EditRayPictureLoading extends RayCubitState {}
+class EditRayPictureSuccess extends RayCubitState {}
+class EditRayPictureError extends RayCubitState {
+  final String? message;
+  EditRayPictureError({this.message});
+}
 class SearchRaysLoading extends RayCubitState {}
 
 class SearchRaysSuccess extends RayCubitState {

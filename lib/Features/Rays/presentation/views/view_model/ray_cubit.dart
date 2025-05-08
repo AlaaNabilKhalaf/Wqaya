@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
@@ -87,13 +89,12 @@ class RayCubit extends Cubit<RayCubitState> {
       emit(DeleteRayError(message: "حدث خلل أثناء الحذف"));
     }
   }
-  Future<void> editUserRay({
+  Future<void> editUserRayWithoutPicture({
     required int rayId,
     required String rayType,
     required String reason,
     required String rayDate,
     required String bodyPart,
-    MultipartFile? image,
   }) async {
     final dio = Dio();
 
@@ -106,18 +107,13 @@ class RayCubit extends Cubit<RayCubitState> {
       "BodyPart": bodyPart,
       "MedicalHistoryId": "",
     };
-
-    if (image != null) {
-      formFields["ImageFile"] = image;
-    }
-
     final formData = FormData.fromMap(formFields);
 
     try {
       emit(EditRayLoading());
 
       final response = await dio.put(
-        'https://wqaya.runasp.net/api/Ray/$rayId',
+        'https://wqaya.runasp.net/api/Ray',
         data: formData,
         options: Options(
           headers: {
@@ -135,6 +131,57 @@ class RayCubit extends Cubit<RayCubitState> {
       }
     } catch (e) {
       emit(EditRayError(message: e.toString()));
+    }
+  }
+  Future<void> editRayPicture({
+    required int rayId,
+    required File profilePic,
+    required String rayType,
+    required String reason,
+    required String rayDate,
+    required String bodyPart,
+  }) async {
+    final dio = Dio();
+
+    // Create a map with the fields to update
+    final Map<String, dynamic> formFields = {
+      "Id": rayId.toString(),
+      "profilePic": await MultipartFile.fromFile(
+        profilePic.path,
+        filename: profilePic.path.split('/').last,
+      ),
+    };
+    final formData = FormData.fromMap(formFields);
+
+    try {
+      emit(EditRayPictureLoading());
+
+      final response = await dio.put(
+        'https://wqaya.runasp.net/api/Ray/profile-pic',
+        data: formData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+            'Content-Type': 'multipart/form-data',
+          },
+          validateStatus: (status) => true,
+        ),
+      );
+
+      if (response.data['succeeded'] == true) {
+        // After successful image update, update the text data
+        await editUserRayWithoutPicture(
+            rayId: rayId, rayType: rayType, reason: reason, rayDate: rayDate, bodyPart: bodyPart);
+
+        // Only emit success if both operations succeed (the text update will emit its own success)
+        if (state is EditRaySuccess) {
+          emit(EditRayPictureSuccess());
+        }
+      } else {
+        emit(EditRayPictureError(message: response.data['message'] ?? "Failed to edit ray picture"));
+      }
+    } catch (e) {
+      emit(EditRayPictureError(message: e.toString()));
     }
   }
   Future<void> searchRays({required String keyword}) async {
