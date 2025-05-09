@@ -183,7 +183,53 @@ class MedicineCubit extends Cubit<MedicineState> {
       emit(DeleteMedicineError(errorMessage: "حدث خلل أثناء الحذف"));
     }
   }
+  Future<void> editUserMedicine({
+   required MedicineModel medicine
+  }) async {
+    emit(EditMedicineLoading());
+    try {
+      final token = CacheHelper().getData(key: 'token');
 
+
+      final response = await Dio().put(
+        'https://wqaya.runasp.net/api/MedicalHistory/EditMedicineByPatient',
+        data: {
+          'id': medicine.id,
+          'medicalHistryId': 0,
+          'name': medicine.name,
+          'dosageForm': medicine.dosageForm,
+          'strength': medicine.strength,
+          'unit': medicine.unit,
+          'medicineType': medicine.medicineType,
+        },
+        options: Options(
+          headers: {
+            'accept': '*/*',
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      print('Medicine updated response: ${response.data}');
+      emit(EditMedicineSuccess());
+      // Refresh the medicine list after editing
+      await getUserMedicine();
+    } catch (e) {
+      print('Error updating medicine: $e');
+      String errorMessage = 'Failed to update medicine';
+      if (e is DioException && e.response != null) {
+        // Extract specific error message from response if available
+        if (e.response!.data is Map && e.response!.data['message'] != null) {
+          errorMessage = e.response!.data['message'];
+        } else if (e.response!.data is String) {
+          errorMessage = e.response!.data;
+        }
+        print('Server error details: ${e.response!.data}');
+      }
+      emit(EditMedicineError(errorMessage: errorMessage));
+    }
+  }
   Future<void> addMedicineByHand({
     required String name,
     required String dosageForm,

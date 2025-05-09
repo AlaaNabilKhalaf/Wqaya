@@ -60,3 +60,11 @@ class DeleteMedicineError extends MedicineState {
 
   DeleteMedicineError({required this.errorMessage});
 }
+class EditMedicineLoading extends MedicineState {}
+
+class EditMedicineSuccess extends MedicineState {}
+
+class EditMedicineError extends MedicineState {
+  final String errorMessage;
+  EditMedicineError({required this.errorMessage});
+}

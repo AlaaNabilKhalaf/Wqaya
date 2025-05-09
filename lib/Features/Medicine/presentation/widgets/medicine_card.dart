@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
+import 'package:wqaya/Features/Medicine/presentation/views/edit_medicine_view.dart';
 import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_cubit.dart';
 import 'package:wqaya/Features/Medicine/presentation/views/view_model/models/medicine_model.dart';
 
@@ -92,6 +93,7 @@ class _MedicineCardState extends State<MedicineCard> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              widget.medicine.source=="Added By User" ?
               ListTile(
                 title: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -105,8 +107,9 @@ class _MedicineCardState extends State<MedicineCard> {
                 ),
                 onTap: () {
                   Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditUserMedicineView(medicineModel: widget.medicine),));
                 },
-              ),
+              ) :const SizedBox.shrink(),
               ListTile(
                 title: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
