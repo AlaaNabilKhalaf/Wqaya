@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wqaya/Core/cache/cache_helper.dart';
 import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
@@ -211,6 +212,7 @@ class HomeView extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     context.read<BottomNavVisibilityCubit>().hide();
+                    print(CacheHelper().getData(key :'token'));
                     Navigator.push(
                     context,
                     MaterialPageRoute(

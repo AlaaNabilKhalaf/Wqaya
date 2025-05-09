@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
+import 'package:wqaya/Features/Medicine/presentation/views/add_medicine_view.dart';
 import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_cubit.dart';
 import 'package:wqaya/Features/Medicine/presentation/widgets/medicine_card.dart';
 
@@ -33,7 +34,7 @@ class _MedicineViewState extends State<MedicineView>
         context.read<MedicineCubit>().getUserMedicine();
       } else {
         // Otherwise perform search
-        context.read<MedicineCubit>().searchMedicines(keyword: query);
+        context.read<MedicineCubit>().searchMedicinesForAdding(keyword: query);
       }
     });
   }
@@ -104,7 +105,7 @@ class _MedicineViewState extends State<MedicineView>
                     // Handle error states
                     else if (state is UserMedicineError) {
                       return Center(
-                        key: ValueKey('error'),
+                        key: const ValueKey('error'),
                         child: Text(
                           'حدث خطأ: ${state.message}',
                           style: const TextStyle(fontFamily: regular),
@@ -113,7 +114,7 @@ class _MedicineViewState extends State<MedicineView>
                     }
                     else if (state is SearchMedicineError) {
                       return Center(
-                        key: ValueKey('search_error'),
+                        key: const ValueKey('search_error'),
                         child: Text(
                           'حدث خطأ في البحث: ${state.message}',
                           style: const TextStyle(fontFamily: regular),
@@ -136,6 +137,7 @@ class _MedicineViewState extends State<MedicineView>
                         itemBuilder: (context, index) {
                           return MedicineCard(
                             medicine: medicines[index],
+                            canBeChosen: false,
                           );
                         },
                       );
@@ -156,6 +158,7 @@ class _MedicineViewState extends State<MedicineView>
                         itemBuilder: (context, index) {
                           return MedicineCard(
                             medicine: medicines[index],
+                            canBeChosen: false,
                           );
                         },
                       );
@@ -173,7 +176,10 @@ class _MedicineViewState extends State<MedicineView>
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff0094FD),
         onPressed: () {
-          // Add new medication
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AddMedicineView()),
+          );
         },
         child: const Icon(Icons.add, color: Colors.white),
       ),

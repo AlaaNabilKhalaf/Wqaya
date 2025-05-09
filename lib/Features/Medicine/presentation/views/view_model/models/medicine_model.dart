@@ -4,7 +4,9 @@ class MedicineModel {
   final String dosageForm;
   final int strength;
   final String unit;
-  final String status;
+  final String? status; // optional
+  final String? source; // optional
+  final String? medicineType; // optional
 
   MedicineModel({
     required this.id,
@@ -12,7 +14,9 @@ class MedicineModel {
     required this.dosageForm,
     required this.strength,
     required this.unit,
-    required this.status,
+    this.status,
+    this.source,
+    this.medicineType,
   });
 
   factory MedicineModel.fromJson(Map<String, dynamic> json) {
@@ -22,7 +26,9 @@ class MedicineModel {
       dosageForm: json['dosageForm'],
       strength: json['strength'],
       unit: json['unit'],
-      status: json['status'],
+      status: json['status'], // might be missing
+      source: json['source'], // might be missing
+      medicineType: json['medicineType'] ?? json['medicinetype'], // handle both spellings
     );
   }
 }
