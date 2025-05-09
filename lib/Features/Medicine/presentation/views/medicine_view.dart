@@ -34,7 +34,7 @@ class _MedicineViewState extends State<MedicineView>
         context.read<MedicineCubit>().getUserMedicine();
       } else {
         // Otherwise perform search
-        context.read<MedicineCubit>().searchMedicinesForAdding(keyword: query);
+        context.read<MedicineCubit>().searchGeneralMedicine(keyword: query);
       }
     });
   }

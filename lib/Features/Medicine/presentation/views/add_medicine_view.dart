@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wqaya/Features/Medicine/presentation/views/add_medicine_by_hand_view.dart';
 import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_cubit.dart';
 import 'package:wqaya/Features/Medicine/presentation/widgets/medicine_card.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 
 class AddMedicineView extends StatefulWidget {
-  const AddMedicineView({Key? key}) : super(key: key);
+  const AddMedicineView({super.key});
 
   @override
   State<AddMedicineView> createState() => _AddMedicineViewState();
@@ -35,6 +36,49 @@ class _AddMedicineViewState extends State<AddMedicineView> {
 
   @override
   Widget build(BuildContext context) {
+    Widget _buildHeader() {
+      return Container(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        decoration: const BoxDecoration(
+          color: Color(0xff0094FD),
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 24),
+            TextField(
+              controller: _searchController,
+              onTapOutside: (event) =>
+                  FocusManager.instance.primaryFocus?.unfocus(),
+              decoration: InputDecoration(
+                hintText: 'أبحث عن ادوية للاضافة',
+                hintStyle: const TextStyle(fontFamily: regular),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide.none,
+                ),
+                prefixIcon:
+                const Icon(Icons.search, color: Color(0xff1678F2)),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.clear, color: Color(0xff1678F2)),
+                  onPressed: () {
+                    _searchController.clear();
+                    context.read<MedicineCubit>().getUserMedicine();
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
         context.read<MedicineCubit>().getUserMedicine();
@@ -62,33 +106,7 @@ class _AddMedicineViewState extends State<AddMedicineView> {
         body: SafeArea(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: TextField(
-                  controller: _searchController,
-                  onTapOutside: (event) =>
-                      FocusManager.instance.primaryFocus?.unfocus(),
-                  decoration: InputDecoration(
-                    hintText: 'أبحث عن الأدوية الخاصة بك',
-                    hintStyle: const TextStyle(fontFamily: regular),
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide.none,
-                    ),
-                    prefixIcon:
-                    const Icon(Icons.search, color: Color(0xff1678F2)),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear, color: Color(0xff1678F2)),
-                      onPressed: () {
-                        _searchController.clear();
-                        context.read<MedicineCubit>().getUserMedicine();
-                      },
-                    ),
-                  ),
-                ),
-              ),
+              _buildHeader(),
               Expanded(
                 child: BlocBuilder<MedicineCubit, MedicineState>(
                   builder: (context, state) {
@@ -144,9 +162,36 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                         },
                       );
                     } else if (state is SearchMedicineError) {
-                      return Center(
-                          child: Text('خطأ في البحث: ${state.message}',
-                              style: const TextStyle(color: Colors.red)));
+                      return Column(
+                       mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(state.message=="Item not found" ?'لم نجد الدواء' : state.message,
+                              style: const TextStyle(color: Colors.red,fontFamily: black,fontSize: 24)),
+                          const SizedBox(height: 20,),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const AddMedicineByHandView(),
+                                  ),
+                                );                              },
+                              label: const Text(
+                                'قم باضافة الدواء',
+                                style: TextStyle(fontSize: 16, color: Colors.white, fontFamily: black),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xff0094FD),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30)),
+                                minimumSize: const Size(double.infinity, 50),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
                     } else {
                       return const Center(
                           child: Text('ابدأ بالبحث عن دواء',

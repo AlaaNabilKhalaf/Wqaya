@@ -46,3 +46,17 @@ class MedicineSubmissionError extends MedicineState {
   final String message;
   MedicineSubmissionError(this.message);
 }
+class AddMedicineSuccess extends MedicineState {}
+class AddMedicineLoading extends MedicineState {}
+class AddMedicineError extends MedicineState {
+  final String errorMessage;
+
+  AddMedicineError({required this.errorMessage});
+}
+class DeleteMedicineSuccess extends MedicineState {}
+class DeleteMedicineLoading extends MedicineState {}
+class DeleteMedicineError extends MedicineState {
+  final String errorMessage;
+
+  DeleteMedicineError({required this.errorMessage});
+}
