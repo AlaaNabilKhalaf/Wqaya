@@ -13,7 +13,7 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
   Future<void> changePassword(String currentPassword, String newPassword, String confirmNewPassword) async {
     emit(ChangePasswordLoadingState());
     try {
-      final token = await CacheHelper().getData(key: 'token'); // تأكد إن التوكن محفوظ هنا
+      final token = await CacheHelper().getData(key: 'token');
 
       final response = await _dio.post(
         "/api/Authentication/ChangePassword",
@@ -55,5 +55,40 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
       emit(ChangePasswordFailState(message: errorText));
     }
   }
+
+
+  // Future<void> uploadProfilePicture(File imageFile) async {
+  //   emit(UploadProfilePicLoadingState());
+  //
+  //   try {
+  //     final token = await CacheHelper().getData(key: 'token');
+  //
+  //     final formData = FormData.fromMap({
+  //       'profilePic': await MultipartFile.fromFile(
+  //         imageFile.path,
+  //         filename: imageFile.path.split('/').last,
+  //       ),
+  //     });
+  //
+  //     final response = await _dio.put(
+  //       'https://wqaya.runasp.net/api/Patient/profile-pic',
+  //       data: formData,
+  //       options: Options(
+  //         headers: {
+  //           'accept': '*/*',
+  //           'Authorization': 'Bearer $token',
+  //           'Content-Type': 'multipart/form-data',
+  //         },
+  //       ),
+  //     );
+  //
+  //     debugPrint('Upload success: ${response.data}');
+  //     emit(UploadProfilePicSuccessState(message: 'تم رفع الصورة بنجاح'));
+  //   } on DioException catch (e) {
+  //     final errorMsg = e.response?.data['message'] ?? 'فشل في رفع الصورة';
+  //     emit(UploadProfilePicFailState(message: errorMsg));
+  //   }
+  // }
+
 
 }

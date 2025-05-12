@@ -80,43 +80,45 @@ class _ChangeProfilePictureViewState extends State<ChangeProfilePictureView> {
                           behavior: SnackBarBehavior.floating,
                         ),
                       );
+                    } else if (state is UploadProfilePictureSuccessState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: RegularTextWithoutLocalization(
+                            text: state.message,
+                            fontSize: 15.sp,
+                            textColor: Colors.white,
+                            fontFamily: bold,
+                          ),
+                          backgroundColor: Colors.green,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
                     }
                   },
-                builder: (context , state ){
+
+                  builder: (context , state ){
                   return state is !UploadProfilePictureLoadingState?
                   ProfileCard(cardAction: 'confirm',
-                  onTap: (){
-                  if(currentPassword == currentPasswordController.text.toString()){
+                    onTap: () {
+                      if (currentPassword! == currentPasswordController.text.toString()) {
+                        BlocProvider.of<ProfileImageCubit>(context).uploadProfilePicture();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: RegularTextWithoutLocalization(
+                              text: "كلمة السر الحالية خاطئة",
+                              fontSize: 15.sp,
+                              textColor: Colors.white,
+                              fontFamily: bold,
+                            ),
+                            backgroundColor: Colors.red,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
+                    },
 
-
-                  //
-                  // showDialog(
-                  //   context: context,
-                  //   barrierDismissible: true, // Prevent dismissing by tapping outside
-                  //   builder: (BuildContext context) {
-                  //     return CustomAlert (
-                  //       nextText: '',
-                  //       nextScreenFunction: (){},);
-                  //
-                  //   },
-                  // );
-                  }
-                  else{
-                  ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                  content: RegularTextWithoutLocalization(
-                  text: "كلمة السر الحالية خاطئة",
-                  fontSize: 15.sp,
-                  textColor: Colors.white,
-                  fontFamily: bold,
-                  ),
-                  backgroundColor: Colors.red,
-                  behavior: SnackBarBehavior.floating,
-                  ),
-                  );
-                  }
-
-                  },cardColor: primaryColor,textColor: myWhiteColor,)  :
+                    cardColor: primaryColor,textColor: myWhiteColor,)  :
                   const Center(
                   child: CircularProgressIndicator(
                   color: primaryColor,

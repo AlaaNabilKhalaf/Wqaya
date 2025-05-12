@@ -7,7 +7,6 @@ class ChangePasswordSuccessState extends ApiProfileStates{
     required this.message
   });
   String message ;
-
 }
 class ChangePasswordFailState extends ApiProfileStates{
   ChangePasswordFailState({
@@ -16,3 +15,18 @@ class ChangePasswordFailState extends ApiProfileStates{
   String message ;
 }
 
+
+//
+// class UploadProfilePicLoadingState extends ApiProfileStates{}
+// class UploadProfilePicSuccessState extends ApiProfileStates{
+//   UploadProfilePicSuccessState({
+//     required this.message
+//   });
+//   String message ;
+// }
+// class UploadProfilePicFailState extends ApiProfileStates{
+//   UploadProfilePicFailState({
+//     required this.message
+//   });
+//   String message ;
+// }

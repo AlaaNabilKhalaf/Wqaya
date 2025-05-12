@@ -1,13 +1,10 @@
-import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wqaya/Core/cache/cache_helper.dart';
-import 'package:wqaya/Features/Auth/Presentation/Views/view_model/Models/update_user_response.dart';
 import 'Models/user_model.dart';
-import 'Models/register.dart';
 
 part 'auth_state.dart';
 
@@ -165,7 +162,7 @@ class AuthCubit extends Cubit<AuthState> {
       if (data['succeeded'] == true) {
         CacheHelper().saveData(key: 'UserId', value: data['userId']);
         final storedUserId = CacheHelper().getData(key: 'UserId');
-        print(storedUserId);
+        debugPrint(storedUserId);
         CacheHelper().saveData(key: 'name', value: displayedName.toString());
         CacheHelper().saveData(key: 'phoneNumber', value: data['phoneNumber'].toString());
         CacheHelper().saveData(key: 'email', value: data['email'].toString());
