@@ -7,7 +7,6 @@ import 'package:wqaya/Features/Profile/Controller/profile_image_cubit.dart';
 import 'package:wqaya/Features/Profile/Controller/profile_image_states.dart';
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
-import '../../../../Core/widgets/custom_ alert.dart';
 import '../../../../Core/widgets/custom_home_app_bar.dart';
 import '../../../../Core/widgets/image_picker_widget.dart';
 import '../../../../Core/widgets/password_icon.dart';
@@ -35,6 +34,7 @@ class _ChangeProfilePictureViewState extends State<ChangeProfilePictureView> {
   }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         backgroundColor: myWhiteColor,
         appBar: const PreferredSize(

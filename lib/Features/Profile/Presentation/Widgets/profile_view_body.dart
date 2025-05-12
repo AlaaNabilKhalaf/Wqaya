@@ -4,6 +4,7 @@ import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Profile/Presentation/Views/change_password_view.dart';
+import 'package:wqaya/Features/Profile/Presentation/Views/edit_phone_number_view.dart';
 import 'package:wqaya/Features/Profile/Presentation/Views/edit_profile_view.dart';
 import 'package:wqaya/Features/Profile/Presentation/Views/exist_view.dart';
 import 'package:wqaya/Features/Profile/Presentation/Widgets/profile_card.dart';
@@ -27,9 +28,10 @@ class ProfileViewBody extends StatelessWidget {
           }),
           ProfileCard(cardAction: 'changeProfilePicture', onTap: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=> const ChangeProfilePictureView()));
-
           }),
-
+          ProfileCard(cardAction: 'editPhoneNumber', onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> const EditPhoneNumberView()));
+          }),
           ProfileCard(cardAction: 'changePassword', onTap: (){
             Navigator.push(context, MaterialPageRoute(builder: (context)=> const ChangePasswordView()));
 

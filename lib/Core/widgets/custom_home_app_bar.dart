@@ -46,6 +46,7 @@ class HomeCustomAppBar extends StatelessWidget {
                 fontFamily: black,
               ),
               const SizedBox(height: 2,),
+
               RegularTextWithLocalization(
                 text: 'address',
                 fontSize: 13.sp,
