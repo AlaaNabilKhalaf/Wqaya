@@ -32,6 +32,27 @@ bool confirmPasswordIsVisible = false;
 
 class _SignUpViewBodyState extends State<SignUpViewBody> {
   @override
+  void initState() {
+    // TODO: implement initState
+    phoneNumberController.clear();
+    passwordController.clear();
+    passwordConfirmController.clear();
+    emailController.clear();
+    nameController.clear();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    nameController.dispose();
+    passwordConfirmController.dispose();
+    passwordController.dispose();
+    emailController.dispose();
+    phoneNumberController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(18.0),

@@ -87,6 +87,8 @@ class AuthCubit extends Cubit<AuthState> {
       if (response.statusCode == 200 && response.data['succeeded'] == true) {
         debugPrint(response.data.toString());
         CacheHelper().saveData(key: 'token', value: response.data['token']);
+        CacheHelper().saveData(key: 'email', value: response.data['userData']['email']);
+        CacheHelper().saveData(key: 'profileImage', value: response.data['userData']['imgUrl']);
         CacheHelper().saveData(key: 'currentPassword', value: password);
         emit(SignInSuccessState(token: response.data['token']));
       } else {

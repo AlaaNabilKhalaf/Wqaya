@@ -28,6 +28,26 @@ class _FollowingUpFormFieldsState extends State<FollowingUpFormFields> {
 
   @override
   Widget build(BuildContext context) {
+
+    @override
+    void initState() {
+      // TODO: implement initState
+      idController.clear();
+      ageController.clear();
+      addressController.clear();
+      super.initState();
+    }
+
+    @override
+    void dispose() {
+      // TODO: implement dispose
+      ageController.dispose();
+      addressController.dispose();
+      idController.dispose();
+      super.dispose();
+    }
+
+
     var aCubit = context.read<AuthCubit>();
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

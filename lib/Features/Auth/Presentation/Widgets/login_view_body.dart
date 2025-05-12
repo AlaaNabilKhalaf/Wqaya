@@ -24,6 +24,20 @@ bool passwordIsVisible = false;
 
 class _LoginViewBodyState extends State<LoginViewBody> {
   @override
+  void initState() {
+    // TODO: implement initState
+    phoneNumberController.clear();
+    passwordController.clear();
+    super.initState();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    phoneNumberController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     var aCubit = context.read<AuthCubit>();
     return Padding(

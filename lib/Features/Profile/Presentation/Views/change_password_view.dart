@@ -32,13 +32,15 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   bool newPasswordIsVisible = false;
   bool confirmNewPasswordIsVisible = false;
   @override
-  @override
   void initState() {
     super.initState();
     currentPassword = CacheHelper().getData(key: 'currentPassword');
     oldPasswordController = TextEditingController();
     newPasswordController = TextEditingController();
     confirmNewPasswordController = TextEditingController();
+    confirmNewPasswordController.clear();
+    oldPasswordController.clear();
+    newPasswordController.clear();
   }
 
   @override
