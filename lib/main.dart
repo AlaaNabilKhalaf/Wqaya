@@ -10,6 +10,7 @@ import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_c
 import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
+import 'package:wqaya/Features/Profile/Controller/api_profile_cubit.dart';
 import 'package:wqaya/Features/Rays/presentation/views/view_model/ray_cubit.dart';
 import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
 import 'package:wqaya/Features/surgries/presentation/views/view_model/models/surgery_models.dart';
@@ -38,6 +39,8 @@ void main() async {
           create: (context) => BottomNavVisibilityCubit(),),
         BlocProvider<ProfileImageCubit>(
             create: (context) => ProfileImageCubit()),
+        BlocProvider<ApiProfileCubit>(
+            create: (context) => ApiProfileCubit()),
         BlocProvider<AuthCubit>(
             create: (context) => AuthCubit()),
         BlocProvider<HomeCubit>(
@@ -77,10 +80,11 @@ class Wqaya extends StatelessWidget {
         return MaterialApp(
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
-          locale: const Locale('ar', 'EG'),
           // Force Arabic
+          locale: const Locale('ar', 'EG'),
           debugShowCheckedModeBanner: false,
-          home: CacheHelper().getData(key: 'token').toString().isNotEmpty? const NavBarView() :const SplashView(), // Updated to use bottom navigation
+          home: const SplashView(),
+          // home: CacheHelper().getData(key: 'token').toString().isNotEmpty? const NavBarView() :const SplashView(), // Updated to use bottom navigation
         );
       },
     );

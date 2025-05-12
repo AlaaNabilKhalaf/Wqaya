@@ -13,39 +13,47 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
   Future<void> changePassword(String currentPassword, String newPassword, String confirmNewPassword) async {
     emit(ChangePasswordLoadingState());
     try {
+      final token = await CacheHelper().getData(key: 'token'); // تأكد إن التوكن محفوظ هنا
+
       final response = await _dio.post(
         "/api/Authentication/ChangePassword",
-        options: Options(headers:
-        {
+        options: Options(headers: {
           'Content-Type': 'application/json',
           'accept': '*/*',
+          'Authorization': 'Bearer $token',
         }),
-
         data: {
           "currentPassword": currentPassword,
           "newPassword": newPassword,
           "confirmNewPassword": confirmNewPassword,
         },
       );
+
       debugPrint("Response data: ${response.data}");
 
-      //Getting Data
       final Map<String, dynamic> data = response.data;
       if (data.containsKey('succeeded') && data['succeeded'] == true) {
         final String msg = data['message'] ?? 'Password reset successfully';
-
-        //Caching
         CacheHelper().saveData(key: 'currentPassword', value: newPassword);
-        //Emitting
         emit(ChangePasswordSuccessState(message: msg));
       } else {
-
         final String msg = data['message'] ?? "لم تتم العملية من فضلك حاول في وقت اخر";
         emit(ChangePasswordFailState(message: msg));
       }
     } on DioException catch (e) {
-      debugPrint(e.response?.data['message'].toString() );
-      emit(ChangePasswordFailState(message: e.response?.data['message'].toString()  ?? " خطأ من السيرفر بدون تفاصيل" ));
+      final errorMsg = e.response?.data['message'];
+      String errorText;
+
+      if (errorMsg is List) {
+        errorText = errorMsg.isNotEmpty ? errorMsg[0].toString() : "خطأ غير معروف";
+      } else if (errorMsg is String) {
+        errorText = errorMsg;
+      } else {
+        errorText = "حدث خطأ غير متوقع";
+      }
+
+      emit(ChangePasswordFailState(message: errorText));
     }
   }
+
 }

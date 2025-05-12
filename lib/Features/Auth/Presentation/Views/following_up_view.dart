@@ -40,7 +40,7 @@ class FollowingUpView extends StatelessWidget {
               ],
             ),
             //Text Form Fields
-                      Expanded(child: const FollowingUpFormFields()),
+                      const Expanded(child: FollowingUpFormFields()),
           ],
           ),
         ),

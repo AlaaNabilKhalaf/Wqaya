@@ -4,16 +4,16 @@ part of 'auth_cubit.dart';
 sealed class AuthState {}
 
 final class AuthInitial extends AuthState {}
-final class SigninLoadingState extends AuthState {}
-final class SigninSuccessState extends AuthState {
+final class SignInLoadingState extends AuthState {}
+final class SignInSuccessState extends AuthState {
   final String token;
 
-  SigninSuccessState({required this.token});
+  SignInSuccessState({required this.token});
 }
-final class SigninFailureState extends AuthState {
+final class SignInFailureState extends AuthState {
   final String error;
 
-  SigninFailureState({required this.error});
+  SignInFailureState({required this.error});
 
 }
 final class RegisterLoadingState extends AuthState {}

@@ -76,7 +76,7 @@ class AuthCubit extends Cubit<AuthState> {
   // }
   Future<void> signIn({required String phoneNumber, required String password}) async {
     try {
-      emit(SigninLoadingState());
+      emit(SignInLoadingState());
 
       final response = await Dio().post(
         'https://wqaya.runasp.net/api/Authentication/Login',
@@ -90,11 +90,12 @@ class AuthCubit extends Cubit<AuthState> {
       if (response.statusCode == 200 && response.data['succeeded'] == true) {
         debugPrint(response.data.toString());
         CacheHelper().saveData(key: 'token', value: response.data['token']);
-        emit(SigninSuccessState(token: response.data['token']));
+        CacheHelper().saveData(key: 'currentPassword', value: password);
+        emit(SignInSuccessState(token: response.data['token']));
       } else {
         final errorMessage = response.data['message'] ?? 'فشل تسجيل الدخول';
         debugPrint("Sign-in failed: $errorMessage");
-        emit(SigninFailureState(error: errorMessage));
+        emit(SignInFailureState(error: errorMessage));
       }
 
     } catch (e) {
@@ -103,7 +104,7 @@ class AuthCubit extends Cubit<AuthState> {
         serverError = e.response?.data['message']?.toString() ?? "خطأ من السيرفر بدون تفاصيل";
       }
       debugPrint("Server error: $serverError");
-      emit(SigninFailureState(error: serverError));
+      emit(SignInFailureState(error: serverError));
     }
   }
 

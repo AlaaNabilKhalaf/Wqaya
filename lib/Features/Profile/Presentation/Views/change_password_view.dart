@@ -19,20 +19,34 @@ class ChangePasswordView extends StatefulWidget {
 
   @override
   State<ChangePasswordView> createState() => _ChangePasswordViewState();
+
 }
-TextEditingController oldPasswordController = TextEditingController();
-TextEditingController newPasswordController = TextEditingController();
-TextEditingController confirmNewPasswordController = TextEditingController();
-bool currentPasswordIsVisible = false;
-bool newPasswordIsVisible = false;
-bool confirmNewPasswordIsVisible = false;
+
 
 class _ChangePasswordViewState extends State<ChangePasswordView> {
+
+  late TextEditingController oldPasswordController;
+  late TextEditingController newPasswordController ;
+  late TextEditingController confirmNewPasswordController;
+  bool currentPasswordIsVisible = false;
+  bool newPasswordIsVisible = false;
+  bool confirmNewPasswordIsVisible = false;
   @override
-  void initState() async{
+  @override
+  void initState() {
     super.initState();
-   await CacheHelper().getData(key:'currentPassword');
-   currentPassword = CacheHelper().getData(key:'currentPassword');
+    currentPassword = CacheHelper().getData(key: 'currentPassword');
+    oldPasswordController = TextEditingController();
+    newPasswordController = TextEditingController();
+    confirmNewPasswordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    oldPasswordController.dispose();
+    newPasswordController.dispose();
+    confirmNewPasswordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -93,11 +107,11 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     isPasswordVisible: confirmNewPasswordIsVisible,
                     fieldController: confirmNewPasswordController, hintText: 'اعادة كتابة كلمة السر الجديدة',),
                 ),
-                // SizedBox(width: 100.h,),
+
+
 
                 BlocConsumer<ApiProfileCubit, ApiProfileStates>(
                   listener: (context, state) {
-
 
                     if(currentPassword! == oldPasswordController.text.toString()){
                       if (newPasswordController.text == confirmNewPasswordController.text){
