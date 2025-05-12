@@ -7,7 +7,7 @@ import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/first_complaints_view.dart';
-import 'package:wqaya/Features/Home/Presentation/Views/analysis_view.dart';
+import 'package:wqaya/Features/Analysis/Presentation/views/analysis_view.dart';
 import 'package:wqaya/Features/Medicine/presentation/views/medicine_view.dart';
 import 'package:wqaya/Features/Rays/presentation/views/ray_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';

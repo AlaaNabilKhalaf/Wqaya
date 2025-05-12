@@ -105,6 +105,15 @@ class _ChatWelcomeViewBodyState extends State<ChatWelcomeViewBody> with SingleTi
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 14),
               child: RegularTextWithLocalization(
+                text: 'OCR Chatbot',
+                fontSize: 30.sp,
+                textColor: const Color(0xFF1678f2),
+                fontFamily: black,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              child: RegularTextWithLocalization(
                 text: 'howCanIHelpYou',
                 fontSize: 30.sp,
                 textColor: primaryColor,
@@ -123,7 +132,7 @@ class _ChatWelcomeViewBodyState extends State<ChatWelcomeViewBody> with SingleTi
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     RegularTextWithLocalization(
-                      text: 'askMe',
+                      text: 'ارسل لي صورة',
                       fontSize: 20,
                       textColor: myWhiteColor,
                       fontFamily: semiBold,
