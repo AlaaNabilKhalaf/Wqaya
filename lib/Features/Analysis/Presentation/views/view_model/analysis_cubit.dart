@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:wqaya/Core/cache/cache_helper.dart';
@@ -14,8 +13,11 @@ class AnalysisCubit extends Cubit<AnalysisState> {
 
   AnalysisCubit() : super(AnalysisInitial());
 
-  // Set the authorization token for authenticated requests
+  // Keep track of current analysis records list for consistent state management
+  List<AnalysisRecord> _currentRecords = [];
+  List<AnalysisRecord> get currentRecords => _currentRecords;
 
+  // Map for displaying result status in Arabic
   final Map<String, String> resultStatusMap = {
     'Normal': 'طبيعي',
     'High': 'مرتفع',
@@ -25,31 +27,30 @@ class AnalysisCubit extends Cubit<AnalysisState> {
   };
 
   // Fetch analysis records
-  Future<void> fetchAnalysisRecords(
-      {int pageNumber = 1, int pageSize = 111}) async {
+  Future<void> fetchAnalysisRecords({int pageNumber = 1, int pageSize = 111}) async {
+    emit(AnalysisLoading());
     try {
-      emit(AnalysisLoading());
-      print('$baseUrl/Analysis/page?pageNumber=1&pageSize=111');
-      final response =
-          await _dio.get('$baseUrl/Analysis/page?pageNumber=1&pageSize=111',
-              options: Options(
-                validateStatus: (status) => true,
-                headers: {
-                  'Authorization':
-                      'Bearer ${CacheHelper().getData(key: 'token')}',
-                  'accept': '*/*'
-                },
-              ));
+      final response = await _dio.get(
+        '$baseUrl/Analysis/page?pageNumber=$pageNumber&pageSize=$pageSize',
+        options: Options(
+          validateStatus: (status) => true,
+          headers: {
+            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+            'accept': '*/*'
+          },
+        ),
+      );
 
       if (response.statusCode == 200) {
         final data = response.data;
-        print(data);
         if (data['succeeded'] == true) {
           final pageData = data['data'];
           final List<dynamic> items = pageData['items'];
 
           final List<AnalysisRecord> records =
-              items.map((item) => AnalysisRecord.fromJson(item)).toList();
+          items.map((item) => AnalysisRecord.fromJson(item)).toList();
+
+          _currentRecords = records; // Update current records list
 
           emit(AnalysisLoaded(
             records: records,
@@ -60,79 +61,34 @@ class AnalysisCubit extends Cubit<AnalysisState> {
             hasNextPage: pageData['hasNextPage'],
           ));
         } else {
-          emit(AnalysisError(
-              message: data['message'] ?? 'Failed to load records'));
+          emit(AnalysisError(message: data['message'] ?? 'Failed to load records'));
         }
       } else {
-        print(response.data);
-        emit(const AnalysisError(message: 'Failed to load records'));
+        emit(AnalysisError(message: 'Failed to load records. Status: ${response.statusCode}'));
       }
     } catch (e) {
       emit(AnalysisError(message: 'Error fetching records: ${e.toString()}'));
     }
   }
 
-  // Upload a new analysis record (PDF only)
-  Future<void> uploadAnalysisRecord({
-    required String testName,
-    required String labName,
-    required DateTime date,
-    String? resultSummary,
-    String? resultStatus,
-    required int medicalHistoryId,
-    required File pdfFile,
-  }) async {
+  // Search analysis records
+  Future<void> searchAnalysisRecords({required String keyword}) async {
+    if (keyword.trim().isEmpty) {
+      await fetchAnalysisRecords();
+      return;
+    }
+
+    emit(SearchAnalysisLoading());
     try {
-      emit(AnalysisUploading());
+      // Filter the existing records for client-side search
+      final filteredRecords = _currentRecords.where((record) =>
+      record.testName.toLowerCase().contains(keyword.toLowerCase()) ||
+          record.labName.toLowerCase().contains(keyword.toLowerCase())
+      ).toList();
 
-      // Check if the file is a PDF
-      if (!pdfFile.path.toLowerCase().endsWith('.pdf')) {
-        emit(const AnalysisError(message: 'Only PDF files are allowed'));
-        return;
-      }
-
-      // Create form data
-      final formData = FormData.fromMap({
-        'TestName': testName,
-        'LabName': labName,
-        'Date': date.toIso8601String(),
-        'ResultSummary': resultSummary,
-        'ResultStatus': resultStatus,
-        'ImageFile':
-            await MultipartFile.fromFile(pdfFile.path, filename: 'report.pdf'),
-        'MedicalHistoryId': medicalHistoryId,
-      });
-
-      final response = await _dio.post(
-        '$baseUrl/Analysis',
-        data: formData,
-        options: Options(
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
-            'accept': '*/*'
-          },
-          validateStatus: (status) => true,
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        final data = response.data;
-        if (data['succeeded'] == true) {
-          emit(AnalysisUploadSuccess(
-              message: data['message'] ?? 'Upload successful'));
-          // Fetch updated records after successful upload
-          await fetchAnalysisRecords();
-        } else {
-          emit(AnalysisUploadError(
-              message: data['message'] ?? 'Failed to upload record'));
-        }
-      } else {
-        emit(const AnalysisUploadError(message: 'Failed to upload record'));
-      }
+      emit(SearchAnalysisSuccess(filteredRecords));
     } catch (e) {
-      emit(AnalysisUploadError(
-          message: 'Error uploading record: ${e.toString()}'));
+      emit(SearchAnalysisError('Failed to search records: ${e.toString()}'));
     }
   }
 
@@ -153,7 +109,98 @@ class AnalysisCubit extends Cubit<AnalysisState> {
       return null;
     }
   }
+  Future<void> searchAnalysisRecordsFromServer({required String keyword}) async {
+    emit(SearchAnalysisLoading());
+    try {
+      final response = await _dio.get(
+        '$baseUrl/Analysis/search',
+        queryParameters: {'key': keyword},
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+            'accept': '*/*',
+          },
+          validateStatus: (status) => true,
+        ),
+      );
 
+      if (response.statusCode == 200) {
+        final data = response.data;
+        if (data['succeeded'] == true) {
+          final List<dynamic> items = data['data'];
+
+          final List<AnalysisRecord> records =
+          items.map((item) => AnalysisRecord.fromJson(item)).toList();
+
+          emit(SearchAnalysisSuccess(records));
+        } else {
+          emit(SearchAnalysisError(data['message'] ?? 'فشل البحث عن التحاليل'));
+        }
+      } else {
+        emit(SearchAnalysisError('فشل البحث. كود الحالة: ${response.statusCode}'));
+      }
+    } catch (e) {
+      emit(SearchAnalysisError('حدث خطأ أثناء البحث: ${e.toString()}'));
+    }
+  }
+  Future<void> uploadAnalysisRecord({
+    required String testName,
+    required String labName,
+    required DateTime date,
+    String? resultSummary,
+    String? resultStatus,
+    required int medicalHistoryId,
+    required File pdfFile,
+  }) async {
+    emit(AnalysisUploading());
+    try {
+      // Check if the file is a PDF
+      if (!pdfFile.path.toLowerCase().endsWith('.pdf')) {
+        emit(AnalysisUploadError(message: 'Only PDF files are allowed'));
+        return;
+      }
+      // Create form data
+      final formData = FormData.fromMap({
+        'TestName': testName,
+        'LabName': labName,
+        'Date': date.toIso8601String(),
+        'ResultSummary': resultSummary,
+        'ResultStatus': resultStatus,
+        'ImageFile': await MultipartFile.fromFile(pdfFile.path, filename: 'report.pdf'),
+        'MedicalHistoryId': medicalHistoryId,
+      });
+
+      final response = await _dio.post(
+        '$baseUrl/Analysis',
+        data: formData,
+        options: Options(
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+            'accept': '*/*'
+          },
+          validateStatus: (status) => true,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        final data = response.data;
+        if (data['succeeded'] == true) {
+          emit(AnalysisUploadSuccess(message: data['message'] ?? 'Upload successful'));
+          // Fetch updated records after successful upload
+          await fetchAnalysisRecords();
+        } else {
+          emit(AnalysisUploadError(message: data['message'] ?? 'Failed to upload record'));
+        }
+      } else {
+        emit(AnalysisUploadError(message: 'Failed to upload record. Status: ${response.statusCode}'));
+      }
+    } catch (e) {
+      emit(AnalysisUploadError(message: 'Error uploading record: ${e.toString()}'));
+    }
+  }
+
+  // Update an existing analysis record
   Future<void> updateAnalysisRecord({
     required int id,
     required String testName,
@@ -164,9 +211,8 @@ class AnalysisCubit extends Cubit<AnalysisState> {
     required int medicalHistoryId,
     File? pdfFile,
   }) async {
+    emit(AnalysisUpdateLoading());
     try {
-      emit(AnalysisUploading());
-
       // First API call - Update analysis info
       final formData = FormData.fromMap({
         'Id': id,
@@ -177,8 +223,9 @@ class AnalysisCubit extends Cubit<AnalysisState> {
         if (resultStatus != null) 'ResultStatus': resultStatus,
         'MedicalHistoryId': medicalHistoryId,
       });
+
       final response = await _dio.put(
-        'https://wqaya.runasp.net/api/Analysis',
+        '$baseUrl/Analysis',
         data: formData,
         options: Options(
           headers: {
@@ -190,8 +237,7 @@ class AnalysisCubit extends Cubit<AnalysisState> {
       );
 
       if (response.statusCode != 200 && response.statusCode != 204) {
-        emit(AnalysisUpdateError(
-            message: 'فشل تحديث بيانات التحليل: ${response.statusCode}'));
+        emit(AnalysisUpdateError(errorMessage: 'فشل تحديث بيانات التحليل: ${response.statusCode}'));
         return;
       }
 
@@ -206,7 +252,7 @@ class AnalysisCubit extends Cubit<AnalysisState> {
         });
 
         final pdfResponse = await _dio.put(
-          'https://wqaya.runasp.net/api/Analysis/profile-pic',
+          '$baseUrl/Analysis/profile-pic',
           data: pdfFormData,
           options: Options(
             headers: {
@@ -216,27 +262,40 @@ class AnalysisCubit extends Cubit<AnalysisState> {
             },
           ),
         );
+
         if (pdfResponse.statusCode != 200 && pdfResponse.statusCode != 204) {
           emit(AnalysisUpdateError(
-              message:
-                  'تم تحديث البيانات لكن فشل تحديث ملف PDF: ${pdfResponse.statusCode}'));
+              errorMessage: 'تم تحديث البيانات لكن فشل تحديث ملف PDF: ${pdfResponse.statusCode}'
+          ));
           return;
         }
       }
-      fetchAnalysisRecords();
+
       emit(AnalysisUpdateSuccess());
+      // Refresh the analysis records after update
+      await fetchAnalysisRecords();
     } on DioException catch (e) {
-      emit(AnalysisUpdateError(message: 'حدث خطأ غير متوقع: $e'));
+      String errorMessage = 'حدث خطأ غير متوقع';
+      if (e.response != null) {
+        // Extract specific error message from response if available
+        if (e.response!.data is Map && e.response!.data['message'] != null) {
+          errorMessage = e.response!.data['message'];
+        } else if (e.response!.data is String) {
+          errorMessage = e.response!.data;
+        }
+      }
+      emit(AnalysisUpdateError(errorMessage: '$errorMessage: $e'));
     } catch (e) {
-      emit(AnalysisUpdateError(message: 'حدث خطأ غير متوقع: $e'));
+      emit(AnalysisUpdateError(errorMessage: 'حدث خطأ غير متوقع: $e'));
     }
   }
 
+  // Delete an analysis record
   Future<void> deleteAnalysisRecord(int analysisId) async {
+    emit(AnalysisDeleteLoading());
     try {
-      emit(AnalysisDeleting());
       final response = await _dio.delete(
-        'https://wqaya.runasp.net/api/Analysis/$analysisId',
+        '$baseUrl/Analysis/$analysisId',
         options: Options(
           headers: {
             'accept': '*/*',
@@ -245,14 +304,24 @@ class AnalysisCubit extends Cubit<AnalysisState> {
           validateStatus: (status) => true,
         ),
       );
+
       if (response.statusCode == 200 || response.statusCode == 204) {
-        fetchAnalysisRecords();
         emit(AnalysisDeleteSuccess());
-      } else {}
+        // Refresh the analysis records after deletion
+        await fetchAnalysisRecords();
+      } else {
+        emit(AnalysisDeleteError(errorMessage: 'حدث خطأ أثناء الحذف. Status: ${response.statusCode}'));
+      }
     } on DioException catch (e) {
-      emit(AnalysisDeleteError(message: 'حدث خطأ غير متوقع: $e'));
+      String errorMessage = 'حدث خطأ أثناء الحذف';
+      if (e.response != null) {
+        if (e.response!.data is Map && e.response!.data['message'] != null) {
+          errorMessage = e.response!.data['message'];
+        }
+      }
+      emit(AnalysisDeleteError(errorMessage: errorMessage));
     } catch (e) {
-      emit(AnalysisDeleteError(message: 'حدث خطأ غير متوقع: $e'));
+      emit(AnalysisDeleteError(errorMessage: 'حدث خطأ غير متوقع: $e'));
     }
   }
 }

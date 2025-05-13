@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
@@ -16,22 +18,33 @@ class AnalysisView extends StatefulWidget {
 }
 
 class _AnalysisViewState extends State<AnalysisView> {
-  final _testNameController = TextEditingController();
-  final _labNameController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
-
-    // Load analysis records when the view is initialized
     context.read<AnalysisCubit>().fetchAnalysisRecords();
   }
 
   @override
   void dispose() {
-    _testNameController.dispose();
-    _labNameController.dispose();
+    _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
+  }
+
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      if (query.trim().isEmpty) {
+        // If search field is empty, fetch all analysis records
+        context.read<AnalysisCubit>().fetchAnalysisRecords();
+      } else {
+        // Otherwise perform search using server endpoint
+        context.read<AnalysisCubit>().searchAnalysisRecordsFromServer(keyword: query);
+      }
+    });
   }
 
   void _openPdfUrl(String url) {
@@ -42,8 +55,6 @@ class _AnalysisViewState extends State<AnalysisView> {
       ),
     );
   }
-
-  String _getSearchQuery = '';
 
   @override
   Widget build(BuildContext context) {
@@ -79,66 +90,22 @@ class _AnalysisViewState extends State<AnalysisView> {
                 backgroundColor: Colors.red,
               ),
             );
+          } else if (state is SearchAnalysisError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  state.message,
+                  style: const TextStyle(fontFamily: regular),
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
           }
         },
         builder: (context, state) {
           return Column(
             children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: const BoxDecoration(
-                  color: Color(0xff0094FD),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'تحاليلكم الطبية',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: regular),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      state is AnalysisLoaded
-                          ? 'عدد التحاليل : ${state.totalCount}'
-                          : 'عدد التحاليل: 0',
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: regular),
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          _getSearchQuery = value;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'البحث في تحاليلكم الطبية',
-                        hintStyle: const TextStyle(fontFamily: regular),
-                        filled: true,
-                        fillColor: const Color(0xffF1F6FB),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
-                        ),
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Color(0xff1678F2),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _buildHeader(state),
               const SizedBox(height: 16),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
@@ -157,18 +124,22 @@ class _AnalysisViewState extends State<AnalysisView> {
                 ),
               ),
               Expanded(
-                child: state is AnalysisLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                        backgroundColor: primaryColor,
-                      ))
-                    : state is AnalysisLoaded
-                        ? _buildAnalysisList(state.records)
-                        : const Center(
-                            child: Text(
-                            "لا تحاليل متاحة",
-                            style: TextStyle(fontFamily: semiBold),
-                          )),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(0.0, 0.1),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: _buildAnalysisListContent(state),
+                ),
               ),
             ],
           );
@@ -186,42 +157,124 @@ class _AnalysisViewState extends State<AnalysisView> {
     );
   }
 
+  Widget _buildHeader(AnalysisState state) {
+    // Get the count based on state
+    final count = (state is AnalysisLoaded)
+        ? state.totalCount
+        : (state is SearchAnalysisSuccess)
+        ? state.records.length
+        : 0;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+      decoration: const BoxDecoration(
+        color: Color(0xff0094FD),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'تحاليلكم الطبية',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                fontFamily: regular),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'عدد التحاليل : $count',
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: regular),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _searchController,
+            onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+            onChanged: _onSearchChanged,
+            decoration: InputDecoration(
+              hintText: 'البحث في تحاليلكم الطبية',
+              hintStyle: const TextStyle(fontFamily: regular),
+              filled: true,
+              fillColor: const Color(0xffF1F6FB),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: BorderSide.none,
+              ),
+              prefixIcon: const Icon(
+                Icons.search,
+                color: Color(0xff1678F2),
+              ),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear, color: Color(0xff1678F2)),
+                onPressed: () {
+                  // Clear the text field and reload all analysis records
+                  _searchController.clear();
+                  context.read<AnalysisCubit>().fetchAnalysisRecords();
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAnalysisListContent(AnalysisState state) {
+    // Loading states
+    if (state is AnalysisLoading || state is SearchAnalysisLoading) {
+      return const Center(
+        key: ValueKey('loading'),
+        child: CircularProgressIndicator(
+          backgroundColor: primaryColor,
+        ),
+      );
+    }
+
+    // Success states
+    else if (state is AnalysisLoaded) {
+      return _buildAnalysisList(state.records);
+    }
+    else if (state is SearchAnalysisSuccess) {
+      return _buildAnalysisList(state.records);
+    }
+
+    // Error states handled in BlocConsumer listener
+    // Default empty state
+    return const Center(
+      key: ValueKey('empty'),
+      child: Text(
+        "لا تحاليل متاحة",
+        style: TextStyle(fontFamily: semiBold),
+      ),
+    );
+  }
+
   Widget _buildAnalysisList(List<AnalysisRecord> records) {
     if (records.isEmpty) {
       return const Center(
-          child: Text(
-        "لا تحاليل متاحة",
-        style: TextStyle(fontFamily: semiBold),
-      ));
-    }
-
-    final filteredRecords = _getSearchQuery.isEmpty
-        ? records
-        : records
-            .where((record) =>
-                record.testName
-                    .toLowerCase()
-                    .contains(_getSearchQuery.toLowerCase()) ||
-                record.labName
-                    .toLowerCase()
-                    .contains(_getSearchQuery.toLowerCase()))
-            .toList();
-
-    if (filteredRecords.isEmpty) {
-      return const Center(
-          child: Text(
-        "لا تحاليل متاحة",
-        style: TextStyle(fontFamily: semiBold),
-      ));
+        key: ValueKey('empty_list'),
+        child: Text(
+          "لا تحاليل متاحة",
+          style: TextStyle(fontFamily: semiBold),
+        ),
+      );
     }
 
     return RefreshIndicator(
       onRefresh: () => context.read<AnalysisCubit>().fetchAnalysisRecords(),
       child: ListView.builder(
+        key: ValueKey('records_list_${records.length}'),
         padding: const EdgeInsets.all(16),
-        itemCount: filteredRecords.length,
+        itemCount: records.length,
         itemBuilder: (context, index) {
-          final analysis = filteredRecords[index];
+          final analysis = records[index];
           return AnalysisCard(
             analysis: analysis,
             onViewReport: () => _openPdfUrl(analysis.reportUrl),
@@ -241,6 +294,7 @@ class AnalysisCard extends StatelessWidget {
     required this.analysis,
     required this.onViewReport,
   });
+
   void showOptionsMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -266,9 +320,9 @@ class AnalysisCard extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) =>  EditAnalysisView(analysisRecord: analysis,),));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditAnalysisView(analysisRecord: analysis,),));
                 },
-              ) ,
+              ),
               ListTile(
                 title: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -375,7 +429,7 @@ class AnalysisCard extends StatelessWidget {
                     Text(
                       analysis.resultSummary!,
                       style:
-                          TextStyle(color: Colors.grey[600], fontFamily: regular),
+                      TextStyle(color: Colors.grey[600], fontFamily: regular),
                     ),
                   ],
                 ),
@@ -421,7 +475,7 @@ class AnalysisCard extends StatelessWidget {
                   label: const Text(
                     'فتح التحليل الطبي',
                     style:
-                        TextStyle(color: Color(0xff0094FD), fontFamily: semiBold),
+                    TextStyle(color: Color(0xff0094FD), fontFamily: semiBold),
                   ),
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: Color(0xff0094FD)),

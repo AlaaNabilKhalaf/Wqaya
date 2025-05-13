@@ -1,17 +1,11 @@
 part of 'analysis_cubit.dart';
 
-abstract class AnalysisState extends Equatable {
-  const AnalysisState();
-
-  @override
-  List<Object?> get props => [];
-}
+abstract class AnalysisState {}
 
 class AnalysisInitial extends AnalysisState {}
 
+// Fetch Analysis Records States
 class AnalysisLoading extends AnalysisState {}
-
-class AnalysisUploading extends AnalysisState {}
 
 class AnalysisLoaded extends AnalysisState {
   final List<AnalysisRecord> records;
@@ -21,7 +15,7 @@ class AnalysisLoaded extends AnalysisState {
   final bool hasPreviousPage;
   final bool hasNextPage;
 
-  const AnalysisLoaded({
+  AnalysisLoaded({
     required this.records,
     required this.pageIndex,
     required this.totalPages,
@@ -29,61 +23,55 @@ class AnalysisLoaded extends AnalysisState {
     required this.hasPreviousPage,
     required this.hasNextPage,
   });
-
-  @override
-  List<Object?> get props => [
-    records,
-    pageIndex,
-    totalPages,
-    totalCount,
-    hasPreviousPage,
-    hasNextPage
-  ];
-}
-
-class AnalysisUploadSuccess extends AnalysisState {
-  final String message;
-
-  const AnalysisUploadSuccess({required this.message});
-
-  @override
-  List<Object?> get props => [message];
 }
 
 class AnalysisError extends AnalysisState {
   final String message;
-
-  const AnalysisError({required this.message});
-
-  @override
-  List<Object?> get props => [message];
+   AnalysisError({required this.message});
 }
+
+// Upload Analysis States (Similar to Add Medicine states)
+class AnalysisUploading extends AnalysisState {}
+
+class AnalysisUploadSuccess extends AnalysisState {
+  final String message;
+  AnalysisUploadSuccess({required this.message});
+}
+
 class AnalysisUploadError extends AnalysisState {
   final String message;
-
-  const AnalysisUploadError({required this.message});
-
-  @override
-  List<Object?> get props => [message];
+   AnalysisUploadError({required this.message});
 }
-// Success state for analysis update
+
+// Update Analysis States
+class AnalysisUpdateLoading extends AnalysisState {}
+
 class AnalysisUpdateSuccess extends AnalysisState {}
+
 class AnalysisUpdateError extends AnalysisState {
-  final String message;
-
-  const AnalysisUpdateError({required this.message});
-
-  @override
-  List<Object?> get props => [message];
+  final String errorMessage;
+   AnalysisUpdateError({required this.errorMessage});
 }
-class AnalysisDeleting extends AnalysisState {}
+
+// Delete Analysis States
+class AnalysisDeleteLoading extends AnalysisState {}
+
 class AnalysisDeleteSuccess extends AnalysisState {}
+
 class AnalysisDeleteError extends AnalysisState {
-  final String message;
-
-  const AnalysisDeleteError({required this.message});
-
-  @override
-  List<Object?> get props => [message];
+  final String errorMessage;
+   AnalysisDeleteError({required this.errorMessage});
 }
 
+// Search Analysis States
+class SearchAnalysisLoading extends AnalysisState {}
+
+class SearchAnalysisSuccess extends AnalysisState {
+  final List<AnalysisRecord> records;
+  SearchAnalysisSuccess(this.records);
+}
+
+class SearchAnalysisError extends AnalysisState {
+  final String message;
+   SearchAnalysisError(this.message);
+}
