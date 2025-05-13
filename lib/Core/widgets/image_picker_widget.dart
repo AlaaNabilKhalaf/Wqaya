@@ -9,10 +9,13 @@ import '../../Features/Profile/Controller/profile_image_cubit.dart';
 import '../Utils/colors.dart';
 
 class ImagePickerWidget extends StatelessWidget {
+
   const ImagePickerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<ProfileImageCubit>(context);
+
     return BlocBuilder<ProfileImageCubit,ProfileImageStates>(
       builder: (context , _){
         return  GestureDetector(
@@ -21,6 +24,7 @@ class ImagePickerWidget extends StatelessWidget {
             context.read<ProfileImageCubit>().imagePicked = true;
           },
           child: Container(
+            clipBehavior: Clip.antiAlias,
             alignment: Alignment.center,
             margin:  const EdgeInsets.symmetric(vertical: 18),
             height: 250,
@@ -34,13 +38,24 @@ class ImagePickerWidget extends StatelessWidget {
               )
             ),
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(AssetsData.imagePicking),
-                  RegularTextWithLocalization(text: 'pickTheImage', fontSize: 16.sp, textColor: primaryColor, fontFamily: regular)
-                ],
+              child: SizedBox(
+                  height: 245,
+                  width:double.infinity,
+                  child:
+              cubit.imgFile!=null? Image.file(
+                cubit.imgFile!, fit: BoxFit.cover,)
+              :
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(AssetsData.imagePicking),
+                    RegularTextWithLocalization(text: 'pickTheImage', fontSize: 16.sp, textColor: primaryColor, fontFamily: regular)
+
+                  ],
+                ),
+              )
               ),
             ),
 

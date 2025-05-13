@@ -13,12 +13,7 @@ dependencies:
   cupertino_icons: null
   flutter_svg: null
   flutter_screenutil: null
-  image_picker: 
-
-  #  device_preview:
-  #  firebase_core:
-  #  firebase_auth:
-  #  google_sign_in:
+  image_picker:
   flutter_bloc: null
   bloc: null
   shared_preferences: null

@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dart';
-import 'package:wqaya/Features/Home/Presentation/Views/home_view.dart';
-
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
 import '../../../../Core/widgets/password_icon.dart';
 import '../../../../Core/widgets/regular_button.dart';
 import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
+import '../../../NavBar/Presentation/Views/nav_bar_view.dart';
 import '../Views/forget_password_view.dart';
 
 class LoginViewBody extends StatefulWidget {
@@ -24,6 +23,20 @@ TextEditingController passwordController = TextEditingController();
 bool passwordIsVisible = false;
 
 class _LoginViewBodyState extends State<LoginViewBody> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    phoneNumberController.clear();
+    passwordController.clear();
+    super.initState();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    phoneNumberController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     var aCubit = context.read<AuthCubit>();
@@ -52,7 +65,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               CustomTextFormField(
                   textInputType: TextInputType.phone,
                   fieldController: phoneNumberController,
-                  hintText: 'رقم الهاتف'),              SizedBox(
+                  hintText: 'رقم الهاتف'),
+              SizedBox(
                 height: 19.h,
               ),
               CustomTextFormField(
@@ -86,13 +100,13 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               ),
               BlocListener<AuthCubit, AuthState>(
                 listener: (context, state) {
-                  if (state is SigninSuccessState) {
+                  if (state is SignInSuccessState) {
                     debugPrint("Signed in");
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const HomeView()));
-                  } else if (state is SigninFailureState) {
+                            builder: (context) => const NavBarView()));
+                  } else if (state is SignInFailureState) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: RegularTextWithLocalization(
@@ -109,7 +123,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                 },
                 child: BlocBuilder<AuthCubit, AuthState>(
                   builder: (context, state) {
-                    return state is !SigninLoadingState?
+                    return state is !SignInLoadingState?
                     RegularButton(
                         height: 55.h,
                         buttonColor: primaryColor,
@@ -131,7 +145,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   },
                 ),
               ),
-              SizedBox(height: 150,)
+              const SizedBox(height: 150,)
             ],
           ),
         ],

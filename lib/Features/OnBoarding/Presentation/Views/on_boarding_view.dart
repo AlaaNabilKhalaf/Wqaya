@@ -26,15 +26,6 @@ class OnBoardingView extends StatelessWidget {
                 SizedBox(height: 80.h,),
                 RegularTextWithLocalization(text:'pleaseCreateYourAccount', fontSize: 20.sp, textColor: primaryColor, fontFamily: bold),
 
-                // Padding(
-                //   padding:  EdgeInsets.only(bottom: 48.h),
-                //   child: RegularButton(
-                //       width: 45.w, height: 45.h, buttonColor: primaryColor, borderRadius: 15.r, onTap: (){
-                //     Navigator.push(context, MaterialPageRoute(builder: (context)=> const NavBarView()));
-                //
-                //   },
-                //       child: const Icon(Icons.arrow_back_rounded,color: myWhiteColor,)),
-                // ),
               ],
             ),
           )

@@ -45,7 +45,10 @@ class ProfileImageCubit extends Cubit<ProfileImageStates> {
         data: formData,
         options: Options(headers: {
           "Content-Type": "multipart/form-data",
+          "accept": "*/*",
+          "Authorization": "Bearer ${CacheHelper().getData(key: 'token')}",
         }),
+
       );
       if(CacheHelper().getData(key: 'profileImage') == null){
         CacheHelper().saveData(key: 'profileImage', value: imgFile);

@@ -70,7 +70,7 @@ class AboutView extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 12,bottom: 3,right: 5),
                             child: RegularTextWithLocalization(
                                 text:programmers[index]["role"],
-                                 fontSize: 20.sp, textColor: primaryColor, fontFamily: medium),
+                                 fontSize: 18.sp, textColor: primaryColor, fontFamily: medium),
                           ),
                         ],
                       ),

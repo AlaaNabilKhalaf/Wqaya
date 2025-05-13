@@ -109,5 +109,8 @@
   "aiDeveloper3": "م/ أحمد سلام",
   "exist": "خروج",
   "howCanIHelpYou" : "كيف أساعدك ..؟",
-  "askMe": "أسألني"
+  "askMe": "أسألني",
+  "logoutAndDeleteAccount": "تسجيل الخروج وحذف الحساب",
+  "justLogout": "تسجيل الخروج ",
+  "onLogoutScreen": "في شاشة تسجيل الخروج"
 }

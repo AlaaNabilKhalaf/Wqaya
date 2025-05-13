@@ -13,39 +13,143 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
   Future<void> changePassword(String currentPassword, String newPassword, String confirmNewPassword) async {
     emit(ChangePasswordLoadingState());
     try {
+      final token = await CacheHelper().getData(key: 'token');
+
       final response = await _dio.post(
         "/api/Authentication/ChangePassword",
-        options: Options(headers:
-        {
+        options: Options(headers: {
           'Content-Type': 'application/json',
           'accept': '*/*',
+          'Authorization': 'Bearer $token',
         }),
-
         data: {
           "currentPassword": currentPassword,
           "newPassword": newPassword,
           "confirmNewPassword": confirmNewPassword,
         },
       );
+
       debugPrint("Response data: ${response.data}");
 
-      //Getting Data
       final Map<String, dynamic> data = response.data;
       if (data.containsKey('succeeded') && data['succeeded'] == true) {
         final String msg = data['message'] ?? 'Password reset successfully';
-
-        //Caching
+        CacheHelper().removeData(key: 'currentPassword');
         CacheHelper().saveData(key: 'currentPassword', value: newPassword);
-        //Emitting
         emit(ChangePasswordSuccessState(message: msg));
       } else {
-
         final String msg = data['message'] ?? "لم تتم العملية من فضلك حاول في وقت اخر";
         emit(ChangePasswordFailState(message: msg));
       }
     } on DioException catch (e) {
-      debugPrint(e.response?.data['message'].toString() );
-      emit(ChangePasswordFailState(message: e.response?.data['message'].toString()  ?? " خطأ من السيرفر بدون تفاصيل" ));
+      final errorMsg = e.response?.data['message'];
+      String errorText;
+
+      if (errorMsg is List) {
+        errorText = errorMsg.isNotEmpty ? errorMsg[0].toString() : "خطأ غير معروف";
+      } else if (errorMsg is String) {
+        errorText = errorMsg;
+      } else {
+        errorText = "حدث خطأ غير متوقع";
+      }
+
+      emit(ChangePasswordFailState(message: errorText));
     }
   }
+
+
+  Future<void> deleteUser(String email) async {
+    emit(DeleteUserLoadingState());
+
+    final token = CacheHelper().getData(key: 'token');
+
+    try {
+      final response = await _dio.delete(
+        "/api/Authentication/DeleteUser",
+        queryParameters: {"email": email},
+        options: Options(headers: {
+          "Authorization": "Bearer $token",
+          "accept": "*/*",
+        }),
+      );
+
+      if (response.statusCode == 200 && response.data['succeeded'] == true) {
+        {
+          CacheHelper().removeData(key: 'token');
+          CacheHelper().removeData(key: 'profileImage');
+          CacheHelper().removeData(key: 'currentPassword');
+          CacheHelper().clearData();
+        }
+        emit(DeleteUserSuccessState(message: "تم حذف الحساب بنجاح"));
+      } else {
+        emit(DeleteUserFailState(error: "فشل في حذف المستخدم"));
+      }
+    } on DioException catch (e) {
+      emit(DeleteUserFailState(error: e.response?.data?.toString() ?? "خطأ غير معروف"));
+    }
+  }
+
+  // Request to send verification code to email
+  Future<void> requestChangePhone(String newPhone) async {
+    emit(RequestChangePhoneLoadingState());
+    final token = await CacheHelper().getData(key: 'token');
+
+    try {
+      final response = await _dio.post(
+        "/api/Authentication/RequestChangePhone",
+        queryParameters: {
+          "newPhone": newPhone,
+        },
+        options: Options(headers: {
+          'accept': '*/*',
+          'Authorization': 'Bearer $token',
+        }),
+      );
+
+      if (response.data['succeeded'] == true) {
+        emit(RequestChangePhoneSuccessState(message: response.data['message']));
+      } else {
+        emit(RequestChangePhoneFailState(message: response.data['message'] ?? "فشل في إرسال كود التحقق"));
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data['message'] ?? "حدث خطأ أثناء إرسال كود التحقق";
+      emit(RequestChangePhoneFailState(message: errorMsg));
+    }
+  }
+
+  // Request to confirm and change phone number using verification code
+  Future<void> changePhone(String newPhone, int code) async {
+    emit(ChangePhoneLoadingState());
+    final token = await CacheHelper().getData(key: 'token');
+
+    try {
+      final response = await _dio.post(
+        "/api/Authentication/ChangePhone",
+        options: Options(headers: {
+          'accept': '*/*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        }),
+        data: {
+          "newPhone": newPhone,
+          "code": code,
+        },
+      );
+
+      if (response.data['succeeded'] == true) {
+        emit(ChangePhoneSuccessState(message: response.data['message']));
+      } else {
+        emit(ChangePhoneFailState(message: response.data['message'] ?? "فشل في تغيير رقم الهاتف"));
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data['message'] ?? "حدث خطأ أثناء تغيير الرقم";
+      emit(ChangePhoneFailState(message: errorMsg));
+    }
+  }
+
+
+
+
+
+
 }
