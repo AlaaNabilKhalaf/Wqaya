@@ -100,7 +100,10 @@ class AnalysisCubit extends Cubit<AnalysisState> {
         options: Options(
           headers: {
             'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+            'accept':'*/*'
           },
+          validateStatus: (status) => true,
         ),
       );
 
@@ -111,13 +114,13 @@ class AnalysisCubit extends Cubit<AnalysisState> {
           // Fetch updated records after successful upload
           await fetchAnalysisRecords();
         } else {
-          emit(AnalysisError(message: data['message'] ?? 'Failed to upload record'));
+          emit(AnalysisUploadError(message: data['message'] ?? 'Failed to upload record'));
         }
       } else {
-        emit(const AnalysisError(message: 'Failed to upload record'));
+        emit(const AnalysisUploadError(message: 'Failed to upload record'));
       }
     } catch (e) {
-      emit(AnalysisError(message: 'Error uploading record: ${e.toString()}'));
+      emit(AnalysisUploadError(message: 'Error uploading record: ${e.toString()}'));
     }
   }
 
@@ -138,4 +141,5 @@ class AnalysisCubit extends Cubit<AnalysisState> {
       return null;
     }
   }
+
 }

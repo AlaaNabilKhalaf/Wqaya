@@ -58,3 +58,11 @@ class AnalysisError extends AnalysisState {
   @override
   List<Object?> get props => [message];
 }
+class AnalysisUploadError extends AnalysisState {
+  final String message;
+
+  const AnalysisUploadError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

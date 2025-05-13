@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
-import 'package:wqaya/Core/cache/cache_helper.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/view_model/home_cubit.dart';
 import 'package:wqaya/Features/Rays/presentation/views/view_model/ray_cubit.dart';
 
@@ -224,12 +223,6 @@ class _AddRayScreenState extends State<AddRayScreen> {
                         ))
                       : ElevatedButton(
                           onPressed: () async {
-                            print(CacheHelper().getData(key: 'token'));
-                            print(CacheHelper().getData(key: 'UserId'));
-                            print(CacheHelper().getData(key: 'name'));
-                            print(CacheHelper().getData(key: 'phoneNumber'));
-                            print(CacheHelper().getData(key: 'email'));
-                            print(CacheHelper().getData(key: 'currentPassword'));
                             if (!_formKey.currentState!.validate() ||
                                 _selectedImage == null) {
                               ScaffoldMessenger.of(context).showSnackBar(

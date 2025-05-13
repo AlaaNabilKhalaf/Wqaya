@@ -1,12 +1,11 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
+import 'package:wqaya/Features/Analysis/Presentation/views/add_analysis_view.dart';
 import 'package:wqaya/Features/Analysis/Presentation/views/analysis_cubit.dart';
+import 'package:wqaya/Features/Analysis/Presentation/views/pdf_viewer_screen.dart';
 import 'package:wqaya/Features/Analysis/Presentation/views/view_model/analysis_model.dart';
-import 'package:url_launcher/url_launcher.dart';
 class AnalysisView extends StatefulWidget {
   const AnalysisView({super.key});
 
@@ -15,16 +14,12 @@ class AnalysisView extends StatefulWidget {
 }
 
 class _AnalysisViewState extends State<AnalysisView> {
-  File? _selectedPdfFile;
-  final _formKey = GlobalKey<FormState>();
   final _testNameController = TextEditingController();
   final _labNameController = TextEditingController();
-  late DateTime _selectedDate;
 
   @override
   void initState() {
     super.initState();
-    _selectedDate = DateTime.now();
 
     // Load analysis records when the view is initialized
     context.read<AnalysisCubit>().fetchAnalysisRecords();
@@ -37,175 +32,17 @@ class _AnalysisViewState extends State<AnalysisView> {
     super.dispose();
   }
 
-  Future<void> _pickDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
+
+
+
+
+  void _openPdfUrl(String url) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PdfViewerScreen(url: url),
+      ),
     );
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-      });
-    }
-  }
-
-  Future<void> _pickPdfFile() async {
-    final file = await context.read<AnalysisCubit>().pickPdfFile();
-    if (file != null) {
-      setState(() {
-        _selectedPdfFile = file;
-      });
-    }
-  }
-
-  void _submitForm() {
-    if (_formKey.currentState!.validate() && _selectedPdfFile != null) {
-      context.read<AnalysisCubit>().uploadAnalysisRecord(
-        testName: _testNameController.text,
-        labName: _labNameController.text,
-        date: _selectedDate,
-        medicalHistoryId: 56, // This would typically come from user context or previous screen
-        pdfFile: _selectedPdfFile!,
-      );
-    } else if (_selectedPdfFile == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a PDF file')),
-      );
-    }
-  }
-
-  void _showAddAnalysisSheet() {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 16,
-          ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text(
-                  'Add Analysis Record',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff1678F2),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _testNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Test Name',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter test name';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-                TextFormField(
-                  controller: _labNameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Laboratory Name',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter laboratory name';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12),
-                InkWell(
-                  onTap: () => _pickDate(context),
-                  child: InputDecorator(
-                    decoration: const InputDecoration(
-                      labelText: 'Date',
-                      border: OutlineInputBorder(),
-                    ),
-                    child: Text(DateFormat('MMM d, yyyy').format(_selectedDate)),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff7EB8FF),
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: _pickPdfFile,
-                  icon: const Icon(Icons.file_upload),
-                  label: Text(_selectedPdfFile != null
-                      ? 'Selected: ${_selectedPdfFile!.path.split('/').last}'
-                      : 'Select PDF File'),
-                ),
-                const SizedBox(height: 16),
-                BlocConsumer<AnalysisCubit, AnalysisState>(
-                  listener: (context, state) {
-                    if (state is AnalysisUploadSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message)),
-                      );
-                      Navigator.pop(context);
-                      _testNameController.clear();
-                      _labNameController.clear();
-                      setState(() {
-                        _selectedPdfFile = null;
-                        _selectedDate = DateTime.now();
-                      });
-                    } else if (state is AnalysisError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message)),
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    return ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff0094FD),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      onPressed: state is AnalysisUploading ? null : _submitForm,
-                      child: state is AnalysisUploading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text('Submit', style: TextStyle(fontSize: 16)),
-                    );
-                  },
-                ),
-                const SizedBox(height: 16),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _openPdfUrl(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not open the report')),
-        );
-      }
-    }
   }
 
   String _getSearchQuery = '';
@@ -222,12 +59,13 @@ class _AnalysisViewState extends State<AnalysisView> {
         ),
         elevation: 0,
         centerTitle: true,
+        leading: IconButton(onPressed: () => Navigator.pop(context),icon : const Icon(Icons.arrow_back,color: Colors.white,)),
       ),
       body: BlocConsumer<AnalysisCubit, AnalysisState>(
         listener: (context, state) {
           if (state is AnalysisError) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
+              SnackBar(content: Text(state.message,style: const TextStyle(fontFamily: regular),),backgroundColor: Colors.red,),
             );
           }
         },
@@ -275,6 +113,7 @@ class _AnalysisViewState extends State<AnalysisView> {
                       },
                       decoration: InputDecoration(
                         hintText: 'البحث في تحاليلكم الطبية',
+                        hintStyle: const TextStyle(fontFamily: regular),
                         filled: true,
                         fillColor: const Color(0xffF1F6FB),
                         border: OutlineInputBorder(
@@ -305,25 +144,6 @@ class _AnalysisViewState extends State<AnalysisView> {
                         fontFamily: black
                       ),
                     ),
-                    // TextButton(
-                    //   onPressed: () {
-                    //     // Show filter/sort options
-                    //   },
-                    //   child: const Row(
-                    //     children: [
-                    //       Text(
-                    //         'Filter',
-                    //         style: TextStyle(color: Color(0xff0094FD)),
-                    //       ),
-                    //       SizedBox(width: 4),
-                    //       Icon(
-                    //         Icons.filter_list,
-                    //         color: Color(0xff0094FD),
-                    //         size: 18,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -340,7 +160,7 @@ class _AnalysisViewState extends State<AnalysisView> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff0094FD),
-        onPressed: _showAddAnalysisSheet,
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AddAnalysisView(medicalHistoryId: 0),)),
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
@@ -503,8 +323,8 @@ class AnalysisCard extends StatelessWidget {
                   color: Color(0xff0094FD),
                 ),
                 label: const Text(
-                  'View Full Report',
-                  style: TextStyle(color: Color(0xff0094FD)),
+                  'فتح التحليل الطبي',
+                  style: TextStyle(color: Color(0xff0094FD),fontFamily: semiBold),
                 ),
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: Color(0xff0094FD)),
