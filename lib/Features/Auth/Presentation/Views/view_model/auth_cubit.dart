@@ -168,6 +168,7 @@ class AuthCubit extends Cubit<AuthState> {
         CacheHelper().saveData(key: 'name', value: displayedName.toString());
         CacheHelper().saveData(key: 'phoneNumber', value: data['phoneNumber'].toString());
         CacheHelper().saveData(key: 'email', value: data['email'].toString());
+        CacheHelper().saveData(key: 'profileImage', value: data['imgUrl'].toString());
         emit(RegisterSuccessState(message: data['message'], userId: data['userId'].toString()));
       } else {
         emit(RegisterFailureState(message :data['message'] ?? 'فشل التسجيل'));

@@ -34,6 +34,7 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
       final Map<String, dynamic> data = response.data;
       if (data.containsKey('succeeded') && data['succeeded'] == true) {
         final String msg = data['message'] ?? 'Password reset successfully';
+        CacheHelper().removeData(key: 'currentPassword');
         CacheHelper().saveData(key: 'currentPassword', value: newPassword);
         emit(ChangePasswordSuccessState(message: msg));
       } else {
@@ -76,6 +77,8 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
         {
           CacheHelper().removeData(key: 'token');
           CacheHelper().removeData(key: 'profileImage');
+          CacheHelper().removeData(key: 'currentPassword');
+          CacheHelper().clearData();
         }
         emit(DeleteUserSuccessState(message: "تم حذف الحساب بنجاح"));
       } else {
@@ -144,59 +147,6 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
     }
   }
 
-  // Future<void> requestChangePhone(String newPhone) async {
-  //   emit(RequestChangePhoneLoadingState());
-  //
-  //   final token = CacheHelper().getData(key: 'token');
-  //   try {
-  //     final response = await _dio.post(
-  //       "/api/Authentication/RequestChangePhone",
-  //       queryParameters: {
-  //         "newPhone": newPhone,
-  //       },
-  //       options: Options(headers: {
-  //         "Authorization": "Bearer $token",
-  //         "accept": "*/*",
-  //       }),
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       emit(RequestChangePhoneSuccessState(message: "تم إرسال الكود بنجاح"));
-  //     } else {
-  //       emit(RequestChangePhoneFailState(error: "فشل في إرسال الكود"));
-  //     }
-  //   } catch (e) {
-  //     emit(RequestChangePhoneFailState(error: "حدث خطأ أثناء إرسال الكود"));
-  //   }
-  // }
-  //
-  // Future<void> confirmChangePhone({required String newPhone, required int code}) async {
-  //   emit(ChangePhoneLoadingState());
-  //
-  //   final token = CacheHelper().getData(key: 'token');
-  //   try {
-  //     final response = await _dio.post(
-  //       "/api/Authentication/ChangePhone",
-  //       data: {
-  //         "newPhone": newPhone,
-  //         "code": code,
-  //       },
-  //       options: Options(headers: {
-  //         "Authorization": "Bearer $token",
-  //         "accept": "*/*",
-  //         "Content-Type": "application/json",
-  //       }),
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       emit(ChangePhoneSuccessState(message: "تم تغيير الرقم بنجاح"));
-  //     } else {
-  //       emit(ChangePhoneFailState(error: "فشل في تغيير الرقم"));
-  //     }
-  //   } catch (e) {
-  //     emit(ChangePhoneFailState(error: "حدث خطأ أثناء تغيير الرقم"));
-  //   }
-  // }
 
 
 

@@ -38,25 +38,24 @@ class ImagePickerWidget extends StatelessWidget {
               )
             ),
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                      height: 245,
-                      width:double.infinity,
-                      child:
-                  cubit.imgFile!=null? Image.file(
-                    cubit.imgFile!, fit: BoxFit.cover,)
-                  :
-                  Column(
-                    children: [
-                      Image.asset(AssetsData.imagePicking),
-                      RegularTextWithLocalization(text: 'pickTheImage', fontSize: 16.sp, textColor: primaryColor, fontFamily: regular)
+              child: SizedBox(
+                  height: 245,
+                  width:double.infinity,
+                  child:
+              cubit.imgFile!=null? Image.file(
+                cubit.imgFile!, fit: BoxFit.cover,)
+              :
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(AssetsData.imagePicking),
+                    RegularTextWithLocalization(text: 'pickTheImage', fontSize: 16.sp, textColor: primaryColor, fontFamily: regular)
 
-                    ],
-                  )),
-                ],
+                  ],
+                ),
+              )
               ),
             ),
 

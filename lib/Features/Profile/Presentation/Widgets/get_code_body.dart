@@ -66,11 +66,15 @@ class _GetCodeBodyState extends State<GetCodeBody> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 50.h),
-              RegularTextWithoutLocalization(
-                text: 'ادخل كود التحقق المرسل إلى بريدك الإلكتروني',
-                fontSize: 22.sp,
-                fontFamily: medium,
-                textColor: primaryColor,
+              SizedBox(
+                width: 400.w,
+                child: RegularTextWithoutLocalization(
+                  text: 'ادخل كود التحقق المرسل إلى بريدك الإلكتروني',
+                  fontSize: 22.sp,
+                  fontFamily: medium,
+                  textColor: primaryColor,
+                  maxLine: 3,
+                ),
               ),
               SizedBox(height: 30.h),
               CustomTextFormField(
@@ -78,7 +82,8 @@ class _GetCodeBodyState extends State<GetCodeBody> {
                 fieldController: codeController,
                 hintText: 'أدخل الكود هنا',
               ),
-              SizedBox(height: 40.h),
+              const Spacer(),
+              // SizedBox(height: 40.h),
               state is ChangePhoneLoadingState
                   ? const CircularProgressIndicator()
                   : ProfileCard(

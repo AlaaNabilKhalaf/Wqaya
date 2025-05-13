@@ -16,10 +16,22 @@ import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/home_container.da
 import 'package:wqaya/Features/surgries/presentation/views/surgries_view.dart';
 
 import '../../../../Core/widgets/custom_home_app_bar.dart';
+import '../../../Profile/Controller/profile_image_cubit.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+    @override
+  void initState()  {
+      // BlocProvider.of<ProfileImageCubit>(context).imgFile =  CacheHelper().getData(key: 'profileImage') ;
+      // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final Map<String, String> homeContainerItems = {
