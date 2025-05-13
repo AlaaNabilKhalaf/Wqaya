@@ -282,6 +282,7 @@ class AnalysisCard extends StatelessWidget {
                 ),
                 onTap: () async {
                   Navigator.pop(context);
+                  context.read<AnalysisCubit>().deleteAnalysisRecord(analysis.id);
                 },
               ),
             ],

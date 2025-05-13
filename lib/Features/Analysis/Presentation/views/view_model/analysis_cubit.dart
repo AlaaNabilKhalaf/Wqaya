@@ -23,21 +23,23 @@ class AnalysisCubit extends Cubit<AnalysisState> {
     'Pending': 'قيد الانتظار',
     'Abnormal': 'غير طبيعي',
   };
+
   // Fetch analysis records
-  Future<void> fetchAnalysisRecords({int pageNumber = 1, int pageSize = 111}) async {
+  Future<void> fetchAnalysisRecords(
+      {int pageNumber = 1, int pageSize = 111}) async {
     try {
       emit(AnalysisLoading());
       print('$baseUrl/Analysis/page?pageNumber=1&pageSize=111');
-      final response = await _dio.get(
-        '$baseUrl/Analysis/page?pageNumber=1&pageSize=111',
-        options: Options(
-          validateStatus: (status) => true,
-          headers: {
-            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
-            'accept':'*/*'
-          },
-        )
-      );
+      final response =
+          await _dio.get('$baseUrl/Analysis/page?pageNumber=1&pageSize=111',
+              options: Options(
+                validateStatus: (status) => true,
+                headers: {
+                  'Authorization':
+                      'Bearer ${CacheHelper().getData(key: 'token')}',
+                  'accept': '*/*'
+                },
+              ));
 
       if (response.statusCode == 200) {
         final data = response.data;
@@ -46,9 +48,8 @@ class AnalysisCubit extends Cubit<AnalysisState> {
           final pageData = data['data'];
           final List<dynamic> items = pageData['items'];
 
-          final List<AnalysisRecord> records = items
-              .map((item) => AnalysisRecord.fromJson(item))
-              .toList();
+          final List<AnalysisRecord> records =
+              items.map((item) => AnalysisRecord.fromJson(item)).toList();
 
           emit(AnalysisLoaded(
             records: records,
@@ -59,7 +60,8 @@ class AnalysisCubit extends Cubit<AnalysisState> {
             hasNextPage: pageData['hasNextPage'],
           ));
         } else {
-          emit(AnalysisError(message: data['message'] ?? 'Failed to load records'));
+          emit(AnalysisError(
+              message: data['message'] ?? 'Failed to load records'));
         }
       } else {
         print(response.data);
@@ -96,7 +98,8 @@ class AnalysisCubit extends Cubit<AnalysisState> {
         'Date': date.toIso8601String(),
         'ResultSummary': resultSummary,
         'ResultStatus': resultStatus,
-        'ImageFile': await MultipartFile.fromFile(pdfFile.path, filename: 'report.pdf'),
+        'ImageFile':
+            await MultipartFile.fromFile(pdfFile.path, filename: 'report.pdf'),
         'MedicalHistoryId': medicalHistoryId,
       });
 
@@ -107,7 +110,7 @@ class AnalysisCubit extends Cubit<AnalysisState> {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
-            'accept':'*/*'
+            'accept': '*/*'
           },
           validateStatus: (status) => true,
         ),
@@ -116,17 +119,20 @@ class AnalysisCubit extends Cubit<AnalysisState> {
       if (response.statusCode == 200) {
         final data = response.data;
         if (data['succeeded'] == true) {
-          emit(AnalysisUploadSuccess(message: data['message'] ?? 'Upload successful'));
+          emit(AnalysisUploadSuccess(
+              message: data['message'] ?? 'Upload successful'));
           // Fetch updated records after successful upload
           await fetchAnalysisRecords();
         } else {
-          emit(AnalysisUploadError(message: data['message'] ?? 'Failed to upload record'));
+          emit(AnalysisUploadError(
+              message: data['message'] ?? 'Failed to upload record'));
         }
       } else {
         emit(const AnalysisUploadError(message: 'Failed to upload record'));
       }
     } catch (e) {
-      emit(AnalysisUploadError(message: 'Error uploading record: ${e.toString()}'));
+      emit(AnalysisUploadError(
+          message: 'Error uploading record: ${e.toString()}'));
     }
   }
 
@@ -178,13 +184,14 @@ class AnalysisCubit extends Cubit<AnalysisState> {
           headers: {
             'Content-Type': 'multipart/form-data',
             'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
-            'accept':'*/*'
+            'accept': '*/*'
           },
         ),
       );
 
       if (response.statusCode != 200 && response.statusCode != 204) {
-        emit(AnalysisUpdateError(message: 'فشل تحديث بيانات التحليل: ${response.statusCode}'));
+        emit(AnalysisUpdateError(
+            message: 'فشل تحديث بيانات التحليل: ${response.statusCode}'));
         return;
       }
 
@@ -205,13 +212,14 @@ class AnalysisCubit extends Cubit<AnalysisState> {
             headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
-              'accept':'*/*'
+              'accept': '*/*'
             },
           ),
         );
-
         if (pdfResponse.statusCode != 200 && pdfResponse.statusCode != 204) {
-          emit(AnalysisUpdateError(message: 'تم تحديث البيانات لكن فشل تحديث ملف PDF: ${pdfResponse.statusCode}'));
+          emit(AnalysisUpdateError(
+              message:
+                  'تم تحديث البيانات لكن فشل تحديث ملف PDF: ${pdfResponse.statusCode}'));
           return;
         }
       }
@@ -224,4 +232,27 @@ class AnalysisCubit extends Cubit<AnalysisState> {
     }
   }
 
+  Future<void> deleteAnalysisRecord(int analysisId) async {
+    try {
+      emit(AnalysisDeleting());
+      final response = await _dio.delete(
+        'https://wqaya.runasp.net/api/Analysis/$analysisId',
+        options: Options(
+          headers: {
+            'accept': '*/*',
+            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+          },
+          validateStatus: (status) => true,
+        ),
+      );
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        fetchAnalysisRecords();
+        emit(AnalysisDeleteSuccess());
+      } else {}
+    } on DioException catch (e) {
+      emit(AnalysisDeleteError(message: 'حدث خطأ غير متوقع: $e'));
+    } catch (e) {
+      emit(AnalysisDeleteError(message: 'حدث خطأ غير متوقع: $e'));
+    }
+  }
 }

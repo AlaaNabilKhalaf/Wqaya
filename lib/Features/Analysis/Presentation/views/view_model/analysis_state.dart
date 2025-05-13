@@ -76,3 +76,14 @@ class AnalysisUpdateError extends AnalysisState {
   @override
   List<Object?> get props => [message];
 }
+class AnalysisDeleting extends AnalysisState {}
+class AnalysisDeleteSuccess extends AnalysisState {}
+class AnalysisDeleteError extends AnalysisState {
+  final String message;
+
+  const AnalysisDeleteError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
