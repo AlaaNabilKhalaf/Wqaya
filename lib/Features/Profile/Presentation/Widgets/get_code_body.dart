@@ -62,55 +62,58 @@ class _GetCodeBodyState extends State<GetCodeBody> {
       builder: (context, state) {
         return Padding(
           padding: EdgeInsets.all(20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 50.h),
-              SizedBox(
-                width: 400.w,
-                child: RegularTextWithoutLocalization(
-                  text: 'ادخل كود التحقق المرسل إلى بريدك الإلكتروني',
-                  fontSize: 22.sp,
-                  fontFamily: medium,
-                  textColor: primaryColor,
-                  maxLine: 3,
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // SizedBox(height: 50.h),
+                const Spacer(),
+                SizedBox(
+                  width: 400.w,
+                  child: RegularTextWithoutLocalization(
+                    text: 'ادخل كود التحقق المرسل إلى بريدك الإلكتروني',
+                    fontSize: 22.sp,
+                    fontFamily: medium,
+                    textColor: primaryColor,
+                    maxLine: 3,
+                  ),
                 ),
-              ),
-              SizedBox(height: 30.h),
-              CustomTextFormField(
-                textInputType: TextInputType.number,
-                fieldController: codeController,
-                hintText: 'أدخل الكود هنا',
-              ),
-              const Spacer(),
-              // SizedBox(height: 40.h),
-              state is ChangePhoneLoadingState
-                  ? const CircularProgressIndicator()
-                  : ProfileCard(
-                cardAction: 'تأكيد تغيير الرقم',
-                cardColor: primaryColor,
-                textColor: Colors.white,
-                onTap: () {
-                  if (codeController.text.isEmpty || codeController.text.length != 4) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        backgroundColor: errorColor,
-                        content: RegularTextWithoutLocalization(
-                          text: 'من فضلك أدخل كود مكون من 4 أرقام',
-                          fontSize: 18,
-                          textColor: Colors.white,
-                          fontFamily: medium,
+                SizedBox(height: 30.h),
+                CustomTextFormField(
+                  textInputType: TextInputType.number,
+                  fieldController: codeController,
+                  hintText: 'أدخل الكود هنا',
+                ),
+                state is ChangePhoneLoadingState
+                    ? const CircularProgressIndicator()
+                    : ProfileCard(
+                  cardAction: 'تأكيد تغيير الرقم',
+                  cardColor: primaryColor,
+                  textColor: Colors.white,
+                  onTap: () {
+                    if (codeController.text.isEmpty || codeController.text.length != 4) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: errorColor,
+                          content: RegularTextWithoutLocalization(
+                            text: 'من فضلك أدخل كود مكون من 4 أرقام',
+                            fontSize: 18,
+                            textColor: Colors.white,
+                            fontFamily: medium,
+                          ),
                         ),
-                      ),
-                    );
-                    return;
-                  }
+                      );
+                      return;
+                    }
 
-                  final int code = int.tryParse(codeController.text) ?? 0;
-                  context.read<ApiProfileCubit>().changePhone(widget.phone, code);
-                },
-              ),
-            ],
+                    final int code = int.tryParse(codeController.text) ?? 0;
+                    context.read<ApiProfileCubit>().changePhone(widget.phone, code);
+                  },
+                ),
+                const Spacer(),
+
+              ],
+            ),
           ),
         );
       },
