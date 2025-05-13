@@ -66,3 +66,13 @@ class AnalysisUploadError extends AnalysisState {
   @override
   List<Object?> get props => [message];
 }
+// Success state for analysis update
+class AnalysisUpdateSuccess extends AnalysisState {}
+class AnalysisUpdateError extends AnalysisState {
+  final String message;
+
+  const AnalysisUpdateError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

@@ -16,7 +16,13 @@ class AnalysisCubit extends Cubit<AnalysisState> {
 
   // Set the authorization token for authenticated requests
 
-
+  final Map<String, String> resultStatusMap = {
+    'Normal': 'طبيعي',
+    'High': 'مرتفع',
+    'Low': 'منخفض',
+    'Pending': 'قيد الانتظار',
+    'Abnormal': 'غير طبيعي',
+  };
   // Fetch analysis records
   Future<void> fetchAnalysisRecords({int pageNumber = 1, int pageSize = 111}) async {
     try {
@@ -139,6 +145,82 @@ class AnalysisCubit extends Cubit<AnalysisState> {
     } catch (e) {
       emit(AnalysisError(message: 'Error picking file: ${e.toString()}'));
       return null;
+    }
+  }
+
+  Future<void> updateAnalysisRecord({
+    required int id,
+    required String testName,
+    required String labName,
+    required DateTime date,
+    String? resultSummary,
+    String? resultStatus,
+    required int medicalHistoryId,
+    File? pdfFile,
+  }) async {
+    try {
+      emit(AnalysisUploading());
+
+      // First API call - Update analysis info
+      final formData = FormData.fromMap({
+        'Id': id,
+        'TestName': testName,
+        'LabName': labName,
+        'Date': date.toIso8601String().split('T')[0],
+        if (resultSummary != null) 'ResultSummary': resultSummary,
+        if (resultStatus != null) 'ResultStatus': resultStatus,
+        'MedicalHistoryId': medicalHistoryId,
+      });
+      final response = await _dio.put(
+        'https://wqaya.runasp.net/api/Analysis',
+        data: formData,
+        options: Options(
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+            'accept':'*/*'
+          },
+        ),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        emit(AnalysisUpdateError(message: 'فشل تحديث بيانات التحليل: ${response.statusCode}'));
+        return;
+      }
+
+      // If PDF file is changed, make second API call to update it
+      if (pdfFile != null) {
+        final pdfFormData = FormData.fromMap({
+          'Id': id,
+          'profilePic': await MultipartFile.fromFile(
+            pdfFile.path,
+            filename: pdfFile.path.split('/').last,
+          ),
+        });
+
+        final pdfResponse = await _dio.put(
+          'https://wqaya.runasp.net/api/Analysis/profile-pic',
+          data: pdfFormData,
+          options: Options(
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
+              'accept':'*/*'
+            },
+          ),
+        );
+
+        if (pdfResponse.statusCode != 200 && pdfResponse.statusCode != 204) {
+          emit(AnalysisUpdateError(message: 'تم تحديث البيانات لكن فشل تحديث ملف PDF: ${pdfResponse.statusCode}'));
+          return;
+        }
+      }
+      fetchAnalysisRecords();
+      emit(AnalysisUpdateSuccess());
+    } on DioException catch (e) {
+      emit(AnalysisUpdateError(message: 'حدث خطأ غير متوقع: $e'));
+    } catch (e) {
+      emit(AnalysisUpdateError(message: 'حدث خطأ غير متوقع: $e'));
     }
   }
 

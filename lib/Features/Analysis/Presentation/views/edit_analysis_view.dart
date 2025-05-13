@@ -5,20 +5,18 @@ import 'package:file_picker/file_picker.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Features/Analysis/Presentation/views/view_model/analysis_cubit.dart';
+import 'package:wqaya/Features/Analysis/Presentation/views/view_model/analysis_model.dart';
 
-class AddAnalysisView extends StatefulWidget {
-  final int medicalHistoryId;
+class EditAnalysisView extends StatefulWidget {
+  final AnalysisRecord analysisRecord;
 
-  const AddAnalysisView({
-    super.key,
-    required this.medicalHistoryId,
-  });
+  const EditAnalysisView({super.key, required this.analysisRecord});
 
   @override
-  State<AddAnalysisView> createState() => _AddAnalysisViewState();
+  State<EditAnalysisView> createState() => _EditAnalysisViewState();
 }
 
-class _AddAnalysisViewState extends State<AddAnalysisView> {
+class _EditAnalysisViewState extends State<EditAnalysisView> {
   final _formKey = GlobalKey<FormState>();
   final _testNameController = TextEditingController();
   final _labNameController = TextEditingController();
@@ -27,8 +25,27 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
 
   File? _selectedPdfFile;
   String? _resultStatus;
+  bool _isPdfChanged = false;
 
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers with data from analysisRecord
+    _testNameController.text = widget.analysisRecord.testName;
+    _labNameController.text = widget.analysisRecord.labName;
+    _dateController.text = "${widget.analysisRecord.date.year}-${widget.analysisRecord.date.month.toString().padLeft(2, '0')}-${widget.analysisRecord.date.day.toString().padLeft(2, '0')}";
+    _resultSummaryController.text = widget.analysisRecord.resultSummary ?? '';
+    _resultStatus = widget.analysisRecord.resultStatus;
+  }
 
+  @override
+  void dispose() {
+    _testNameController.dispose();
+    _labNameController.dispose();
+    _dateController.dispose();
+    _resultSummaryController.dispose();
+    super.dispose();
+  }
 
   Future<void> _pickPdfFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -39,6 +56,7 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
     if (result != null) {
       setState(() {
         _selectedPdfFile = File(result.files.single.path!);
+        _isPdfChanged = true;
       });
     }
   }
@@ -80,7 +98,7 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
       appBar: AppBar(
         backgroundColor: myWhiteColor,
         elevation: 0,
-        title: const Text("إضافة تحليل",
+        title: const Text("تعديل التحليل",
             style:
             TextStyle(fontFamily: bold, fontSize: 20, color: primaryColor)),
         centerTitle: true,
@@ -104,7 +122,7 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
                       .requestFocus(FocusNode()); // Close the keyboard
                   final DateTime? pickedDate = await showDatePicker(
                     context: context,
-                    initialDate: DateTime.now(),
+                    initialDate: widget.analysisRecord.date,
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2100),
                     helpText: "اختر تاريخ التحليل",
@@ -173,12 +191,39 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
                     child: Text(entry.value, style: const TextStyle(fontFamily: medium)), // Arabic label
                   );
                 }).toList(),
+                validator: (value) => value == null ? 'مطلوب' : null,
               ),
               const SizedBox(height: 20),
+
+              // Current PDF file display
+              if (!_isPdfChanged)
+                Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: textFormBackgroundColor,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.file_present, color: primaryColor),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          "الملف الحالي: ${widget.analysisRecord.reportUrl.split('/').last}",
+                          style: const TextStyle(fontFamily: medium),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
               ElevatedButton.icon(
                 onPressed: _pickPdfFile,
                 icon: const Icon(Icons.upload_file),
-                label: const Text("اختر ملف PDF",
+                label: const Text("اختر ملف PDF جديد",
                     style: TextStyle(fontFamily: medium)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: unselectedContainerColor,
@@ -187,6 +232,7 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
                       borderRadius: BorderRadius.circular(12)),
                 ),
               ),
+
               if (_selectedPdfFile != null)
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 16),
@@ -212,6 +258,7 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
                         onPressed: () {
                           setState(() {
                             _selectedPdfFile = null;
+                            _isPdfChanged = false;
                           });
                         },
                       )
@@ -221,11 +268,11 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
               const SizedBox(height: 10),
               BlocConsumer<AnalysisCubit, AnalysisState>(
                 listener: (context, state) {
-                  if (state is AnalysisUploadSuccess) {
+                  if (state is AnalysisUpdateSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         behavior: SnackBarBehavior.floating,
-                        content: Text("تم إضافة التحليل بنجاح", style: TextStyle(fontFamily: regular)),
+                        content: Text("تم تعديل التحليل بنجاح", style: TextStyle(fontFamily: regular)),
                         backgroundColor: primaryColor,
                       ),
                     );
@@ -248,12 +295,11 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
                       ))
                       : ElevatedButton(
                     onPressed: () {
-                      if (!_formKey.currentState!.validate() ||
-                          _selectedPdfFile == null) {
+                      if (!_formKey.currentState!.validate()) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(
-                              'يجب ملئ كل الخانات و رفع ملف PDF',
+                              'يجب ملئ كل الخانات المطلوبة',
                               style: TextStyle(fontFamily: regular),
                             ),
                             behavior: SnackBarBehavior.floating,
@@ -262,7 +308,8 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
                         );
                         return;
                       } else {
-                        context.read<AnalysisCubit>().uploadAnalysisRecord(
+                        context.read<AnalysisCubit>().updateAnalysisRecord(
+                          id: widget.analysisRecord.id,
                           testName: _testNameController.text,
                           labName: _labNameController.text,
                           date: DateTime.parse(_dateController.text),
@@ -270,8 +317,8 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
                               ? _resultSummaryController.text
                               : null,
                           resultStatus: _resultStatus,
-                          medicalHistoryId: widget.medicalHistoryId,
-                          pdfFile: _selectedPdfFile!,
+                          medicalHistoryId: widget.analysisRecord.medicalHistoryId,
+                          pdfFile: _isPdfChanged ? _selectedPdfFile : null,
                         );
                       }
                     },
@@ -281,7 +328,7 @@ class _AddAnalysisViewState extends State<AddAnalysisView> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text("إرسال",
+                    child: const Text("حفظ التعديلات",
                         style: TextStyle(
                             fontFamily: bold,
                             fontSize: 16,
