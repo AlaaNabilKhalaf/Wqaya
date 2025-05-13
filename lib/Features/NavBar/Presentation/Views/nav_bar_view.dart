@@ -14,7 +14,6 @@ class NavBarView extends StatelessWidget {
     return BlocBuilder<BottomNavCubit, int>(
       builder: (context, state) {
         var bottomNavCubit = context.read<BottomNavCubit>();
-
         return PopScope(
           canPop: false, // Prevents the default back behavior
           onPopInvokedWithResult: (didPop,result) {
