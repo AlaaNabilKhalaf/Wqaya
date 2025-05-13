@@ -43,15 +43,15 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    nameController.dispose();
-    passwordConfirmController.dispose();
-    passwordController.dispose();
-    emailController.dispose();
-    phoneNumberController.dispose();
-    super.dispose();
-  }
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   nameController.dispose();
+  //   passwordConfirmController.dispose();
+  //   passwordController.dispose();
+  //   emailController.dispose();
+  //   phoneNumberController.dispose();
+  //   super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     return Padding(

@@ -1,66 +1,110 @@
-// ✅ GetCodeBody.dart - خاص بإدخال كود التحقق لتغيير الرقم
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../Core/Utils/colors.dart';
 import '../../../../Core/Utils/fonts.dart';
+import '../../../../Core/widgets/text_form_fields.dart';
 import '../../../../Core/widgets/texts.dart';
-import '../../../Auth/Presentation/Widgets/pin_code_widget.dart';
 import '../../Controller/api_profile_cubit.dart';
 import '../../Controller/api_profile_states.dart';
+import 'profile_card.dart';
 
-class GetCodeBody extends StatelessWidget {
+class GetCodeBody extends StatefulWidget {
   final String phone;
+
   const GetCodeBody({super.key, required this.phone});
+
+  @override
+  State<GetCodeBody> createState() => _GetCodeBodyState();
+}
+
+class _GetCodeBodyState extends State<GetCodeBody> {
+  final TextEditingController codeController = TextEditingController();
+
+  @override
+  void dispose() {
+    codeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ApiProfileCubit, ApiProfileStates>(
       listener: (context, state) {
         if (state is ChangePhoneSuccessState) {
-          Navigator.popUntil(context, (route) => route.isFirst);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("تم تغيير الرقم بنجاح")),
+            SnackBar(
+              backgroundColor: Colors.green,
+              content: RegularTextWithoutLocalization(
+                text: state.message,
+                fontSize: 18,
+                textColor: Colors.white,
+                fontFamily: medium,
+              ),
+            ),
           );
+          Navigator.pop(context);
+          Navigator.pop(context);
         } else if (state is ChangePhoneFailState) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error)),
+            SnackBar(
+              backgroundColor: errorColor,
+              content: RegularTextWithoutLocalization(
+                text: state.message,
+                fontSize: 18,
+                textColor: Colors.white,
+                fontFamily: medium,
+              ),
+            ),
           );
         }
       },
       builder: (context, state) {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          padding: EdgeInsets.all(20.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Spacer(),
-              RegularTextWithLocalization(
-                text: 'welcomeToYou',
-                fontSize: 70.sp,
-                textColor: primaryColor,
-                fontFamily: bold,
-              ),
-              SizedBox(height: 10.h),
-              RegularTextWithLocalization(
-                text: 'codeIsSent',
-                fontSize: 30.sp,
-                textColor: primaryColor,
+              SizedBox(height: 50.h),
+              RegularTextWithoutLocalization(
+                text: 'ادخل كود التحقق المرسل إلى بريدك الإلكتروني',
+                fontSize: 22.sp,
                 fontFamily: medium,
+                textColor: primaryColor,
               ),
               SizedBox(height: 30.h),
-              PinCodeWidget(
-                nextScreen: () {},
-                nextText: 'continue',
-                verifyEmail: (verificationCode) {
-                  context.read<ApiProfileCubit>().confirmChangePhone(
-                    newPhone: phone,
-                    code: int.tryParse(verificationCode) ?? 0,
-                  );
+              CustomTextFormField(
+                textInputType: TextInputType.number,
+                fieldController: codeController,
+                hintText: 'أدخل الكود هنا',
+              ),
+              SizedBox(height: 40.h),
+              state is ChangePhoneLoadingState
+                  ? const CircularProgressIndicator()
+                  : ProfileCard(
+                cardAction: 'تأكيد تغيير الرقم',
+                cardColor: primaryColor,
+                textColor: Colors.white,
+                onTap: () {
+                  if (codeController.text.isEmpty || codeController.text.length != 4) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        backgroundColor: errorColor,
+                        content: RegularTextWithoutLocalization(
+                          text: 'من فضلك أدخل كود مكون من 4 أرقام',
+                          fontSize: 18,
+                          textColor: Colors.white,
+                          fontFamily: medium,
+                        ),
+                      ),
+                    );
+                    return;
+                  }
+
+                  final int code = int.tryParse(codeController.text) ?? 0;
+                  context.read<ApiProfileCubit>().changePhone(widget.phone, code);
                 },
               ),
-              const Spacer(),
             ],
           ),
         );

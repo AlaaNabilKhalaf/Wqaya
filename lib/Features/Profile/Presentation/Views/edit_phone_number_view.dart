@@ -52,11 +52,23 @@ class _EditPhoneNumberViewState extends State<EditPhoneNumberView> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => GetCodeToChangePhoneNumber(phone: phoneNumberController.text),
+              builder: (context) => GetCodeToChangePhoneNumber(
+                phone: phoneNumberController.text,
+              ),
             ),
           );
         } else if (state is RequestChangePhoneFailState) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: errorColor,
+              content: RegularTextWithoutLocalization(
+                text: state.message,
+                fontSize: 18,
+                textColor: Colors.white,
+                fontFamily: medium,
+              ),
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -121,12 +133,17 @@ class _EditPhoneNumberViewState extends State<EditPhoneNumberView> {
                     fieldController: confirmNewPhoneNumberController,
                     hintText: 'اعادة ادخال رقم الهاتف الجديد',
                   ),
-                  ProfileCard(
+                  SizedBox(height: 30.h),
+                  state is RequestChangePhoneLoadingState
+                      ? const CircularProgressIndicator()
+                      : ProfileCard(
                     cardAction: 'getCode',
                     onTap: () {
                       if (oldPasswordController.text == currentPassword) {
                         if (phoneNumberController.text == confirmNewPhoneNumberController.text) {
-                          context.read<ApiProfileCubit>().requestChangePhone(phoneNumberController.text);
+                          context.read<ApiProfileCubit>().requestChangePhone(
+                            phoneNumberController.text,
+                          );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -145,7 +162,7 @@ class _EditPhoneNumberViewState extends State<EditPhoneNumberView> {
                           const SnackBar(
                             backgroundColor: errorColor,
                             content: RegularTextWithoutLocalization(
-                              text: 'الرقم السري غير صحيح',
+                              text: 'كلمة المرور غير صحيحة',
                               fontSize: 20,
                               textColor: Colors.white,
                               fontFamily: medium,
