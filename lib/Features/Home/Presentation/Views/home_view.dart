@@ -5,6 +5,7 @@ import 'package:wqaya/Core/cache/cache_helper.dart';
 import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
+import 'package:wqaya/Core/utils/global_variables.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/first_complaints_view.dart';
 import 'package:wqaya/Features/Analysis/Presentation/views/analysis_view.dart';
@@ -16,7 +17,6 @@ import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/home_container.da
 import 'package:wqaya/Features/surgries/presentation/views/surgries_view.dart';
 
 import '../../../../Core/widgets/custom_home_app_bar.dart';
-import '../../../Profile/Controller/profile_image_cubit.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -29,6 +29,8 @@ class _HomeViewState extends State<HomeView> {
     @override
   void initState()  {
       // BlocProvider.of<ProfileImageCubit>(context).imgFile =  CacheHelper().getData(key: 'profileImage') ;
+      currentPassword = CacheHelper().getData(key: 'currentPassword');
+      print("kkkkkkkkkkkkkkkkkkkkkkkkkkk$currentPassword");
       // TODO: implement initState
     super.initState();
   }

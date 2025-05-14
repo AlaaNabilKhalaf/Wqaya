@@ -54,7 +54,6 @@ class ProfileImageCubit extends Cubit<ProfileImageStates> {
         CacheHelper().saveData(key: 'profileImage', value: imgFile.toString());
 
       }else{
-        CacheHelper().removeData(key: 'profileImage');
         CacheHelper().saveData(key: 'profileImage', value: imgFile.toString());
       }
 

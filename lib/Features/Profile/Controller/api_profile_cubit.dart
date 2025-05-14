@@ -14,6 +14,10 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
     emit(ChangePasswordLoadingState());
     try {
       final token = await CacheHelper().getData(key: 'token');
+      if (token == null) {
+        emit(ChangePasswordFailState(message: "حدث خطأ، حاول تسجيل الدخول من جديد"));
+        return;
+      }
 
       final response = await _dio.post(
         "/api/Authentication/ChangePassword",
@@ -34,7 +38,6 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
       final Map<String, dynamic> data = response.data;
       if (data.containsKey('succeeded') && data['succeeded'] == true) {
         final String msg = data['message'] ?? 'Password reset successfully';
-        CacheHelper().removeData(key: 'currentPassword');
         CacheHelper().saveData(key: 'currentPassword', value: newPassword.toString());
         emit(ChangePasswordSuccessState(message: msg));
       } else {
@@ -137,7 +140,6 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
       );
 
       if (response.data['succeeded'] == true) {
-        CacheHelper().removeData(key: 'phoneNumber');
         CacheHelper().saveData(key: 'phoneNumber', value: newPhone.toString());
 
         emit(ChangePhoneSuccessState(message: response.data['message']));
@@ -195,14 +197,6 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
       debugPrint('📥 Response data: ${response.data}');
 
       if (response.data['succeeded'] == true) {
-
-        //Remove Old
-        CacheHelper().removeData(key: 'displayedName');
-        CacheHelper().removeData(key: 'nationalId', );
-        CacheHelper().removeData(key: 'age');
-        CacheHelper().removeData(key: 'gender');
-        CacheHelper().removeData(key: 'address');
-        CacheHelper().removeData(key: 'governorate');
 
         //Save New
         CacheHelper().saveData(key: 'displayedName', value: displayedName.toString());
