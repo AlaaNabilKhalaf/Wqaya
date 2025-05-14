@@ -165,7 +165,7 @@ class AuthCubit extends Cubit<AuthState> {
         CacheHelper().saveData(key: 'UserId', value: data['userId']);
         final storedUserId = CacheHelper().getData(key: 'UserId');
         debugPrint(storedUserId);
-        CacheHelper().saveData(key: 'name', value: displayedName.toString());
+        CacheHelper().saveData(key: 'displayedName', value: displayedName.toString());
         CacheHelper().saveData(key: 'phoneNumber', value: data['phoneNumber'].toString());
         CacheHelper().saveData(key: 'email', value: data['email'].toString());
         CacheHelper().saveData(key: 'profileImage', value: data['imgUrl'].toString());

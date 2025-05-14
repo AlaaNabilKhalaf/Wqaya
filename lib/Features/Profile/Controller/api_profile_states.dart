@@ -56,3 +56,17 @@ class ChangePhoneFailState extends ApiProfileStates {
   final String message;
   ChangePhoneFailState({required this.message});
 }
+
+//Update User Data
+
+class UpdateUserLoadingState extends ApiProfileStates {}
+
+class UpdateUserSuccessState extends ApiProfileStates {
+  final String message;
+  UpdateUserSuccessState({required this.message});
+}
+
+class UpdateUserFailState extends ApiProfileStates {
+  final String error;
+  UpdateUserFailState({required this.error});
+}

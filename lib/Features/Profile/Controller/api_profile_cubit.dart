@@ -35,7 +35,7 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
       if (data.containsKey('succeeded') && data['succeeded'] == true) {
         final String msg = data['message'] ?? 'Password reset successfully';
         CacheHelper().removeData(key: 'currentPassword');
-        CacheHelper().saveData(key: 'currentPassword', value: newPassword);
+        CacheHelper().saveData(key: 'currentPassword', value: newPassword.toString());
         emit(ChangePasswordSuccessState(message: msg));
       } else {
         final String msg = data['message'] ?? "لم تتم العملية من فضلك حاول في وقت اخر";
@@ -75,9 +75,9 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
 
       if (response.statusCode == 200 && response.data['succeeded'] == true) {
         {
-          CacheHelper().removeData(key: 'token');
-          CacheHelper().removeData(key: 'profileImage');
-          CacheHelper().removeData(key: 'currentPassword');
+          // CacheHelper().removeData(key: 'token');
+          // CacheHelper().removeData(key: 'profileImage');
+          // CacheHelper().removeData(key: 'currentPassword');
           CacheHelper().clearData();
         }
         emit(DeleteUserSuccessState(message: "تم حذف الحساب بنجاح"));
@@ -137,6 +137,9 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
       );
 
       if (response.data['succeeded'] == true) {
+        CacheHelper().removeData(key: 'phoneNumber');
+        CacheHelper().saveData(key: 'phoneNumber', value: newPhone.toString());
+
         emit(ChangePhoneSuccessState(message: response.data['message']));
       } else {
         emit(ChangePhoneFailState(message: response.data['message'] ?? "فشل في تغيير رقم الهاتف"));
@@ -146,6 +149,91 @@ class ApiProfileCubit extends Cubit<ApiProfileStates> {
       emit(ChangePhoneFailState(message: errorMsg));
     }
   }
+
+
+  Future<void> updateUserData({
+    required String displayedName,
+    required String nationalId,
+    required int age,
+    required String gender,
+    required String address,
+    required String governorate,
+  }) async {
+    emit(UpdateUserLoadingState());
+
+    final token = await CacheHelper().getData(key: 'token');
+
+    debugPrint('🔐 Token: $token');
+    debugPrint('📦 Sending data:');
+    debugPrint('Name: $displayedName');
+    debugPrint('National ID: $nationalId');
+    debugPrint('Age: $age');
+    debugPrint('Gender: $gender');
+    debugPrint('Address: $address');
+    debugPrint('Governorate: $governorate');
+
+    try {
+      final response = await _dio.put(
+        "/api/Patient/UpdateUser",
+        options: Options(headers: {
+          'accept': '*/*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        }),
+        data: {
+          "displayedName": displayedName,
+          "nationalId": nationalId,
+          "age": age,
+          "gender": gender,
+          "adress": address,
+          "governorate": governorate
+        },
+      );
+
+
+      debugPrint('📥 Response status: ${response.statusCode}');
+      debugPrint('📥 Response data: ${response.data}');
+
+      if (response.data['succeeded'] == true) {
+
+        //Remove Old
+        CacheHelper().removeData(key: 'displayedName');
+        CacheHelper().removeData(key: 'nationalId', );
+        CacheHelper().removeData(key: 'age');
+        CacheHelper().removeData(key: 'gender');
+        CacheHelper().removeData(key: 'address');
+        CacheHelper().removeData(key: 'governorate');
+
+        //Save New
+        CacheHelper().saveData(key: 'displayedName', value: displayedName.toString());
+        CacheHelper().saveData(key: 'nationalId', value: nationalId.toString());
+        CacheHelper().saveData(key: 'age', value: age.toString());
+        CacheHelper().saveData(key: 'gender', value: gender.toString());
+        CacheHelper().saveData(key: 'address', value: address.toString() );
+        CacheHelper().saveData(key: 'governorate', value: governorate.toString());
+
+        emit(UpdateUserSuccessState(message: response.data['message']));
+      } else {
+        emit(UpdateUserFailState(
+          error: response.data['message'] ?? "فشل في تحديث البيانات",
+        ));
+      }
+    } on DioException catch (e) {
+      final errorMsg = e.response?.data['message'] ?? "حدث خطأ أثناء تحديث البيانات";
+
+      debugPrint('❌ DioException caught');
+      debugPrint('Status Code: ${e.response?.statusCode}');
+      debugPrint('Response Data: ${e.response?.data}');
+      debugPrint('Message: $errorMsg');
+
+      emit(UpdateUserFailState(error: errorMsg));
+    } catch (e) {
+      debugPrint('❗ Unexpected error: $e');
+      emit(UpdateUserFailState(error: "حدث خطأ غير متوقع"));
+    }
+  }
+
+
 
 
 

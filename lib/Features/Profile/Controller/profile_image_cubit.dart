@@ -51,11 +51,11 @@ class ProfileImageCubit extends Cubit<ProfileImageStates> {
 
       );
       if(CacheHelper().getData(key: 'profileImage') == null){
-        CacheHelper().saveData(key: 'profileImage', value: imgFile);
+        CacheHelper().saveData(key: 'profileImage', value: imgFile.toString());
 
       }else{
         CacheHelper().removeData(key: 'profileImage');
-        CacheHelper().saveData(key: 'profileImage', value: imgFile);
+        CacheHelper().saveData(key: 'profileImage', value: imgFile.toString());
       }
 
       emit(UploadProfilePictureSuccessState(message: "تم تغيير الصورة بنجاح"));
