@@ -46,7 +46,6 @@ class _HomeViewState extends State<HomeView> {
     };
     final List<MapEntry<String, String>> itemsList =
         homeContainerItems.entries.toList();
-
     return Scaffold(
       backgroundColor: myWhiteColor,
       appBar: const PreferredSize(
@@ -62,7 +61,7 @@ class _HomeViewState extends State<HomeView> {
               ),
               SliverToBoxAdapter(
                 child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(), // Avoid nested scroll issues
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true, // Needed inside scrollable views
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,

@@ -4,8 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/cache/cache_helper.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
-import 'package:wqaya/Core/widgets/about_button.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
+import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
+import 'package:wqaya/Features/OCR/presentation/views/ocr_view.dart';
 import 'package:wqaya/Features/Profile/Controller/profile_image_cubit.dart';
 import 'package:wqaya/Features/Profile/Controller/profile_image_states.dart';
 
@@ -52,7 +53,6 @@ class HomeCustomAppBar extends StatelessWidget {
                 fontFamily: black,
               ),
               const SizedBox(height: 2,),
-
               RegularTextWithLocalization(
                 text: 'address',
                 fontSize: 13.sp,
@@ -62,7 +62,38 @@ class HomeCustomAppBar extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          const AboutButton()
+        //  const AboutButton()
+          Column(
+            children: [
+              const SizedBox(height: 2,),
+              IconButton(onPressed: () {
+                context.read<BottomNavVisibilityCubit>().hide();
+                Navigator.of(context)
+                    .push(
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                    const OCRView(),
+                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(1.0, 0.0);
+                      const end = Offset.zero;
+                      const curve = Curves.ease;
+
+                      final tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                    transitionDuration: const Duration(milliseconds: 400),
+                  ),
+                ).then((_) {
+                  context.read<BottomNavVisibilityCubit>().show();
+                });
+              }, icon: const Center(child: Icon(Icons.camera_alt_outlined,color: primaryColor,))),
+            ],
+          )
         ],
       ),
     );
