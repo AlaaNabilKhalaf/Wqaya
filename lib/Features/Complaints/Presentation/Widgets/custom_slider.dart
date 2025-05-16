@@ -4,17 +4,40 @@ import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/constance.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
+import 'package:wqaya/Features/Complaints/Presentation/Views/view_model/complaint_cubit.dart';
+
+// Updated CustomSlider to report pain level values
 
 class CustomSlider extends StatefulWidget {
-  const CustomSlider({super.key});
+  final Function(double) onValueChanged;
+
+  const CustomSlider({
+    super.key,
+    required this.onValueChanged,
+  });
 
   @override
   State<CustomSlider> createState() => _CustomSliderState();
 }
 
-
 class _CustomSliderState extends State<CustomSlider> {
   double sliderValue = 0.3;
+
+  // Map pain levels (0-10) to severity levels
+  String mapPainToSeverity(double painLevel) {
+    // Convert slider value (0-1) to pain scale (0-10)
+    int pain = (painLevel * 10).round();
+
+    if (pain <= 1) return 'Trivial';
+    if (pain <= 2) return 'Low';
+    if (pain <= 4) return 'Moderate';
+    if (pain <= 5) return 'Medium';
+    if (pain <= 6) return 'Significant';
+    if (pain <= 7) return 'High';
+    if (pain <= 8) return 'Severe';
+    if (pain <= 9) return 'Critical';
+    return 'Fatal';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +66,7 @@ class _CustomSliderState extends State<CustomSlider> {
           child: SliderTheme(
             data: SliderTheme.of(context).copyWith(
               trackHeight: 0,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0), // Thumb size
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 0),
               overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
               thumbColor: Colors.transparent,
               activeTrackColor: primaryColor,
@@ -55,6 +78,9 @@ class _CustomSliderState extends State<CustomSlider> {
                 setState(() {
                   sliderValue = value;
                 });
+
+                // Pass both the raw value and the corresponding severity level
+                widget.onValueChanged(value * 10); // Convert to 0-10 scale
               },
             ),
           ),
@@ -76,7 +102,23 @@ class _CustomSliderState extends State<CustomSlider> {
             textColor: myWhiteColor,
             fontFamily: medium,
           ),
-        )
+        ),
+        Positioned(
+          top: 25,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: Text(
+              // Show the corresponding severity level in Arabic
+              ComplaintEnums.severityOptionsArabic[mapPainToSeverity(sliderValue)] ?? "",
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: primaryColor,
+                fontFamily: medium,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

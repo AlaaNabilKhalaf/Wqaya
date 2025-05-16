@@ -34,7 +34,7 @@ class SearchMedicineError extends MedicineState {
 
 // Selection State - Modified to include medicines list
 class MedicineSelectionChanged extends MedicineState {
-  final List<int> selectedIds;
+  final List<dynamic> selectedIds;
   final List<MedicineModel> medicines; // Keep track of current medicines
   MedicineSelectionChanged(this.selectedIds, this.medicines);
 }

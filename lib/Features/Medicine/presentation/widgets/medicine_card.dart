@@ -144,22 +144,44 @@ class _MedicineCardState extends State<MedicineCard> {
   @override
   Widget build(BuildContext context) {
     var mCubit = context.watch<MedicineCubit>();
-
     // Check if this medicine is already in the selectedIds set
     isSelected = mCubit.selectedIds.contains(widget.medicine.id);
 
-    if (widget.canBeChosen == false) {
-      return buildNormalCard();
-    } else {
+    if (widget.canBeChosen) {
+      // Selectable card
       return InkWell(
         onTap: () {
           mCubit.toggleMedicineSelection(widget.medicine.id);
+          mCubit.toggleMedicineSelectionByName(widget.medicine.name);
         },
-        child: isSelected ? buildSelectedCard() : buildNormalCard(),
+        child: Card(
+          color: isSelected ? primaryColor : Colors.white,
+          elevation: 3,
+          margin: const EdgeInsets.only(bottom: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: buildCardContent(isSelected: isSelected),
+          ),
+        ),
+      );
+    } else {
+      // Non-selectable card with long press option
+      return InkWell(
+        onLongPress: () => showOptionsMenu(context),
+        child: Card(
+          color: Colors.white,
+          elevation: 3,
+          margin: const EdgeInsets.only(bottom: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: buildCardContent(isSelected: false),
+          ),
+        ),
       );
     }
   }
-
   Widget buildNormalCard() {
     return InkWell(
       onLongPress: () => showOptionsMenu(context),
@@ -216,7 +238,6 @@ class _MedicineCardState extends State<MedicineCard> {
           ],
         ),
         const SizedBox(height: 8),
-
         // Dosage form (translated)
         Text(
           "شكل الجرعة: $translatedDosageForm",
@@ -226,7 +247,6 @@ class _MedicineCardState extends State<MedicineCard> {
             fontFamily: semiBold,
           ),
         ),
-
         // Strength + Unit (translated)
         Text(
           "التركيز: ${widget.medicine.strength} $translatedUnit",
@@ -251,7 +271,25 @@ class _MedicineCardState extends State<MedicineCard> {
             color: isSelected ? Colors.white : Colors.black87,
             fontFamily: semiBold,
           ),
-        )
+        ),
+        if (widget.medicine.duration.toString()!="null")
+        Text(
+          "المدة: ${widget.medicine.duration.toString()} $translatedUnit",
+          style: TextStyle(
+            fontSize: 14,
+            color: isSelected ? Colors.white : Colors.black87,
+            fontFamily: semiBold,
+          ),
+        ),
+        if (widget.medicine.frequency.toString()!="null")
+          Text(
+            "التكرار: ${widget.medicine.frequency.toString()} $translatedUnit",
+            style: TextStyle(
+              fontSize: 14,
+              color: isSelected ? Colors.white : Colors.black87,
+              fontFamily: semiBold,
+            ),
+          ),
       ],
     );
   }

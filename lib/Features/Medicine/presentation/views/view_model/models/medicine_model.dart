@@ -7,6 +7,8 @@ class MedicineModel {
   final String? status; // optional
   final String? source; // optional
   final String? medicineType; // optional
+  final String? frequency; // optional
+  final String? duration; // optional
 
   MedicineModel({
     required this.id,
@@ -17,6 +19,8 @@ class MedicineModel {
     this.status,
     this.source,
     this.medicineType,
+    this.duration,
+    this.frequency,
   });
 
   factory MedicineModel.fromJson(Map<String, dynamic> json) {
@@ -28,6 +32,8 @@ class MedicineModel {
       unit: json['unit'],
       status: json['status'], // might be missing
       source: json['source'], // might be missing
+      frequency: json['frequency'], // might be missing
+      duration: json['duration'], // might be missing
       medicineType: json['medicineType'] ?? json['medicinetype'], // handle both spellings
     );
   }

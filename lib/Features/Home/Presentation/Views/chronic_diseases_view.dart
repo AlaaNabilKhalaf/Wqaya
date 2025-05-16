@@ -11,7 +11,6 @@ import 'package:wqaya/Features/Home/Presentation/Widgets/symptoms_container.dart
 import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
 
 import '../../../../Core/widgets/custom_ alert.dart';
-import '../../../../Core/widgets/custom_app_bar.dart';
 
 class ChronicDiseasesView extends StatefulWidget {
   const ChronicDiseasesView({super.key});

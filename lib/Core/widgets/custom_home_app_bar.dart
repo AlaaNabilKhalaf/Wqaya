@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wqaya/Core/cache/cache_helper.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/about_button.dart';
@@ -22,16 +23,21 @@ class HomeCustomAppBar extends StatelessWidget {
       backgroundColor: myWhiteColor,
       leading:  Padding(
         padding: const EdgeInsets.only(right: 8.0,top: 5),
-        child: Container(
-          clipBehavior: Clip.antiAlias,
-          height: 110.h,width: 110.w,
-          decoration:  BoxDecoration(
-              color: const Color(0xff0094FD),
-              shape: BoxShape.circle,
-              border: Border.all(color: const Color(0xff0094FD),width: 1)
+        child: InkWell(
+          onTap: () {
+            print(CacheHelper().getData(key: 'token'));
+          },
+          child: Container(
+            clipBehavior: Clip.antiAlias,
+            height: 110.h,width: 110.w,
+            decoration:  BoxDecoration(
+                color: const Color(0xff0094FD),
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xff0094FD),width: 1)
+            ),
+            child:  cubit.imgFile!=null? Image.file(
+                cubit.imgFile!, fit: BoxFit.cover,)  : const Icon(Icons.person , color: myWhiteColor,size: 35,),
           ),
-          child:  cubit.imgFile!=null? Image.file(
-              cubit.imgFile!, fit: BoxFit.cover,)  : const Icon(Icons.person , color: myWhiteColor,size: 35,),
         ),
       ),
       title:  Row(

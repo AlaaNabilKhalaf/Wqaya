@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/cache/cache_helper.dart';
 import 'package:wqaya/Features/Analysis/Presentation/views/view_model/analysis_cubit.dart';
 import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dart';
+import 'package:wqaya/Features/Complaints/Presentation/Views/view_model/complaint_cubit.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/view_model/home_cubit.dart';
 import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_cubit.dart';
 import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
@@ -55,6 +56,9 @@ void main() async {
         BlocProvider<SurgeryCubit>(
           create: (context) => SurgeryCubit(
             surgeryRepository: SurgeryRepository(),
+          ),
+        ),BlocProvider<ComplaintsCubit>(
+          create: (context) => ComplaintsCubit(
           ),
         ),
       ],

@@ -11,6 +11,7 @@ class MedicineCubit extends Cubit<MedicineState> {
 
   // Use a Set to prevent duplicates
   final Set<int> selectedIds = {};
+  final Set<String> selectedMedicineName = {};
 
   // Keep track of current medicines list
   List<MedicineModel> _currentMedicines = [];
@@ -22,6 +23,15 @@ class MedicineCubit extends Cubit<MedicineState> {
       selectedIds.remove(medicineId);
     } else {
       selectedIds.add(medicineId);
+    }
+    // Emit a state change while preserving the current medicines list
+    emit(MedicineSelectionChanged(selectedIds.toList(), _currentMedicines));
+  }
+  void toggleMedicineSelectionByName(String medicineName) {
+    if (selectedMedicineName.contains(medicineName)) {
+      selectedMedicineName.remove(medicineName);
+    } else {
+      selectedMedicineName.add(medicineName);
     }
     // Emit a state change while preserving the current medicines list
     emit(MedicineSelectionChanged(selectedIds.toList(), _currentMedicines));
@@ -67,12 +77,16 @@ class MedicineCubit extends Cubit<MedicineState> {
         ),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 ) {
         final responseData = response.data;
+        if (responseData==[]){
+          emit(SearchMedicineError('Invalid data format received from server.'));
+        }
         if (responseData is Map<String, dynamic> && responseData['data'] is List) {
           final data = responseData['data'] as List;
           final medicines = data.map((e) => MedicineModel.fromJson(e)).toList();
           _currentMedicines = medicines;
+
           emit(SearchMedicineSuccess(medicines));
         } else {
           emit(SearchMedicineError('Invalid data format received from server.'));

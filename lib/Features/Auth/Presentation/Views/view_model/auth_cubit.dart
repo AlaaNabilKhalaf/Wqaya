@@ -89,7 +89,6 @@ class AuthCubit extends Cubit<AuthState> {
         CacheHelper().saveData(key: 'token', value: response.data['token']);
         CacheHelper().saveData(key: 'email', value: response.data['userData']['email']);
         CacheHelper().saveData(key: 'profileImage', value: response.data['userData']['imgUrl']);
-        CacheHelper().saveData(key: 'currentPassword', value: password);
         emit(SignInSuccessState(token: response.data['token']));
       } else {
         final errorMessage = response.data['message'] ?? 'فشل تسجيل الدخول';

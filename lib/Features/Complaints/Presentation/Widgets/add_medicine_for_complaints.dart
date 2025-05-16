@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wqaya/Features/Medicine/presentation/views/add_medicine_by_hand_view.dart';
 import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_cubit.dart';
 import 'package:wqaya/Features/Medicine/presentation/widgets/medicine_card.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 
-class AddMedicineView extends StatefulWidget {
-  const AddMedicineView({super.key});
+class AddMedicineForComplaints extends StatefulWidget {
+  const AddMedicineForComplaints({super.key});
 
   @override
-  State<AddMedicineView> createState() => _AddMedicineViewState();
+  State<AddMedicineForComplaints> createState() => _AddMedicineForComplaintsState();
 }
 
-class _AddMedicineViewState extends State<AddMedicineView> {
+class _AddMedicineForComplaintsState extends State<AddMedicineForComplaints> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -112,7 +111,8 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                   builder: (context, state) {
                     if (state is SearchMedicineLoading) {
                       return const Center(child: CircularProgressIndicator());
-                    } else if (state is SearchMedicineSuccess) {
+                    }
+                    else if (state is SearchMedicineSuccess) {
                       final medicines = state.medicines;
                       if (medicines.isEmpty) {
                         return GestureDetector(
@@ -162,33 +162,10 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                       );
                     } else if (state is SearchMedicineError) {
                       return Column(
-                       mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(state.message=="Item not found" ?'لم نجد الدواء' : state.message,
                               style: const TextStyle(color: Colors.red,fontFamily: black,fontSize: 24)),
-                          const SizedBox(height: 20,),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const AddMedicineByHandView(),
-                                  ),
-                                );                              },
-                              label: const Text(
-                                'قم باضافة الدواء',
-                                style: TextStyle(fontSize: 16, color: Colors.white, fontFamily: black),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xff0094FD),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)),
-                                minimumSize: const Size(double.infinity, 50),
-                              ),
-                            ),
-                          ),
                         ],
                       );
                     } else {
@@ -213,12 +190,13 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                       child: ElevatedButton.icon(
                         key: ValueKey("submit_btn_${currentCubit.selectedIds.length}"),
                         onPressed: () {
-                          currentCubit.submitSelectedMedicines();
+                         // currentCubit.submitSelectedMedicines();
+                          print(currentCubit.selectedMedicineName);
                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.check, color: Colors.white),
                         label: Text(
-                          'تأكيد الاختيار (${currentCubit.selectedIds.length})',
+                          'تأكيد الاختيار (${currentCubit.selectedMedicineName.length})',
                           style: const TextStyle(fontSize: 16, color: Colors.white, fontFamily: black),
                         ),
                         style: ElevatedButton.styleFrom(

@@ -29,10 +29,8 @@ class _RayViewState extends State<RayView> {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       if (query.trim().isEmpty) {
-        // If search field is empty, fetch all rays
         context.read<RayCubit>().getUserRays();
       } else {
-        // Otherwise perform search
         context.read<RayCubit>().searchRays(keyword: query);
       }
     });
@@ -86,7 +84,6 @@ class _RayViewState extends State<RayView> {
                     );
                   },
                   child: () {
-                    // Handle loading states
                     if (state is RayLoading || state is SearchRaysLoading) {
                       return const Center(
                         key: ValueKey('loading'),
@@ -95,7 +92,6 @@ class _RayViewState extends State<RayView> {
                         ),
                       );
                     }
-                    // Handle error states
                     else if (state is RayError) {
                       return Center(
                         key: const ValueKey('error'),
@@ -114,7 +110,6 @@ class _RayViewState extends State<RayView> {
                         ),
                       );
                     }
-                    // Handle success states
                     else if (state is RaySuccess) {
                       final rays = state.rays;
                       if (rays.isEmpty) {
@@ -132,7 +127,6 @@ class _RayViewState extends State<RayView> {
                         },
                       );
                     }
-                    // Handle search success state
                     else if (state is SearchRaysSuccess) {
                       final rays = state.rays;
                       if (rays.isEmpty) {
@@ -168,7 +162,6 @@ class _RayViewState extends State<RayView> {
                       backgroundColor: primaryColor,
                     ),
                   );
-                  // Refresh the rays list after deletion
                   context.read<RayCubit>().getUserRays();
                 } else if (state is DeleteRayError) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -182,7 +175,6 @@ class _RayViewState extends State<RayView> {
                     ),
                   );
                 } else if (state is AddRaySuccess) {
-                  // Refresh rays list after adding a new ray
                   context.read<RayCubit>().getUserRays();
                 }
               },
@@ -230,7 +222,6 @@ class _RayViewState extends State<RayView> {
           const SizedBox(height: 8),
           BlocBuilder<RayCubit, RayCubitState>(
             builder: (context, state) {
-              // Update count for both normal and search results
               final count = (state is RaySuccess)
                   ? state.rays.length
                   : (state is SearchRaysSuccess)
@@ -260,7 +251,6 @@ class _RayViewState extends State<RayView> {
               suffixIcon: IconButton(
                 icon: const Icon(Icons.clear, color: Color(0xff1678F2)),
                 onPressed: () {
-                  // Clear the text field and reload all rays
                   _searchController.clear();
                   context.read<RayCubit>().getUserRays();
                 },

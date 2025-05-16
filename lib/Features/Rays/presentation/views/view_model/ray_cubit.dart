@@ -98,7 +98,6 @@ class RayCubit extends Cubit<RayCubitState> {
   }) async {
     final dio = Dio();
 
-    // Create a map with the fields to update
     final Map<String, dynamic> formFields = {
       "Id": rayId.toString(),
       "RayType": rayType,
@@ -143,7 +142,6 @@ class RayCubit extends Cubit<RayCubitState> {
   }) async {
     final dio = Dio();
 
-    // Create a map with the fields to update
     final Map<String, dynamic> formFields = {
       "Id": rayId.toString(),
       "profilePic": await MultipartFile.fromFile(
@@ -169,11 +167,9 @@ class RayCubit extends Cubit<RayCubitState> {
       );
 
       if (response.data['succeeded'] == true) {
-        // After successful image update, update the text data
         await editUserRayWithoutPicture(
             rayId: rayId, rayType: rayType, reason: reason, rayDate: rayDate, bodyPart: bodyPart);
 
-        // Only emit success if both operations succeed (the text update will emit its own success)
         if (state is EditRaySuccess) {
           emit(EditRayPictureSuccess());
         }
