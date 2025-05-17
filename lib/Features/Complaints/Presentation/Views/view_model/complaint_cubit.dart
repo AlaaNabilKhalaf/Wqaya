@@ -1,6 +1,7 @@
 // lib/Features/Complaints/Presentation/Views/view_model/complaint_cubit.dart
 
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:wqaya/Core/cache/cache_helper.dart';
@@ -196,14 +197,64 @@ class ComplaintsCubit extends Cubit<ComplaintState> {
     }
   }
 
-  // Helper method to get token
-
+  Future<void> updateComplaint({
+    required int id,
+    required String type,
+    required String reason,
+    required String location,
+    required String duration,
+    required String severity,
+    required List<String> medicines,
+    required String notes,
+  }) async {
+    emit(UpdateComplaintLoading());
+    try {
+      final token = CacheHelper().getData(key: 'token');
+      final addedMedicines = medicines.isNotEmpty ? medicines.join('-') : "";
+      final response = await Dio().put(
+        'https://wqaya.runasp.net/api/Complaints',
+        data: {
+          'id': id,
+          'type': type,
+          'medicalHistoryId': 0,
+          'reason': reason,
+          'location': location,
+          'duration': duration,
+          'severity': severity,
+          'addedmedicines': addedMedicines,
+          'notes': notes,
+        },
+        options: Options(
+          headers: {
+            'accept': '*/*',
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      print('Complaint updated successfully: ${response.data}');
+      emit(UpdateComplaintSuccess('تم تحديث الشكوى بنجاح'));
+      await getUserComplaints();
+    } catch (e) {
+      print('Error updating complaint: $e');
+      String errorMessage = 'فشل في تحديث الشكوى';
+      if (e is DioException && e.response != null) {
+        if (e.response!.data is Map && e.response!.data['message'] != null) {
+          errorMessage = e.response!.data['message'];
+        } else if (e.response!.data is String) {
+          errorMessage = e.response!.data;
+        }
+        print('Server error details: ${e.response!.data}');
+      }
+      emit(UpdateComplaintError(errorMessage));
+    }
+  }
 }
 class ComplaintEnums {
   // Type options with translations
   static const Map<String, String> typeOptionsArabic = {
     'Active': 'حالية',
-    'Inactive': 'قديمة',
+    'InActive': 'قديمة',
   };
 
   // Duration options with translations

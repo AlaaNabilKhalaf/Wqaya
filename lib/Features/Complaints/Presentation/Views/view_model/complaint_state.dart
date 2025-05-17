@@ -7,6 +7,7 @@ class ComplaintInitial extends ComplaintState {}
 // Loading States
 class UserComplaintsLoading extends ComplaintState {}
 class AddComplaintLoading extends ComplaintState {}
+class UpdateComplaintLoading extends ComplaintState {}
 class DeleteComplaintLoading extends ComplaintState {}
 class SearchComplaintsLoading extends ComplaintState {}
 
@@ -21,6 +22,11 @@ class AddComplaintSuccess extends ComplaintState {
   final String message;
 
   AddComplaintSuccess(this.message);
+}
+class UpdateComplaintSuccess extends ComplaintState {
+  final String message;
+
+  UpdateComplaintSuccess(this.message);
 }
 
 class DeleteComplaintSuccess extends ComplaintState {
@@ -46,6 +52,10 @@ class AddComplaintError extends ComplaintState {
   final String message;
 
   AddComplaintError(this.message);
+}
+class UpdateComplaintError extends ComplaintState {
+  final String message;
+  UpdateComplaintError(this.message);
 }
 
 class DeleteComplaintError extends ComplaintState {

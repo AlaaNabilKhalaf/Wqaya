@@ -11,11 +11,15 @@ import 'package:wqaya/Features/Complaints/Presentation/Widgets/custom_slider.dar
 class PainWidgets extends StatefulWidget {
   final Function(double) onPainLevelChanged;
   final Function(String) onDurationChanged;
+  final String? initialDuration;
+  final double? initialPainLevel;
 
   const PainWidgets({
     super.key,
     required this.onPainLevelChanged,
     required this.onDurationChanged,
+    this.initialDuration,
+    this.initialPainLevel,
   });
 
   @override
@@ -24,6 +28,8 @@ class PainWidgets extends StatefulWidget {
 
 class _PainWidgetsState extends State<PainWidgets> {
   int index = 0;
+  double painLevel = 0.0;
+
   final List<String> durations = [
     "Hours",
     "Days",
@@ -32,7 +38,6 @@ class _PainWidgetsState extends State<PainWidgets> {
     "Years",
   ];
 
-  // Arabic translations for the durations
   final Map<String, String> durationTranslations = {
     "Hours": "ساعات",
     "Days": "أيام",
@@ -40,6 +45,22 @@ class _PainWidgetsState extends State<PainWidgets> {
     "Months": "شهور",
     "Years": "سنوات",
   };
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Apply initial duration if provided
+    if (widget.initialDuration != null &&
+        durations.contains(widget.initialDuration)) {
+      index = durations.indexOf(widget.initialDuration!);
+    }
+
+    // Apply initial pain level if provided
+    if (widget.initialPainLevel != null) {
+      painLevel = widget.initialPainLevel!;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +87,6 @@ class _PainWidgetsState extends State<PainWidgets> {
                       index++;
                     }
                     setState(() {});
-
-                    // Notify parent about the duration change
                     widget.onDurationChanged(durations[index]);
                   },
                   child: Container(
@@ -104,7 +123,7 @@ class _PainWidgetsState extends State<PainWidgets> {
             const Spacer(),
           ],
         ),
-        const SizedBox(height: 15,),
+        const SizedBox(height: 15),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -119,8 +138,9 @@ class _PainWidgetsState extends State<PainWidgets> {
               children: [
                 SizedBox(height: 10.h),
                 CustomSlider(
+                  initialValue: painLevel,
                   onValueChanged: (value) {
-                    // Pass the pain level value back to the parent
+                    painLevel = value;
                     widget.onPainLevelChanged(value);
                   },
                 ),

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
+import 'package:wqaya/Features/Complaints/Presentation/Views/edit_complaint_view.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/view_model/complaint_cubit.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/view_model/models.dart';
+import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_cubit.dart';
 
 
 class ComplaintCard extends StatelessWidget {
@@ -20,7 +22,6 @@ class ComplaintCard extends StatelessWidget {
         return 'حالية';
       case 'inactive':
         return 'قديمة';
-
       default:
         return 'غير معروف';
     }
@@ -29,32 +30,33 @@ class ComplaintCard extends StatelessWidget {
   String _getSeverityColor(String severity) {
     switch (severity.toLowerCase()) {
       case 'trivial':
-        return 'تافه'; // أقل من منخفض
+        return 'خفيف جداً';
       case 'low':
-        return 'منخفض';
+        return 'خفيف';
       case 'moderate':
-        return 'متوسط'; // بين متوسط ومنخفض
+        return 'متوسط الشدة';
       case 'medium':
-        return 'متوسط'; // احتفظ بها كما هي
+        return 'متوسط';
       case 'significant':
-        return 'هام'; // بين متوسط وعالي
+        return 'ملحوظ';
       case 'high':
-        return 'مرتفع';
+        return 'شديد';
       case 'severe':
-        return 'شديد'; // أعلى من مرتفع
+        return 'حاد';
       case 'critical':
-        return 'حرج';
+        return 'خطير';
       case 'blocker':
-        return 'حاجز'; // يمنع التقدم
+        return 'معيق';
       case 'fatal':
-        return 'مميت'; // يؤدي لانهيار تام
+        return 'قاتل';
       default:
-        return 'غير معروف';
+        return 'غير محدد';
     }
   }
   @override
   Widget build(BuildContext context) {
     var complaintCubit = context.read<ComplaintsCubit>();
+    var mCubit = context.read<MedicineCubit>();
     void showOptionsMenu() {
       showModalBottomSheet(
         context: context,
@@ -80,12 +82,17 @@ class ComplaintCard extends StatelessWidget {
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => EditComplaintView(complaint: complaint),
-                    //   ),
-                    // );
+                    final Set<String> parts = complaint.medicines.expand((item) => item.split('-').map((part) => part.trim())).toSet();
+                    mCubit.selectedMedicineName.addAll(parts);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider.value(
+                          value: mCubit,
+                          child: EditComplaintView(complaint: complaint),
+                        ),
+                      ),
+                    );
                   },
                 ),
                 ListTile(

@@ -55,10 +55,12 @@ const Map<String, String> dosageFormTranslations = {
 class MedicineCard extends StatefulWidget {
   final MedicineModel medicine;
   final bool canBeChosen;
+  final bool isEditing;
   const MedicineCard({
     super.key,
     required this.medicine,
     required this.canBeChosen,
+    this.isEditing = false
   });
 
   @override
@@ -80,6 +82,7 @@ class _MedicineCardState extends State<MedicineCard> {
   String getTranslatedMedicineType(String englishValue) {
     return medicineTypeTranslations[englishValue] ?? englishValue;
   }
+
   void showOptionsMenu(BuildContext context) {
     var mCubit = context.read<MedicineCubit>();
     showModalBottomSheet(
@@ -106,8 +109,10 @@ class _MedicineCardState extends State<MedicineCard> {
                   ],
                 ),
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => EditUserMedicineView(medicineModel: widget.medicine),));
+                  if (widget.isEditing==false){
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditUserMedicineView(medicineModel: widget.medicine),));
+                  }
                 },
               ) :const SizedBox.shrink(),
               ListTile(
@@ -130,8 +135,6 @@ class _MedicineCardState extends State<MedicineCard> {
                     await mCubit.deleteMedicineAddedByUser(medicineId: widget.medicine.id);
                     await mCubit.getUserMedicine();
                   }
-
-
                 },
               ),
             ],
@@ -144,8 +147,8 @@ class _MedicineCardState extends State<MedicineCard> {
   @override
   Widget build(BuildContext context) {
     var mCubit = context.watch<MedicineCubit>();
-    // Check if this medicine is already in the selectedIds set
-    isSelected = mCubit.selectedIds.contains(widget.medicine.id);
+    // Check if this medicine is already in the tempSelectedIds set
+    isSelected = mCubit.tempSelectedIds.contains(widget.medicine.id);
 
     if (widget.canBeChosen) {
       // Selectable card
@@ -182,6 +185,7 @@ class _MedicineCardState extends State<MedicineCard> {
       );
     }
   }
+
   Widget buildNormalCard() {
     return InkWell(
       onLongPress: () => showOptionsMenu(context),
@@ -273,14 +277,14 @@ class _MedicineCardState extends State<MedicineCard> {
           ),
         ),
         if (widget.medicine.duration.toString()!="null")
-        Text(
-          "المدة: ${widget.medicine.duration.toString()} $translatedUnit",
-          style: TextStyle(
-            fontSize: 14,
-            color: isSelected ? Colors.white : Colors.black87,
-            fontFamily: semiBold,
+          Text(
+            "المدة: ${widget.medicine.duration.toString()} $translatedUnit",
+            style: TextStyle(
+              fontSize: 14,
+              color: isSelected ? Colors.white : Colors.black87,
+              fontFamily: semiBold,
+            ),
           ),
-        ),
         if (widget.medicine.frequency.toString()!="null")
           Text(
             "التكرار: ${widget.medicine.frequency.toString()} $translatedUnit",

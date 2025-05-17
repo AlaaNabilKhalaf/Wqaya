@@ -7,13 +7,14 @@ import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/view_model/complaint_cubit.dart';
 
 // Updated CustomSlider to report pain level values
-
 class CustomSlider extends StatefulWidget {
   final Function(double) onValueChanged;
+  final double? initialValue; // Value in the 0–10 scale
 
   const CustomSlider({
     super.key,
     required this.onValueChanged,
+    this.initialValue,
   });
 
   @override
@@ -21,11 +22,25 @@ class CustomSlider extends StatefulWidget {
 }
 
 class _CustomSliderState extends State<CustomSlider> {
-  double sliderValue = 0.3;
+  late double sliderValue;
 
-  // Map pain levels (0-10) to severity levels
+  @override
+  void initState() {
+    super.initState();
+    // Use initialValue if provided (convert 0–10 to 0–1 scale), otherwise default to 0.3
+    sliderValue = (widget.initialValue != null)
+        ? (widget.initialValue!.clamp(0, 10) / 10)
+        : 0.3;
+
+    // Trigger initial callback if initialValue is provided
+    if (widget.initialValue != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onValueChanged(sliderValue * 10);
+      });
+    }
+  }
+
   String mapPainToSeverity(double painLevel) {
-    // Convert slider value (0-1) to pain scale (0-10)
     int pain = (painLevel * 10).round();
 
     if (pain <= 1) return 'Trivial';
@@ -45,7 +60,7 @@ class _CustomSliderState extends State<CustomSlider> {
     return Stack(
       children: [
         Container(
-          width: getResponsiveSize(context, fontSize: maxWidth),
+          width: maxWidth,
           height: 15,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
@@ -53,7 +68,7 @@ class _CustomSliderState extends State<CustomSlider> {
           ),
         ),
         Container(
-          width: getResponsiveSize(context, fontSize: sliderValue * maxWidth),
+          width: sliderValue * maxWidth,
           height: 15,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
@@ -78,9 +93,7 @@ class _CustomSliderState extends State<CustomSlider> {
                 setState(() {
                   sliderValue = value;
                 });
-
-                // Pass both the raw value and the corresponding severity level
-                widget.onValueChanged(value * 10); // Convert to 0-10 scale
+                widget.onValueChanged(value * 10);
               },
             ),
           ),
@@ -109,7 +122,6 @@ class _CustomSliderState extends State<CustomSlider> {
           right: 0,
           child: Center(
             child: Text(
-              // Show the corresponding severity level in Arabic
               ComplaintEnums.severityOptionsArabic[mapPainToSeverity(sliderValue)] ?? "",
               style: TextStyle(
                 fontSize: 12.sp,

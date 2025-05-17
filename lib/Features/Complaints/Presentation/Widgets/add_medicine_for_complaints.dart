@@ -5,8 +5,14 @@ import 'package:wqaya/Features/Medicine/presentation/widgets/medicine_card.dart'
 import 'package:wqaya/Core/Utils/fonts.dart';
 
 class AddMedicineForComplaints extends StatefulWidget {
-  const AddMedicineForComplaints({super.key});
+  final bool isEditing;
+  final void Function(List<String>)? onMedicinesSelected;
 
+  const AddMedicineForComplaints({
+    super.key,
+    this.isEditing = false,
+    this.onMedicinesSelected,
+  });
   @override
   State<AddMedicineForComplaints> createState() => _AddMedicineForComplaintsState();
 }
@@ -17,6 +23,10 @@ class _AddMedicineForComplaintsState extends State<AddMedicineForComplaints> {
   @override
   void initState() {
     super.initState();
+    // Clear temporary selections when initializing the screen
+    context.read<MedicineCubit>().tempSelectedIds.clear();
+    context.read<MedicineCubit>().tempSelectedMedicineName.clear();
+
     _searchController.addListener(() {
       final keyword = _searchController.text.trim();
       if (keyword.isNotEmpty) {
@@ -81,14 +91,21 @@ class _AddMedicineForComplaintsState extends State<AddMedicineForComplaints> {
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
         context.read<MedicineCubit>().getUserMedicine();
-        context.read<MedicineCubit>().selectedIds.clear();
+        // Clear temporary selections when leaving the screen without confirming
+        context.read<MedicineCubit>().tempSelectedIds.clear();
+        context.read<MedicineCubit>().tempSelectedMedicineName.clear();
       },
       child: Scaffold(
         backgroundColor: const Color(0xffF1F6FB),
         appBar: AppBar(
           backgroundColor: const Color(0xff0094FD),
           leading: IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              // Clear temporary selections when pressing back button
+              context.read<MedicineCubit>().tempSelectedIds.clear();
+              context.read<MedicineCubit>().tempSelectedMedicineName.clear();
+            },
             icon: const Icon(Icons.arrow_back, color: Colors.white),
           ),
           title: const Text(
@@ -132,10 +149,18 @@ class _AddMedicineForComplaintsState extends State<AddMedicineForComplaints> {
                         itemCount: medicines.length,
                         itemBuilder: (context, index) {
                           final medicine = medicines[index];
-                          return MedicineCard(
-                            medicine: medicine,
-                            canBeChosen: true,
-                          );
+                          if (widget.isEditing ==true){
+                            return MedicineCard(
+                              medicine: medicine,
+                              canBeChosen: true,
+                              isEditing: true,
+                            );
+                          }else {
+                            return MedicineCard(
+                              medicine: medicine,
+                              canBeChosen: true,
+                            );
+                          }
                         },
                       );
                     } else if (state is MedicineSelectionChanged) {
@@ -154,10 +179,18 @@ class _AddMedicineForComplaintsState extends State<AddMedicineForComplaints> {
                         itemCount: medicines.length,
                         itemBuilder: (context, index) {
                           final medicine = medicines[index];
-                          return MedicineCard(
-                            medicine: medicine,
-                            canBeChosen: true,
-                          );
+                          if (widget.isEditing ==true){
+                            return MedicineCard(
+                              medicine: medicine,
+                              canBeChosen: true,
+                              isEditing: true,
+                            );
+                          }else {
+                            return MedicineCard(
+                              medicine: medicine,
+                              canBeChosen: true,
+                            );
+                          }
                         },
                       );
                     } else if (state is SearchMedicineError) {
@@ -181,23 +214,28 @@ class _AddMedicineForComplaintsState extends State<AddMedicineForComplaints> {
                 builder: (context, state) {
                   // Get fresh reference to cubit to ensure latest state
                   final currentCubit = context.watch<MedicineCubit>();
-
                   return AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
-                    child: currentCubit.selectedIds.isNotEmpty
+                    child: currentCubit.tempSelectedIds.isNotEmpty
                         ? Padding(
                       padding: const EdgeInsets.all(16),
                       child: ElevatedButton.icon(
-                        key: ValueKey("submit_btn_${currentCubit.selectedIds.length}"),
+                        key: ValueKey("submit_btn_${currentCubit.tempSelectedIds.length}"),
                         onPressed: () {
-                         // currentCubit.submitSelectedMedicines();
-                          print(currentCubit.selectedMedicineName);
+                          // Confirm selections by adding temporary selections to permanent selections
+                          currentCubit.confirmSelections();
+
+                          // If onMedicinesSelected callback was provided, call it with the selected medicine names
+                          if (widget.onMedicinesSelected != null) {
+                            widget.onMedicinesSelected!(currentCubit.selectedMedicineName.toList());
+                          }
+
                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.check, color: Colors.white),
-                        label: Text(
-                          'تأكيد الاختيار (${currentCubit.selectedMedicineName.length})',
-                          style: const TextStyle(fontSize: 16, color: Colors.white, fontFamily: black),
+                        label: const Text(
+                          'تأكيد الاختيار ',
+                          style: TextStyle(fontSize: 16, color: Colors.white, fontFamily: black),
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff0094FD),

@@ -4,34 +4,64 @@ import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/view_model/complaint_cubit.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Views/view_model/complaint_state.dart';
+import 'package:wqaya/Features/Complaints/Presentation/Views/view_model/models.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/add_medicine_for_complaints.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/pain_widgets.dart';
 import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_cubit.dart';
 
+class EditComplaintView extends StatefulWidget {
+  final Complaint complaint;
 
-class AddComplaintView extends StatefulWidget {
-  const AddComplaintView({super.key});
+  const EditComplaintView({super.key, required this.complaint});
 
   @override
-  State<AddComplaintView> createState() => _AddComplaintViewState();
+  State<EditComplaintView> createState() => _EditComplaintViewState();
 }
 
-class _AddComplaintViewState extends State<AddComplaintView> {
+class _EditComplaintViewState extends State<EditComplaintView> {
   final _formKey = GlobalKey<FormState>();
+  late List<String> medicines;
 
-  final TextEditingController _reasonController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _durationController = TextEditingController();
-  final TextEditingController _howAffectsController = TextEditingController();
-  final TextEditingController _notesController = TextEditingController();
-  final TextEditingController _medicineController = TextEditingController();
-  final List<String> _typeOptions = ['Active', 'Inactive'];
+  late final TextEditingController _reasonController;
+  late final TextEditingController _locationController;
+  late final TextEditingController _durationController;
+  late final TextEditingController _howAffectsController;
+  late final TextEditingController _notesController;
+  late final TextEditingController _medicineController;
+  final List<String> _typeOptions = ['Active', 'InActive'];
 
+  late String _selectedType;
+  late String _selectedDuration;
+  late String _selectedSeverity;
+  late double _painLevel;
 
-  String _selectedType = 'Active';
-  String _selectedDuration = 'Days';
-  String _selectedSeverity = 'Moderate';
-  double _painLevel = 3; // Default pain level
+  // Map to convert severity options to pain level (0-10)
+  double _mapSeverityToPainLevel(String severity) {
+    switch (severity) {
+      case 'Trivial':
+        return 0;
+      case 'Low':
+        return 1;
+      case 'Moderate':
+        return 2;
+      case 'Medium':
+        return 3;
+      case 'Significant':
+        return 4;
+      case 'High':
+        return 5;
+      case 'Severe':
+        return 7;
+      case 'Critical':
+        return 8;
+      case 'Blocker':
+        return 9;
+      case 'Fatal':
+        return 10;
+      default:
+        return 3; // Default fallback
+    }
+  }
 
   // Map to convert pain level (0-10) to severity options
   String _mapPainLevelToSeverity(double painLevel) {
@@ -40,25 +70,67 @@ class _AddComplaintViewState extends State<AddComplaintView> {
 
     // Map the 0-10 pain scale to the 10 severity options
     switch (painInt) {
-      case 0: return 'Trivial';
-      case 1: return 'Low';
-      case 2: return 'Moderate';
-      case 3: return 'Medium';
-      case 4: return 'Significant';
-      case 5: return 'High';
-      case 6: return 'High';
-      case 7: return 'Severe';
-      case 8: return 'Critical';
-      case 9: return 'Blocker';
-      case 10: return 'Fatal';
-      default: return 'Moderate'; // Default fallback
+      case 0:
+        return 'Trivial';
+      case 1:
+        return 'Low';
+      case 2:
+        return 'Moderate';
+      case 3:
+        return 'Medium';
+      case 4:
+        return 'Significant';
+      case 5:
+        return 'High';
+      case 6:
+        return 'High';
+      case 7:
+        return 'Severe';
+      case 8:
+        return 'Critical';
+      case 9:
+        return 'Blocker';
+      case 10:
+        return 'Fatal';
+      default:
+        return 'Moderate'; // Default fallback
     }
   }
 
   @override
   void initState() {
     super.initState();
-    context.read<MedicineCubit>().selectedMedicineName.toList().clear();
+    print(
+        "Inside EditComplaintView: ${context.read<MedicineCubit>().selectedMedicineName}");
+    final parts = widget.complaint.medicines
+        .expand((item) => item.split('-').map((part) => part.trim()))
+        .toSet();
+    medicines = parts.toList();
+
+    // Initialize controllers with existing complaint data
+    _reasonController = TextEditingController(text: widget.complaint.reason);
+    _locationController =
+        TextEditingController(text: widget.complaint.location);
+    _durationController = TextEditingController();
+    _howAffectsController = TextEditingController();
+    _notesController = TextEditingController(text: widget.complaint.notes);
+    _medicineController = TextEditingController();
+
+    // Initialize select values from complaint
+    _selectedType = widget.complaint.type;
+    _selectedDuration = widget.complaint.duration;
+    _selectedSeverity = widget.complaint.severity;
+    _painLevel = _mapSeverityToPainLevel(widget.complaint.severity);
+
+    // Initialize selected medicines
+    if (widget.complaint.medicines.isNotEmpty) {
+      context.read<MedicineCubit>().selectedMedicineName.clear();
+      for (var medicine in widget.complaint.medicines) {
+        print(medicine);
+      }
+    } else {
+      context.read<MedicineCubit>().selectedMedicineName.clear();
+    }
   }
 
   @override
@@ -80,15 +152,15 @@ class _AddComplaintViewState extends State<AddComplaintView> {
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
         elevation: 0,
-        title: const Text("إضافة شكوى",
+        title: const Text("تعديل الشكوى",
             style:
-            TextStyle(fontFamily: bold, fontSize: 20, color: primaryColor)),
+                TextStyle(fontFamily: bold, fontSize: 20, color: primaryColor)),
         centerTitle: true,
         iconTheme: const IconThemeData(color: primaryColor),
       ),
       body: BlocConsumer<ComplaintsCubit, ComplaintState>(
         listener: (context, state) {
-          if (state is AddComplaintSuccess) {
+          if (state is UpdateComplaintSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 behavior: SnackBarBehavior.floating,
@@ -100,7 +172,7 @@ class _AddComplaintViewState extends State<AddComplaintView> {
               ),
             );
             Navigator.pop(context);
-          } else if (state is AddComplaintError) {
+          } else if (state is UpdateComplaintError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 behavior: SnackBarBehavior.floating,
@@ -114,7 +186,9 @@ class _AddComplaintViewState extends State<AddComplaintView> {
           }
         },
         builder: (context, state) {
-          var selectedMedicineName = context.watch<MedicineCubit>().selectedMedicineName.toList();
+          var selectedMedicineName =
+              context.watch<MedicineCubit>().selectedMedicineName.toList();
+          print("aaa : $selectedMedicineName");
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -124,6 +198,8 @@ class _AddComplaintViewState extends State<AddComplaintView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     PainWidgets(
+                      initialPainLevel: _painLevel,
+                      initialDuration: _selectedDuration,
                       onDurationChanged: (duration) {
                         setState(() {
                           _selectedDuration = duration;
@@ -133,7 +209,8 @@ class _AddComplaintViewState extends State<AddComplaintView> {
                         setState(() {
                           _painLevel = painLevel;
                           // Update the selected severity based on pain level
-                          _selectedSeverity = _mapPainLevelToSeverity(painLevel);
+                          _selectedSeverity =
+                              _mapPainLevelToSeverity(painLevel);
                         });
                       },
                     ),
@@ -150,7 +227,9 @@ class _AddComplaintViewState extends State<AddComplaintView> {
                           child: Row(
                             children: [
                               Text(
-                                ComplaintEnums.severityOptionsArabic[_selectedSeverity] ?? _selectedSeverity,
+                                ComplaintEnums.severityOptionsArabic[
+                                        _selectedSeverity] ??
+                                    _selectedSeverity,
                                 style: const TextStyle(
                                   fontFamily: medium,
                                   fontSize: 16,
@@ -171,7 +250,6 @@ class _AddComplaintViewState extends State<AddComplaintView> {
                         ),
                       ],
                     ),
-
                     _buildFormSection("معلومات الشكوى", [
                       _buildTextField(
                         controller: _reasonController,
@@ -220,7 +298,7 @@ class _AddComplaintViewState extends State<AddComplaintView> {
                     Row(
                       children: [
                         const Text(
-                          "اضافة دواء",
+                          "تعديل الأدوية",
                           style: TextStyle(
                               fontFamily: bold,
                               fontSize: 20,
@@ -229,7 +307,19 @@ class _AddComplaintViewState extends State<AddComplaintView> {
                         const Spacer(),
                         InkWell(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const AddMedicineForComplaints(),));
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddMedicineForComplaints(
+                                  isEditing: true,
+                                  onMedicinesSelected: (newMedicines) {
+                                    setState(() {
+                                      medicines.addAll(newMedicines);
+                                    });
+                                  },
+                                ),
+                              ),
+                            );
                           },
                           child: const CircleAvatar(
                               backgroundColor: primaryColor,
@@ -240,10 +330,9 @@ class _AddComplaintViewState extends State<AddComplaintView> {
                         ),
                       ],
                     ),
-                    if (selectedMedicineName.isNotEmpty)
+                    if (widget.complaint.medicines.isNotEmpty)
                       BlocBuilder<MedicineCubit, MedicineState>(
                         builder: (context, state) {
-                          final medicines = context.watch<MedicineCubit>().selectedMedicineName.toList();
                           return SizedBox(
                             height: 150,
                             child: ListView.builder(
@@ -255,24 +344,28 @@ class _AddComplaintViewState extends State<AddComplaintView> {
                                 decoration: BoxDecoration(
                                   color: textFormBackgroundColor,
                                   borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.grey.shade300),
+                                  border:
+                                      Border.all(color: Colors.grey.shade300),
                                 ),
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.medication, color: primaryColor),
+                                    const Icon(Icons.medication,
+                                        color: primaryColor),
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
                                         medicines[index],
-                                        style: const TextStyle(fontFamily: medium),
+                                        style:
+                                            const TextStyle(fontFamily: medium),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                     IconButton(
-                                      icon: const Icon(Icons.close, color: errorColor),
+                                      icon: const Icon(Icons.close,
+                                          color: errorColor),
                                       onPressed: () {
-                                        context.read<MedicineCubit>().removeMedicineSelectionByName(selectedMedicineName[index].toString());
                                         setState(() {
+                                          medicines.removeAt(index);
                                         });
                                       },
                                     )
@@ -296,36 +389,32 @@ class _AddComplaintViewState extends State<AddComplaintView> {
                         ),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            // Get the selected medicines from the MedicineCubit
-                            final selectedMedicines = context.read<MedicineCubit>().selectedMedicineName.toList();
 
-                            // Include pain level in notes with additional notes
                             final String fullNotes = _notesController.text;
-
-                            // Call the updated addComplaint method with the correct parameters
-                            context.read<ComplaintsCubit>().addComplaint(
+                            context.read<ComplaintsCubit>().updateComplaint(
+                              id: widget.complaint.id,
                               type: _selectedType,
                               reason: _reasonController.text,
                               location: _locationController.text,
-                              duration: _selectedDuration,  // Now using the value from PainWidgets
-                              severity: _selectedSeverity, // Now using the mapped value from pain level
-                              medicines: selectedMedicines,
-                              notes: fullNotes, // Include pain level in notes
+                              duration: _selectedDuration,
+                              severity: _selectedSeverity,
+                              medicines: medicines,
+                              notes: fullNotes,
                             );
                           }
                         },
-                        child: state is AddComplaintLoading
+                        child: state is UpdateComplaintLoading
                             ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
+                                color: Colors.white,
+                              )
                             : const Text(
-                          'إضافة الشكوى',
-                          style: TextStyle(
-                            fontFamily: semiBold,
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
+                                'حفظ التعديلات',
+                                style: TextStyle(
+                                  fontFamily: semiBold,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
                   ],
@@ -346,7 +435,9 @@ class _AddComplaintViewState extends State<AddComplaintView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 15,),
+          const SizedBox(
+            height: 15,
+          ),
           ...children,
         ],
       ),
@@ -369,7 +460,7 @@ class _AddComplaintViewState extends State<AddComplaintView> {
       onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
       style: const TextStyle(fontFamily: medium),
       validator:
-      validator ?? (value) => required && value!.isEmpty ? 'مطلوبة' : null,
+          validator ?? (value) => required && value!.isEmpty ? 'مطلوبة' : null,
       decoration: InputDecoration(
         filled: true,
         fillColor: textFormBackgroundColor,
@@ -382,29 +473,22 @@ class _AddComplaintViewState extends State<AddComplaintView> {
           borderSide: BorderSide.none,
         ),
         contentPadding:
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
     );
   }
 
   Widget _buildDropdown({
     required String label,
-    required String value,
+    required String? value,
     required List<String> items,
     required Map<String, String> translations,
-    required void Function(String?) onChanged,
+    required ValueChanged<String?> onChanged,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontFamily: regular,
-            fontSize: 16,
-            color: subTextColor,
-          ),
-        ),
+        Text(label, style: const TextStyle(fontFamily: medium, fontSize: 16)),
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -412,29 +496,25 @@ class _AddComplaintViewState extends State<AddComplaintView> {
             color: textFormBackgroundColor,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: DropdownButtonFormField<String>(
+          child: DropdownButton<String>(
+            isExpanded: true,
             value: value,
-            icon: const Icon(Icons.keyboard_arrow_down),
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(vertical: 14),
-            ),
-            style: const TextStyle(
-              fontFamily: medium,
-              fontSize: 16,
-              color: Colors.black,
-            ),
-            dropdownColor: textFormBackgroundColor,
-            onChanged: onChanged,
-            items: items.map<DropdownMenuItem<String>>((String value) {
+            underline: const SizedBox(),
+            icon: const Icon(Icons.arrow_drop_down),
+            items: items.map((item) {
               return DropdownMenuItem<String>(
-                value: value,
-                child: Text(translations[value] ?? value),
+                value: item, // This is the English value
+                child: Text(
+                  translations[item] ?? item, // This shows Arabic text
+                  style: const TextStyle(fontFamily: regular),
+                ),
               );
             }).toList(),
+            onChanged: onChanged,
           ),
         ),
       ],
     );
   }
+
 }
