@@ -8,7 +8,6 @@ import 'package:wqaya/Features/Medicine/presentation/views/view_model/models/med
 
 // Medicine Type Translations
 const Map<String, String> medicineTypeTranslations = {
-  // Backend enum values -> Arabic translations
   'Antibiotic': 'مضاد حيوي',
   'Analgesic': 'مسكن للألم',
   'Antipyretic': 'خافض للحرارة',
@@ -29,13 +28,12 @@ const Map<String, String> medicineTypeTranslations = {
 
 // Unit Translations
 const Map<String, String> unitTranslations = {
-  // Backend enum values -> Arabic translations
-  'Mg': 'ملغ', // Milligram
-  'Ml': 'مل', // Milliliter
-  'G': 'غم', // Gram
-  'L': 'لتر', // Liter
-  'Mcg': 'ميكروغرام', // Microgram
-  'IU': 'وحدة دولية', // International Units
+  'Mg': 'ملغ',
+  'Ml': 'مل',
+  'G': 'غم',
+  'L': 'لتر',
+  'Mcg': 'ميكروغرام',
+  'IU': 'وحدة دولية',
 };
 
 // Dosage Form Translations
@@ -60,7 +58,7 @@ class MedicineCard extends StatefulWidget {
     super.key,
     required this.medicine,
     required this.canBeChosen,
-    this.isEditing = false
+    this.isEditing = false,
   });
 
   @override
@@ -70,16 +68,18 @@ class MedicineCard extends StatefulWidget {
 class _MedicineCardState extends State<MedicineCard> {
   bool isSelected = false;
 
-  // Helper methods to translate values
-  String getTranslatedDosageForm(String englishValue) {
+  String getTranslatedDosageForm(String? englishValue) {
+    if (englishValue == null) return '';
     return dosageFormTranslations[englishValue] ?? englishValue;
   }
 
-  String getTranslatedUnit(String englishValue) {
+  String getTranslatedUnit(String? englishValue) {
+    if (englishValue == null) return '';
     return unitTranslations[englishValue] ?? englishValue;
   }
 
-  String getTranslatedMedicineType(String englishValue) {
+  String getTranslatedMedicineType(String? englishValue) {
+    if (englishValue == null) return '';
     return medicineTypeTranslations[englishValue] ?? englishValue;
   }
 
@@ -96,43 +96,46 @@ class _MedicineCardState extends State<MedicineCard> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              widget.medicine.source=="Added By User" ?
-              ListTile(
+              widget.medicine.source == "Added By User"
+                  ? ListTile(
                 title: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.edit, color: primaryColor),
-                    SizedBox(
-                      width: 10,
-                    ),
+                    SizedBox(width: 10),
                     Text('تعديل', style: TextStyle(fontFamily: regular)),
                   ],
                 ),
                 onTap: () {
-                  if (widget.isEditing==false){
+                  if (!widget.isEditing) {
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditUserMedicineView(medicineModel: widget.medicine),));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            EditUserMedicineView(medicineModel: widget.medicine),
+                      ),
+                    );
                   }
                 },
-              ) :const SizedBox.shrink(),
+              )
+                  : const SizedBox.shrink(),
               ListTile(
                 title: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.delete, color: errorColor),
-                    SizedBox(
-                      width: 10,
-                    ),
+                    SizedBox(width: 10),
                     Text('حذف', style: TextStyle(fontFamily: regular)),
                   ],
                 ),
                 onTap: () async {
                   Navigator.pop(context);
-                  if (widget.medicine.source=="Added By System"){
-                    await mCubit.deleteMedicineAddedBySystem(medicineId: widget.medicine.id);
+                  if (widget.medicine.source == "Added By System") {
+                    await mCubit.deleteMedicineAddedBySystem(medicineId: widget.medicine.id!);
                     await mCubit.getUserMedicine();
-                  } else if (widget.medicine.source=="Added By User"){
-                    await mCubit.deleteMedicineAddedByUser(medicineId: widget.medicine.id);
+                  } else if (widget.medicine.source == "Added By User") {
+                    await mCubit.deleteMedicineAddedByUser(medicineId: widget.medicine.id!);
                     await mCubit.getUserMedicine();
                   }
                 },
@@ -147,89 +150,43 @@ class _MedicineCardState extends State<MedicineCard> {
   @override
   Widget build(BuildContext context) {
     var mCubit = context.watch<MedicineCubit>();
-    // Check if this medicine is already in the tempSelectedIds set
     isSelected = mCubit.tempSelectedIds.contains(widget.medicine.id);
 
-    if (widget.canBeChosen) {
-      // Selectable card
-      return InkWell(
-        onTap: () {
-          mCubit.toggleMedicineSelection(widget.medicine.id);
-          mCubit.toggleMedicineSelectionByName(widget.medicine.name);
-        },
-        child: Card(
-          color: isSelected ? primaryColor : Colors.white,
-          elevation: 3,
-          margin: const EdgeInsets.only(bottom: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: buildCardContent(isSelected: isSelected),
-          ),
-        ),
-      );
-    } else {
-      // Non-selectable card with long press option
-      return InkWell(
-        onLongPress: () => showOptionsMenu(context),
-        child: Card(
-          color: Colors.white,
-          elevation: 3,
-          margin: const EdgeInsets.only(bottom: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: buildCardContent(isSelected: false),
-          ),
-        ),
-      );
-    }
-  }
-
-  Widget buildNormalCard() {
     return InkWell(
-      onLongPress: () => showOptionsMenu(context),
+      onTap: widget.canBeChosen
+          ? () {
+        mCubit.toggleMedicineSelection(widget.medicine.id!);
+        mCubit.toggleMedicineSelectionByName(widget.medicine.name);
+      }
+          : null,
+      onLongPress: widget.canBeChosen ? null : () => showOptionsMenu(context),
       child: Card(
-        color: Colors.white,
+        color: isSelected ? primaryColor : Colors.white,
         elevation: 3,
         margin: const EdgeInsets.only(bottom: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: buildCardContent(isSelected: false),
+          child: buildCardContent(isSelected: isSelected),
         ),
       ),
     );
   }
 
-  Widget buildSelectedCard() {
-    return Card(
-      color: primaryColor,
-      elevation: 3,
-      margin: const EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: buildCardContent(isSelected: true),
-      ),
-    );
-  }
-
   Widget buildCardContent({required bool isSelected}) {
-    // Translate values
     final translatedDosageForm = getTranslatedDosageForm(widget.medicine.dosageForm);
     final translatedUnit = getTranslatedUnit(widget.medicine.unit);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Medicine name + type
+        // Name + Type
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Text(
-                widget.medicine.name,
+                widget.medicine.name ,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -242,7 +199,7 @@ class _MedicineCardState extends State<MedicineCard> {
           ],
         ),
         const SizedBox(height: 8),
-        // Dosage form (translated)
+
         Text(
           "شكل الجرعة: $translatedDosageForm",
           style: TextStyle(
@@ -251,43 +208,27 @@ class _MedicineCardState extends State<MedicineCard> {
             fontFamily: semiBold,
           ),
         ),
-        // Strength + Unit (translated)
         Text(
-          "التركيز: ${widget.medicine.strength} $translatedUnit",
+          "التركيز: ${widget.medicine.strength ?? ''} $translatedUnit",
           style: TextStyle(
             fontSize: 14,
             color: isSelected ? Colors.white : Colors.black87,
             fontFamily: semiBold,
           ),
         ),
-        widget.medicine.source=="Added By System"?
         Text(
-          "المصدر: تم اضافته بواسطتنا",
-          style: TextStyle(
-            fontSize: 14,
-            color: isSelected ? Colors.white : Colors.black87,
-            fontFamily: semiBold,
-          ),
-        ): Text(
-          "المصدر: تم اضافته بواسطتك",
+          widget.medicine.source == "Added By System"
+              ? "المصدر: تم اضافته بواسطتنا"
+              : "المصدر: تم اضافته بواسطتك",
           style: TextStyle(
             fontSize: 14,
             color: isSelected ? Colors.white : Colors.black87,
             fontFamily: semiBold,
           ),
         ),
-        if (widget.medicine.duration.toString()!="null")
+        if (widget.medicine.duration != null)
           Text(
             "المدة: ${widget.medicine.duration.toString()} $translatedUnit",
-            style: TextStyle(
-              fontSize: 14,
-              color: isSelected ? Colors.white : Colors.black87,
-              fontFamily: semiBold,
-            ),
-          ),
-        if (widget.medicine.frequency.toString()!="null")
-          Text(
-            "التكرار: ${widget.medicine.frequency.toString()} $translatedUnit",
             style: TextStyle(
               fontSize: 14,
               color: isSelected ? Colors.white : Colors.black87,
@@ -299,49 +240,21 @@ class _MedicineCardState extends State<MedicineCard> {
   }
 
   Widget _buildMedicineTypeChip() {
-    // Use the medicine type for the chip, not dosage form
-    String? medicineType = widget.medicine.medicineType;
-    String translatedType = getTranslatedMedicineType(medicineType!);
-
-    // Determine chip color based on medicine type
-    Color chipColor;
-
-    switch (medicineType) {
-      case "Antibiotic":
-        chipColor = Colors.green;
-        break;
-      case "Antihypertensive":
-        chipColor = Colors.red;
-        break;
-      case "Antihistamine":
-        chipColor = Colors.purple;
-        break;
-      case "Antidepressant":
-        chipColor = Colors.indigo;
-        break;
-      case "Analgesic":
-        chipColor = Colors.orange;
-        break;
-      case "Antipyretic":
-        chipColor = Colors.amber;
-        break;
-      default:
-        chipColor = Colors.blue;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+    final translatedType = getTranslatedMedicineType(widget.medicine.medicineType);
+    return translatedType.toString() == "" ?
+        const SizedBox.shrink():
+    Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: chipColor.withValues(alpha: .1),
+        color: const Color(0xff1678F2).withValues(alpha: .1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: chipColor.withValues(alpha: .5)),
       ),
       child: Text(
         translatedType,
-        style: TextStyle(
-            fontSize: 12,
-            color: chipColor,
-            fontFamily: black
+        style: const TextStyle(
+          color: Color(0xff1678F2),
+          fontSize: 12,
+          fontFamily: semiBold,
         ),
       ),
     );

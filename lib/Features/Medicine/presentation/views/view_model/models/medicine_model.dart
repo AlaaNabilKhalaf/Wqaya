@@ -1,21 +1,21 @@
 class MedicineModel {
-  final int id;
+  final int? id;
   final String name;
-  final String dosageForm;
-  final int strength;
-  final String unit;
-  final String? status; // optional
-  final String? source; // optional
-  final String? medicineType; // optional
-  final String? frequency; // optional
-  final String? duration; // optional
+  final String? dosageForm;
+  final int? strength;
+  final String? unit;
+  final String? status;
+  final String? source;
+  final String? medicineType;
+  final String? frequency;
+  final String? duration;
 
   MedicineModel({
-    required this.id,
+    this.id,
     required this.name,
-    required this.dosageForm,
-    required this.strength,
-    required this.unit,
+    this.dosageForm,
+    this.strength,
+    this.unit,
     this.status,
     this.source,
     this.medicineType,
@@ -25,16 +25,16 @@ class MedicineModel {
 
   factory MedicineModel.fromJson(Map<String, dynamic> json) {
     return MedicineModel(
-      id: json['id'],
-      name: json['name'],
+      id: json['id'] is int ? json['id'] : null,
+      name: json['name'] ?? 'Unknown Medicine',
       dosageForm: json['dosageForm'],
-      strength: json['strength'],
+      strength: json['strength'] is int ? json['strength'] : null,
       unit: json['unit'],
-      status: json['status'], // might be missing
-      source: json['source'], // might be missing
-      frequency: json['frequency'], // might be missing
-      duration: json['duration'], // might be missing
-      medicineType: json['medicineType'] ?? json['medicinetype'], // handle both spellings
+      status: json['status'],
+      source: json['source'],
+      frequency: json['frequency'],
+      duration: json['duration'],
+      medicineType: json['medicineType'] ?? json['medicinetype'],
     );
   }
 }

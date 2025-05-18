@@ -94,6 +94,7 @@ class MedicineCubit extends Cubit<MedicineState> {
       _currentMedicines = medicines; // Update current medicines list
       emit(UserMedicineLoaded(medicines));
     } catch (e) {
+      print(e.toString());
       emit(UserMedicineError('Failed to load medicines'));
     }
   }

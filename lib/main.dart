@@ -12,6 +12,7 @@ import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_c
 import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
+import 'package:wqaya/Features/OCR/presentation/views/view_model/ocr_cubit.dart';
 import 'package:wqaya/Features/Profile/Controller/api_profile_cubit.dart';
 import 'package:wqaya/Features/Rays/presentation/views/view_model/ray_cubit.dart';
 import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
@@ -50,7 +51,9 @@ void main() async {
         BlocProvider<RayCubit>(
             create: (context) => RayCubit()),
         BlocProvider<MedicineCubit>(
-            create: (context) => MedicineCubit())
+            create: (context) => MedicineCubit()),
+        BlocProvider<OcrCubit>(
+            create: (context) => OcrCubit())
         ,BlocProvider<AnalysisCubit>(
             create: (context) => AnalysisCubit()),
         BlocProvider<SurgeryCubit>(
