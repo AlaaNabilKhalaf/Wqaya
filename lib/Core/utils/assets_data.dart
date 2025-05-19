@@ -18,6 +18,7 @@ class AssetsData{
   static const String medicineBottle = "assets/images/home_view/medicine_bottle.png" ;
   static const String surgeryPicture = "assets/images/home_view/surgery.png" ;
   static const String complaints = "assets/images/home_view/complaints.png" ;
+  static const String allergies = "assets/images/home_view/allergies.png" ;
 
 
   // AUTHENTICATION VIEW

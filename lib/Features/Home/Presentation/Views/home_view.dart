@@ -5,11 +5,13 @@ import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/global_variables.dart';
 import 'package:wqaya/Features/Analysis/Presentation/views/analysis_view.dart';
+import 'package:wqaya/Features/Complaints/Presentation/Views/complaints_view.dart';
 import 'package:wqaya/Features/Medicine/presentation/views/medicine_view.dart';
 import 'package:wqaya/Features/Rays/presentation/views/ray_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/complaints_home_widget.dart';
 import 'package:wqaya/Features/OnBoarding/Presentation/Widgets/home_container.dart';
+import 'package:wqaya/Features/allergies/Presentation/Views/allergy_view.dart';
 import 'package:wqaya/Features/surgries/presentation/views/surgries_view.dart';
 
 import '../../../../Core/widgets/custom_home_app_bar.dart';
@@ -56,16 +58,13 @@ class _HomeViewState extends State<HomeView> {
           child: CustomScrollView(
             shrinkWrap: true,
             slivers: [
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 40,),
-              ),
               SliverToBoxAdapter(
                 child: GridView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true, // Needed inside scrollable views
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    mainAxisSpacing: 20,
+                    mainAxisSpacing: 10,
                     crossAxisSpacing: 20,
                     childAspectRatio: 0.9, // Normal rectangular shape
                   ),
@@ -94,7 +93,9 @@ class _HomeViewState extends State<HomeView> {
                           transitionDuration: const Duration(milliseconds: 400),
                         ),
                       ).then((_) {
-                        context.read<BottomNavVisibilityCubit>().show();
+                        if(context.mounted) {
+                          context.read<BottomNavVisibilityCubit>().show();
+                        }
                       });
                     },
                     child: HomeContainer(
@@ -107,9 +108,16 @@ class _HomeViewState extends State<HomeView> {
               const SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    SizedBox(height: 40),
-                    ComplaintsHomeWidget(),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
+                    ComplaintsHomeWidget(text : "الشكاوي",image: AssetsData.complaints,screen: ComplaintsView(),),
+                  ],
+                ),
+              ),
+              const SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    SizedBox(height: 15),
+                    ComplaintsHomeWidget(text : "الحساسية",image: AssetsData.allergies,screen: AllergyView(),),
                   ],
                 ),
               ),

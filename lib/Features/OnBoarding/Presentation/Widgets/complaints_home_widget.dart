@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:wqaya/Core/utils/assets_data.dart';
 import 'package:wqaya/Core/utils/colors.dart';
 import 'package:wqaya/Core/utils/fonts.dart';
 import 'package:wqaya/Core/widgets/texts.dart';
-import 'package:wqaya/Features/Complaints/Presentation/Views/complaints_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
 
 class ComplaintsHomeWidget extends StatelessWidget {
+  final String image,text ;
+  final Widget screen ;
   const ComplaintsHomeWidget({
-    super.key,
+    super.key, required this.image, required this.text, required this.screen,
   });
 
   @override
@@ -22,7 +22,7 @@ class ComplaintsHomeWidget extends StatelessWidget {
           .push(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-          const ComplaintsView(),
+           screen,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0.0);
             const end = Offset.zero;
@@ -39,7 +39,9 @@ class ComplaintsHomeWidget extends StatelessWidget {
           transitionDuration: const Duration(milliseconds: 400),
         ),
       ).then((_) {
-        context.read<BottomNavVisibilityCubit>().show();
+        if (context.mounted) {
+          context.read<BottomNavVisibilityCubit>().show();
+        }
       });
       },
       child: Container(
@@ -54,7 +56,7 @@ class ComplaintsHomeWidget extends StatelessWidget {
               child: Column(
                 children: [
                   RegularTextWithLocalization(
-                    text: "الشكاوى",
+                    text: text,
                     fontSize: 20.sp,
                     textColor: myWhiteColor,
                     fontFamily: black,
@@ -62,7 +64,7 @@ class ComplaintsHomeWidget extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(child: Image.asset(AssetsData.complaints,height: 80,)),
+            Expanded(child: Image.asset(image,height: 80,)),
       
           ],
         ),
