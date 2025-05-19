@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wqaya/Core/cache/cache_helper.dart';
 import 'package:wqaya/Features/allergies/Presentation/Views/view_model/models/allergy_model.dart';
 import 'package:http/http.dart' as http;
@@ -70,18 +69,12 @@ class AllergyCubit extends Cubit<AllergyState> {
   Future<void> searchUserAllergies({required String keyword}) async {
     emit(SearchAllergyLoading());
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
 
-      if (token == null) {
-        emit(SearchAllergyError('Authentication token not found'));
-        return;
-      }
 
       final response = await http.get(
         Uri.parse('$baseUrl/Allergic/search?keyword=$keyword'),
         headers: {
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
           'Content-Type': 'application/json',
         },
       );
@@ -109,16 +102,12 @@ class AllergyCubit extends Cubit<AllergyState> {
     required String reaction,
     required String diagnosisDate, // formatted as ISO: yyyy-MM-ddTHH:mm:ss
     required String lastOccurrence, // formatted as ISO: yyyy-MM-ddTHH:mm:ss
-    required List<String> medicines,
+    required String medicines,
     required String notes,
   }) async {
     emit(AddAllergyLoading());
 
     try {
-      
-
-      final combinedMedicines = medicines.isNotEmpty ? medicines.join('-') : "";
-
       final response = await http.post(
         Uri.parse('https://wqaya.runasp.net/api/Allergic'),
         headers: {
@@ -127,14 +116,14 @@ class AllergyCubit extends Cubit<AllergyState> {
           'accept': '*/*',
         },
         body: json.encode({
-          'medicalHistoryId': 0, // assuming static for now
+          'medicalHistoryId': 0,
           'allergenName': allergenName,
           'allergenType': allergenType,
           'severityLevel': severityLevel,
           'reaction': reaction,
           'diagnosisDate': diagnosisDate,
           'lastOccurrence': lastOccurrence,
-          'addedmedicines': combinedMedicines,
+          'addedmedicines': medicines,
           'notes': notes,
         }),
       );
@@ -157,52 +146,77 @@ class AllergyCubit extends Cubit<AllergyState> {
   }
 
   // Edit existing allergy
-  Future<void> editAllergy({required AllergyModel allergy}) async {
+
+// Edit existing allergy
+  Future<void> editAllergy({
+    required int id,
+    required String allergenName,
+    required String allergenType, // e.g., "Food", "Drug"
+    required String severityLevel, // e.g., "Moderate", "High"
+    required String reaction,
+    required String diagnosisDate, // formatted as ISO: yyyy-MM-ddTHH:mm:ss
+    required String lastOccurrence, // formatted as ISO: yyyy-MM-ddTHH:mm:ss
+    required String medicines,
+    required String notes,
+  }) async {
     emit(EditAllergyLoading());
+
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
-
-      if (token == null) {
-        emit(EditAllergyError('Authentication token not found'));
-        return;
-      }
-
       final response = await http.put(
-        Uri.parse('$baseUrl/Allergic/${allergy.medicalHistoryId}'),
+        Uri.parse('https://wqaya.runasp.net/api/Allergic'),
         headers: {
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
           'Content-Type': 'application/json',
+          'accept': '*/*',
         },
-        body: json.encode(allergy.toJson()),
+        body: json.encode({
+          'id': id,
+          'medicalHistoryId': 0, // Assuming this is handled by the backend
+          'allergenName': allergenName,
+          'allergenType': allergenType,
+          'severityLevel': severityLevel,
+          'reaction': reaction,
+          'diagnosisDate': diagnosisDate,
+          'lastOccurrence': lastOccurrence,
+          'addedmedicines': medicines,
+          'notes': notes,
+        }),
       );
-
+      print(response.body);
       if (response.statusCode == 200) {
-        emit(EditAllergySuccess());
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        if (responseData['succeeded'] == true) {
+          emit(EditAllergySuccess());
+        } else {
+          print(responseData);
+          print(1);
+          emit(EditAllergyError(responseData['message'] ?? 'حدث خطأ في تعديل الحساسية'));
+        }
       } else {
-        emit(EditAllergyError('Failed to update allergy: ${response.statusCode}'));
+        print(response.statusCode);
+        print(2);
+        emit(EditAllergyError('حدث خطأ: ${response.statusCode}'));
       }
     } catch (e) {
-      emit(EditAllergyError('Error: $e'));
+      print(e.toString());
+      print(3);
+      emit(EditAllergyError('حدث خطأ أثناء تعديل الحساسية: $e'));
     }
   }
+
+// Add these states to your AllergyCubit state class
 
   // Delete allergy
   Future<void> deleteAllergy({required int allergyId}) async {
     emit(DeleteAllergyLoading());
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
 
-      if (token == null) {
-        emit(DeleteAllergyError('Authentication token not found'));
-        return;
-      }
 
       final response = await http.delete(
         Uri.parse('$baseUrl/Allergic/$allergyId'),
         headers: {
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer ${CacheHelper().getData(key: 'token')}',
           'Content-Type': 'application/json',
         },
       );

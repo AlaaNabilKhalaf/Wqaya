@@ -1,5 +1,6 @@
 class AllergyModel {
   int? medicalHistoryId;
+  int? id;
   String? allergenName;
   String? allergenType;
   String? severityLevel;
@@ -20,12 +21,13 @@ class AllergyModel {
     this.lastOccurrence,
     this.addedmedicines,
     this.notes,
-    this.source,
+    this.source, this.id,
   });
 
   factory AllergyModel.fromJson(Map<String, dynamic> json) {
     return AllergyModel(
       medicalHistoryId: json['medicalHistoryId'],
+      id: json['id'],
       allergenName: json['allergenName'],
       allergenType: json['allergenType'],
       severityLevel: json['severityLevel'],

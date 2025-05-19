@@ -5,26 +5,105 @@ import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Features/Complaints/Presentation/Widgets/add_medicine_for_complaints.dart';
 import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_cubit.dart';
 import 'package:wqaya/Features/allergies/Presentation/Views/view_model/allergy_cubit.dart';
+import 'package:wqaya/Features/allergies/Presentation/Views/view_model/models/allergy_model.dart';
 
-class AddAllergyView extends StatefulWidget {
-  const AddAllergyView({super.key});
+class EditAllergyView extends StatefulWidget {
+  final AllergyModel allergy;
+
+  const EditAllergyView({
+    super.key,
+    required this.allergy,
+  });
 
   @override
-  State<AddAllergyView> createState() => _AddAllergyViewState();
+  State<EditAllergyView> createState() => _EditAllergyViewState();
 }
 
-class _AddAllergyViewState extends State<AddAllergyView> {
+class _EditAllergyViewState extends State<EditAllergyView> {
   final _formKey = GlobalKey<FormState>();
-  final _allergenNameController = TextEditingController();
-  final _allergenTypeController = TextEditingController();
-  final _severityLevelController = TextEditingController();
-  final _reactionController = TextEditingController();
-  final _diagnosisDateController = TextEditingController();
-  final _lastOccurrenceController = TextEditingController();
-  final _notesController = TextEditingController();
+  late final TextEditingController _allergenNameController;
+  late final TextEditingController _allergenTypeController;
+  late final TextEditingController _severityLevelController;
+  late final TextEditingController _reactionController;
+  late final TextEditingController _diagnosisDateController;
+  late final TextEditingController _lastOccurrenceController;
+  late final TextEditingController _addedMedicinesController;
+  late final TextEditingController _notesController;
 
   AllergenType? _selectedAllergenType;
   SeverityLevel? _selectedSeverityLevel;
+
+  // List to store parsed medicines
+  List<String> _medicinesList = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize controllers with existing data
+    _allergenNameController = TextEditingController(text: widget.allergy.allergenName);
+    _allergenTypeController = TextEditingController(text: widget.allergy.allergenType);
+    _severityLevelController = TextEditingController(text: widget.allergy.severityLevel);
+    _reactionController = TextEditingController(text: widget.allergy.reaction);
+    _diagnosisDateController = TextEditingController(
+        text: widget.allergy.diagnosisDate != null
+            ? "${widget.allergy.diagnosisDate!.year}-${widget.allergy.diagnosisDate!.month.toString().padLeft(2, '0')}-${widget.allergy.diagnosisDate!.day.toString().padLeft(2, '0')}"
+            : ""
+    );
+    _lastOccurrenceController = TextEditingController(
+        text: widget.allergy.lastOccurrence != null
+            ? "${widget.allergy.lastOccurrence!.year}-${widget.allergy.lastOccurrence!.month.toString().padLeft(2, '0')}-${widget.allergy.lastOccurrence!.day.toString().padLeft(2, '0')}"
+            : ""
+    );
+    _addedMedicinesController = TextEditingController();
+    _notesController = TextEditingController(text: widget.allergy.notes);
+
+    // Set default values for dropdowns
+    _selectedAllergenType = _getAllergenTypeFromString(widget.allergy.allergenType);
+    _selectedSeverityLevel = _getSeverityLevelFromString(widget.allergy.severityLevel);
+
+    // Parse medicines from the dash-separated string
+    if (widget.allergy.addedmedicines != null && widget.allergy.addedmedicines!.isNotEmpty) {
+      _medicinesList = widget.allergy.addedmedicines!.split('-')
+          .map((medicine) => medicine.trim())
+          .where((medicine) => medicine.isNotEmpty)
+          .toList();
+
+      // Add each medicine to the cubit for selection tracking
+      // WidgetsBinding.instance.addPostFrameCallback((_) {
+      //   context.read<MedicineCubit>().selectedMedicineName.clear();
+      //   for (String medicine in _medicinesList) {
+      //     context.read<MedicineCubit>().addMedicineSelectionByName(medicine);
+      //   }
+      // });
+    }
+  }
+
+  AllergenType? _getAllergenTypeFromString(String? typeString) {
+    if (typeString == null || typeString.isEmpty) return null;
+
+    try {
+      return AllergenType.values.firstWhere(
+            (type) => type.name == typeString,
+        orElse: () => AllergenType.Other,
+      );
+    } catch (e) {
+      return AllergenType.Other;
+    }
+  }
+
+  SeverityLevel? _getSeverityLevelFromString(String? levelString) {
+    if (levelString == null || levelString.isEmpty) return null;
+
+    try {
+      return SeverityLevel.values.firstWhere(
+            (level) => level.name == levelString,
+        orElse: () => SeverityLevel.Moderate,
+      );
+    } catch (e) {
+      return SeverityLevel.Moderate;
+    }
+  }
 
   Widget _buildTextField({
     required String label,
@@ -56,13 +135,12 @@ class _AddAllergyViewState extends State<AddAllergyView> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedMedicineName = context.watch<MedicineCubit>().selectedMedicineName.toList();
     return Scaffold(
       backgroundColor: myWhiteColor,
       appBar: AppBar(
         backgroundColor: myWhiteColor,
         elevation: 0,
-        title: const Text("إضافة حساسية",
+        title: const Text("تعديل الحساسية",
             style:
             TextStyle(fontFamily: bold, fontSize: 20, color: primaryColor)),
         centerTitle: true,
@@ -171,7 +249,7 @@ class _AddAllergyViewState extends State<AddAllergyView> {
                       .requestFocus(FocusNode()); // Close the keyboard
                   final DateTime? pickedDate = await showDatePicker(
                     context: context,
-                    initialDate: DateTime.now(),
+                    initialDate: widget.allergy.diagnosisDate ?? DateTime.now(),
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2100),
                     helpText: "اختر تاريخ التشخيص",
@@ -216,7 +294,7 @@ class _AddAllergyViewState extends State<AddAllergyView> {
                       .requestFocus(FocusNode()); // Close the keyboard
                   final DateTime? pickedDate = await showDatePicker(
                     context: context,
-                    initialDate: DateTime.now(),
+                    initialDate: widget.allergy.lastOccurrence ?? DateTime.now(),
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2100),
                     helpText: "اختر تاريخ آخر ظهور",
@@ -268,7 +346,14 @@ class _AddAllergyViewState extends State<AddAllergyView> {
                   const Spacer(),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const AddMedicineForComplaints(),));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddMedicineForComplaints(
+                        isEditing: true,
+                        onMedicinesSelected: (newMedicines) {
+                          setState(() {
+                            _medicinesList.addAll(newMedicines);
+                          });
+                        },
+                      ),));
                     },
                     child: const CircleAvatar(
                         backgroundColor: primaryColor,
@@ -279,15 +364,14 @@ class _AddAllergyViewState extends State<AddAllergyView> {
                   ),
                 ],
               ),
-              if (selectedMedicineName.isNotEmpty)
+              if (_medicinesList.isNotEmpty)
                 BlocBuilder<MedicineCubit, MedicineState>(
                   builder: (context, state) {
-                    final medicines = context.watch<MedicineCubit>().selectedMedicineName.toList();
                     return SizedBox(
                       height: 150,
                       child: ListView.builder(
                         physics: const ClampingScrollPhysics(),
-                        itemCount: medicines.length,
+                        itemCount: _medicinesList.length,
                         itemBuilder: (context, index) => Container(
                           margin: const EdgeInsets.symmetric(vertical: 4),
                           padding: const EdgeInsets.all(12),
@@ -302,7 +386,7 @@ class _AddAllergyViewState extends State<AddAllergyView> {
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  medicines[index],
+                                  _medicinesList[index],
                                   style: const TextStyle(fontFamily: medium),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -310,8 +394,9 @@ class _AddAllergyViewState extends State<AddAllergyView> {
                               IconButton(
                                 icon: const Icon(Icons.close, color: errorColor),
                                 onPressed: () {
-                                  context.read<MedicineCubit>().removeMedicineSelectionByName(selectedMedicineName[index].toString());
                                   setState(() {
+                                    context.read<MedicineCubit>().removeMedicineSelectionByName(_medicinesList[index]);
+                                    _medicinesList.removeAt(index);
                                   });
                                 },
                               )
@@ -326,21 +411,21 @@ class _AddAllergyViewState extends State<AddAllergyView> {
 
               BlocConsumer<AllergyCubit, AllergyState>(
                 listener: (context, state) {
-                  if (state is AddAllergySuccess) {
+                  if (state is EditAllergySuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         behavior: SnackBarBehavior.floating,
-                        content: Text("تم إضافة الحساسية بنجاح", style: TextStyle(fontFamily: regular)),
+                        content: Text("تم تعديل الحساسية بنجاح", style: TextStyle(fontFamily: regular)),
                         backgroundColor: Colors.green,
                       ),
                     );
                     Navigator.pop(context);
                     context.read<AllergyCubit>().getUserAllergies();
-                  } else if (state is AddAllergyError) {
+                  } else if (state is EditAllergyError) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         behavior: SnackBarBehavior.floating,
-                        content: Text("حدث خطأ أثناء الإضافة", style: TextStyle(fontFamily: regular)),
+                        content: Text("حدث خطأ أثناء التعديل", style: TextStyle(fontFamily: regular)),
                         backgroundColor: errorColor,
                       ),
                     );
@@ -348,7 +433,7 @@ class _AddAllergyViewState extends State<AddAllergyView> {
                 },
                 builder: (context, state) {
                   var allergyCubit = context.read<AllergyCubit>();
-                  return state is AddAllergyLoading
+                  return state is EditAllergyLoading
                       ? const Center(
                       child: CircularProgressIndicator(
                         backgroundColor: primaryColor,
@@ -368,10 +453,11 @@ class _AddAllergyViewState extends State<AddAllergyView> {
                         );
                         return;
                       } else {
-                        final selectedMedicines = context.read<MedicineCubit>().selectedMedicineName.toList();
-                        final selectedMedicinesString = selectedMedicines.join('-');
+                        // Join the medicines list with dashes for saving
+                        final selectedMedicinesString = _medicinesList.join('-');
 
-                        await allergyCubit.addAllergy(
+                        await allergyCubit.editAllergy(
+                          id: widget.allergy.id!,
                           allergenName: _allergenNameController.text,
                           allergenType: _allergenTypeController.text,
                           severityLevel: _severityLevelController.text,
@@ -383,15 +469,9 @@ class _AddAllergyViewState extends State<AddAllergyView> {
                               ? DateTime.parse(_lastOccurrenceController.text).toIso8601String()
                               : "",
                           medicines: selectedMedicinesString,
-                          notes: _notesController.text,);
-                        print(_allergenNameController.text);
-                        print(_allergenTypeController.text);
-                        print(_severityLevelController.text);
-                        print(DateTime.parse(_diagnosisDateController.text).toString());
-                        print(DateTime.parse(_lastOccurrenceController.text).toString());
-                        print(_notesController.text);
-                        print(selectedMedicinesString);
-                                        }
+                          notes: _notesController.text,
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
@@ -399,7 +479,7 @@ class _AddAllergyViewState extends State<AddAllergyView> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text("إرسال",
+                    child: const Text("تحديث",
                         style: TextStyle(
                             fontFamily: bold,
                             fontSize: 16,
@@ -412,6 +492,19 @@ class _AddAllergyViewState extends State<AddAllergyView> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _allergenNameController.dispose();
+    _allergenTypeController.dispose();
+    _severityLevelController.dispose();
+    _reactionController.dispose();
+    _diagnosisDateController.dispose();
+    _lastOccurrenceController.dispose();
+    _addedMedicinesController.dispose();
+    _notesController.dispose();
+    super.dispose();
   }
 }
 
@@ -432,19 +525,4 @@ enum SeverityLevel {
   Fatal,
 }
 
-const Map<String, String> allergenTypeTranslations = {
-  'Food': 'طعام',
-  'Drug': 'دواء',
-  'Environmental': 'بيئي',
-  'Insect': 'حشرات',
-  'Latex': 'لاتكس',
-  'Other': 'أخرى',
-};
-
-const Map<String, String> severityLevelTranslations = {
-  'Trivial': 'بسيط',
-  'Mild': 'خفيف',
-  'Moderate': 'متوسط',
-  'Severe': 'شديد',
-  'Fatal': 'خطير',
-};
+// MapS to translate enum values to Arabic - You may need to add these

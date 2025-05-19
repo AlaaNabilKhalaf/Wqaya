@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:wqaya/Core/Utils/colors.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
+import 'package:wqaya/Features/allergies/Presentation/Views/edit_allergy_view.dart';
 import 'package:wqaya/Features/allergies/Presentation/Views/view_model/allergy_cubit.dart';
 import 'package:wqaya/Features/allergies/Presentation/Views/view_model/models/allergy_model.dart';
 
@@ -66,13 +67,8 @@ class _AllergyCardState extends State<AllergyCard> {
                 onTap: () {
                   if (!widget.isEditing) {
                     Navigator.pop(context);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) =>
-                    //         EditAllergyView(allergyModel: widget.allergy),
-                    //   ),
-                    // );
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EditAllergyView(allergy: widget.allergy),));
                   }
                 },
               ),
@@ -87,7 +83,7 @@ class _AllergyCardState extends State<AllergyCard> {
                 ),
                 onTap: () async {
                   Navigator.pop(context);
-                  await allergyCubit.deleteAllergy(allergyId: widget.allergy.medicalHistoryId!);
+                  await allergyCubit.deleteAllergy(allergyId: widget.allergy.id!);
                   await allergyCubit.getUserAllergies();
                 },
               ),
@@ -126,7 +122,6 @@ class _AllergyCardState extends State<AllergyCard> {
 
   Widget buildCardContent({required bool isSelected}) {
     final translatedAllergenType = getTranslatedAllergenType(widget.allergy.allergenType);
-    final translatedSeverityLevel = getTranslatedSeverityLevel(widget.allergy.severityLevel);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
