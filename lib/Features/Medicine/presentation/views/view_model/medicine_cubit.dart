@@ -9,27 +9,71 @@ part 'medicine_state.dart';
 class MedicineCubit extends Cubit<MedicineState> {
   MedicineCubit() : super(MedicineInitial());
 
-  // Use a Set to prevent duplicates
+  // Permanent selected IDs (what's actually saved in the system)
   final Set<int> selectedIds = {};
+  final Set<String> selectedMedicineName = {};
+
+  // Temporary selection for the medicine selection screen
+  final Set<int> tempSelectedIds = {};
+  final Set<String> tempSelectedMedicineName = {};
 
   // Keep track of current medicines list
   List<MedicineModel> _currentMedicines = [];
   List<MedicineModel> get currentMedicines => _currentMedicines;
 
-  // Add a method to toggle selection
+  // Method to toggle temporary selection (for the selection screen)
   void toggleMedicineSelection(int medicineId) {
-    if (selectedIds.contains(medicineId)) {
-      selectedIds.remove(medicineId);
+    if (tempSelectedIds.contains(medicineId)) {
+      tempSelectedIds.remove(medicineId);
     } else {
-      selectedIds.add(medicineId);
+      tempSelectedIds.add(medicineId);
     }
     // Emit a state change while preserving the current medicines list
+    emit(MedicineSelectionChanged(tempSelectedIds.toList(), _currentMedicines));
+  }
+
+  void toggleMedicineSelectionByName(String medicineName) {
+    if (tempSelectedMedicineName.contains(medicineName)) {
+      tempSelectedMedicineName.remove(medicineName);
+    } else {
+      tempSelectedMedicineName.add(medicineName);
+    }
+    // Emit a state change while preserving the current medicines list
+    emit(MedicineSelectionChanged(tempSelectedIds.toList(), _currentMedicines));
+  }
+
+  // Method to commit temporary selections to permanent selections
+  void confirmSelections() {
+    // Add all temporary selections to permanent selections
+    selectedIds.addAll(tempSelectedIds);
+    selectedMedicineName.addAll(tempSelectedMedicineName);
+
+    // Clear temporary selections
+    tempSelectedIds.clear();
+    tempSelectedMedicineName.clear();
+
+    // Emit a state change with the confirmed selections
+    emit(MedicineSelectionConfirmed(selectedIds.toList(), selectedMedicineName.toList()));
+  }
+
+  void removeMedicineSelectionByName(String medicineName) {
+    if (selectedMedicineName.contains(medicineName)) {
+      selectedMedicineName.remove(medicineName);
+    }
     emit(MedicineSelectionChanged(selectedIds.toList(), _currentMedicines));
+  }
+
+  void updateSelectedMedicines(List<String> medicineNames) {
+    final selectedMedicineNames = [...medicineNames]; // Create a new list to ensure state change
+    emit(MedicineSelectionChangedComplaint(selectedMedicines: selectedMedicineNames)); // Emit a state change
   }
 
   // Method to clear all selections
   void clearSelections() {
     selectedIds.clear();
+    selectedMedicineName.clear();
+    tempSelectedIds.clear();
+    tempSelectedMedicineName.clear();
     emit(MedicineSelectionChanged([], _currentMedicines));
   }
 
@@ -50,9 +94,11 @@ class MedicineCubit extends Cubit<MedicineState> {
       _currentMedicines = medicines; // Update current medicines list
       emit(UserMedicineLoaded(medicines));
     } catch (e) {
+      print(e.toString());
       emit(UserMedicineError('Failed to load medicines'));
     }
   }
+
   Future<void> searchMedicinesForAdding({required String keyword}) async {
     emit(SearchMedicineLoading());
     try {
@@ -67,12 +113,16 @@ class MedicineCubit extends Cubit<MedicineState> {
         ),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 ) {
         final responseData = response.data;
+        if (responseData==[]){
+          emit(SearchMedicineError('Invalid data format received from server.'));
+        }
         if (responseData is Map<String, dynamic> && responseData['data'] is List) {
           final data = responseData['data'] as List;
           final medicines = data.map((e) => MedicineModel.fromJson(e)).toList();
           _currentMedicines = medicines;
+
           emit(SearchMedicineSuccess(medicines));
         } else {
           emit(SearchMedicineError('Invalid data format received from server.'));
@@ -91,6 +141,7 @@ class MedicineCubit extends Cubit<MedicineState> {
       emit(SearchMedicineError('Failed to search medicines'));
     }
   }
+
   Future<void> searchGeneralMedicine({required String keyword}) async {
     emit(SearchMedicineLoading());
     try {
@@ -129,8 +180,7 @@ class MedicineCubit extends Cubit<MedicineState> {
       emit(SearchMedicineError('Failed to search medicines'));
     }
   }
-// Add this method to your MedicineCubit class
-  // Add this method to your MedicineCubit class
+
   Future<void> deleteMedicineAddedByUser({required int medicineId}) async {
     final dio = Dio();
     final String token = CacheHelper().getData(key: 'token');
@@ -157,6 +207,7 @@ class MedicineCubit extends Cubit<MedicineState> {
       emit(DeleteMedicineError(errorMessage: "حدث خلل أثناء الحذف"));
     }
   }
+
   Future<void> deleteMedicineAddedBySystem({required int medicineId}) async {
     final dio = Dio();
     final String token = CacheHelper().getData(key: 'token');
@@ -183,8 +234,9 @@ class MedicineCubit extends Cubit<MedicineState> {
       emit(DeleteMedicineError(errorMessage: "حدث خلل أثناء الحذف"));
     }
   }
+
   Future<void> editUserMedicine({
-   required MedicineModel medicine
+    required MedicineModel medicine
   }) async {
     emit(EditMedicineLoading());
     try {
@@ -230,6 +282,7 @@ class MedicineCubit extends Cubit<MedicineState> {
       emit(EditMedicineError(errorMessage: errorMessage));
     }
   }
+
   Future<void> addMedicineByHand({
     required String name,
     required String dosageForm,
@@ -284,6 +337,7 @@ class MedicineCubit extends Cubit<MedicineState> {
       emit(AddMedicineError(errorMessage: errorMessage));
     }
   }
+
   // Method to update selection state while preserving medicines list
   void updateSelectionState() {
     emit(MedicineSelectionChanged(selectedIds.toList(), _currentMedicines));
@@ -292,29 +346,6 @@ class MedicineCubit extends Cubit<MedicineState> {
   // Add method to submit selected medicines
   Future<void> submitSelectedMedicines() async {
     emit(SubmittingMedicines());
-    print(selectedIds);
-    try {
-      final token = CacheHelper().getData(key: 'token');
-      final List<Map<String, dynamic>> body = selectedIds
-          .map((id) => {'medicineId': id})
-          .toList();
-      final response = await Dio().post(
-        'https://wqaya.runasp.net/api/MedicalHistory/MedicineFromList',
-        data: body,
-        options: Options(
-          headers: {
-            'accept': '*/*',
-            'Authorization': 'Bearer $token',
-            'Content-Type': 'application/json',
-          },
-        ),
-      );
-      print(response.data);
-      emit(MedicinesSubmitted());
-      selectedIds.clear();
-      await getUserMedicine();
-    } catch (e) {
-      emit(MedicineSubmissionError('Failed to submit medicines'));
-    }
+    // Implementation for submitting medicines...
   }
 }

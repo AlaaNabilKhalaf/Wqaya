@@ -6,14 +6,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wqaya/Core/cache/cache_helper.dart';
 import 'package:wqaya/Features/Analysis/Presentation/views/view_model/analysis_cubit.dart';
 import 'package:wqaya/Features/Auth/Presentation/Views/view_model/auth_cubit.dart';
+import 'package:wqaya/Features/Complaints/Presentation/Views/view_model/complaint_cubit.dart';
 import 'package:wqaya/Features/Home/Presentation/Views/view_model/home_cubit.dart';
 import 'package:wqaya/Features/Medicine/presentation/views/view_model/medicine_cubit.dart';
 import 'package:wqaya/Features/NavBar/Presentation/Views/nav_bar_view.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_bar_cubit.dart';
 import 'package:wqaya/Features/NavBar/Presentation/view_model/bottom_nav_visibility__cubit.dart';
+import 'package:wqaya/Features/OCR/presentation/views/view_model/ocr_cubit.dart';
 import 'package:wqaya/Features/Profile/Controller/api_profile_cubit.dart';
 import 'package:wqaya/Features/Rays/presentation/views/view_model/ray_cubit.dart';
 import 'package:wqaya/Features/Splash/Presentation/Views/splash_view.dart';
+import 'package:wqaya/Features/allergies/Presentation/Views/view_model/allergy_cubit.dart';
 import 'package:wqaya/Features/surgries/presentation/views/view_model/models/surgery_models.dart';
 import 'package:wqaya/Features/surgries/presentation/views/view_model/surgery_cubit.dart';
 import 'Core/bloc_observer/bloc_observer.dart';
@@ -49,12 +52,19 @@ void main() async {
         BlocProvider<RayCubit>(
             create: (context) => RayCubit()),
         BlocProvider<MedicineCubit>(
-            create: (context) => MedicineCubit())
+            create: (context) => MedicineCubit()),
+        BlocProvider<OcrCubit>(
+            create: (context) => OcrCubit()),
+        BlocProvider<AllergyCubit>(
+            create: (context) => AllergyCubit())
         ,BlocProvider<AnalysisCubit>(
             create: (context) => AnalysisCubit()),
         BlocProvider<SurgeryCubit>(
           create: (context) => SurgeryCubit(
             surgeryRepository: SurgeryRepository(),
+          ),
+        ),BlocProvider<ComplaintsCubit>(
+          create: (context) => ComplaintsCubit(
           ),
         ),
       ],
