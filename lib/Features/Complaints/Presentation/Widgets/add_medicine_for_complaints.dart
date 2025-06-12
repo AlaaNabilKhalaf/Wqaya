@@ -224,12 +224,10 @@ class _AddMedicineForComplaintsState extends State<AddMedicineForComplaints> {
                         onPressed: () {
                           // Confirm selections by adding temporary selections to permanent selections
                           currentCubit.confirmSelections();
-
                           // If onMedicinesSelected callback was provided, call it with the selected medicine names
                           if (widget.onMedicinesSelected != null) {
                             widget.onMedicinesSelected!(currentCubit.selectedMedicineName.toList());
                           }
-
                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.check, color: Colors.white),

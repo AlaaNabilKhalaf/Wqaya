@@ -74,7 +74,7 @@ class MedicineCubit extends Cubit<MedicineState> {
     selectedMedicineName.clear();
     tempSelectedIds.clear();
     tempSelectedMedicineName.clear();
-    emit(MedicineSelectionChanged([], _currentMedicines));
+    emit(MedicineSelectionChanged(const [], const []));
   }
 
   Future<void> getUserMedicine() async {
@@ -345,7 +345,31 @@ class MedicineCubit extends Cubit<MedicineState> {
 
   // Add method to submit selected medicines
   Future<void> submitSelectedMedicines() async {
-    emit(SubmittingMedicines());
-    // Implementation for submitting medicines...
+  emit(SubmittingMedicines());
+  print(selectedIds);
+  try {
+    final token = CacheHelper().getData(key: 'token');
+    final List<Map<String, dynamic>> body = tempSelectedIds
+        .map((id) => {'medicineId': id})
+        .toList();
+    final response = await Dio().post(
+      'https://wqaya.runasp.net/api/MedicalHistory/MedicineFromList',
+      data: body,
+      options: Options(
+        headers: {
+          'accept': '*/*',
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+    print(response.data);
+    emit(MedicinesSubmitted());
+    selectedIds.clear();
+    await getUserMedicine();
+  } catch (e) {
+    emit(MedicineSubmissionError('Failed to submit medicines'));
   }
+  }
+
 }

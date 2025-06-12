@@ -33,7 +33,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
     // Initialize controllers with data from analysisRecord
     _testNameController.text = widget.analysisRecord.testName;
     _labNameController.text = widget.analysisRecord.labName;
-    _dateController.text = "${widget.analysisRecord.date.year}-${widget.analysisRecord.date.month.toString().padLeft(2, '0')}-${widget.analysisRecord.date.day.toString().padLeft(2, '0')}";
+    _dateController.text =
+        "${widget.analysisRecord.date.year}-${widget.analysisRecord.date.month.toString().padLeft(2, '0')}-${widget.analysisRecord.date.day.toString().padLeft(2, '0')}";
     _resultSummaryController.text = widget.analysisRecord.resultSummary ?? '';
     _resultStatus = widget.analysisRecord.resultStatus;
   }
@@ -85,7 +86,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
           borderSide: BorderSide.none,
         ),
         contentPadding:
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
     );
   }
@@ -100,7 +101,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
         elevation: 0,
         title: const Text("تعديل التحليل",
             style:
-            TextStyle(fontFamily: bold, fontSize: 20, color: primaryColor)),
+                TextStyle(fontFamily: bold, fontSize: 20, color: primaryColor)),
         centerTitle: true,
         iconTheme: const IconThemeData(color: primaryColor),
       ),
@@ -110,9 +111,11 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
           key: _formKey,
           child: ListView(
             children: [
-              _buildTextField(label: "اسم التحليل", controller: _testNameController),
+              _buildTextField(
+                  label: "اسم التحليل", controller: _testNameController),
               const SizedBox(height: 12),
-              _buildTextField(label: "اسم المعمل", controller: _labNameController),
+              _buildTextField(
+                  label: "اسم المعمل", controller: _labNameController),
               const SizedBox(height: 12),
               TextFormField(
                 controller: _dateController,
@@ -133,7 +136,7 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   if (pickedDate != null) {
                     setState(() {
                       _dateController.text =
-                      "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
+                          "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
                     });
                   }
                 },
@@ -144,15 +147,15 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   fillColor: textFormBackgroundColor,
                   labelText: "تاريخ التحليل",
                   labelStyle:
-                  const TextStyle(fontFamily: regular, color: subTextColor),
+                      const TextStyle(fontFamily: regular, color: subTextColor),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   suffixIcon:
-                  const Icon(Icons.calendar_today, color: subTextColor),
+                      const Icon(Icons.calendar_today, color: subTextColor),
                 ),
               ),
               const SizedBox(height: 12),
@@ -175,20 +178,22 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                   fillColor: textFormBackgroundColor,
                   labelText: "حالة النتيجة",
                   labelStyle:
-                  const TextStyle(fontFamily: regular, color: subTextColor),
+                      const TextStyle(fontFamily: regular, color: subTextColor),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 ),
                 style: const TextStyle(fontFamily: medium, color: Colors.black),
                 icon: const Icon(Icons.keyboard_arrow_down_rounded),
                 items: aCubit.resultStatusMap.entries.map((entry) {
                   return DropdownMenuItem<String>(
                     value: entry.key, // Backend value (English)
-                    child: Text(entry.value, style: const TextStyle(fontFamily: medium)), // Arabic label
+                    child: Text(entry.value,
+                        style: const TextStyle(
+                            fontFamily: medium)), // Arabic label
                   );
                 }).toList(),
                 validator: (value) => value == null ? 'مطلوب' : null,
@@ -221,17 +226,17 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                 ),
 
               ElevatedButton.icon(
-                onPressed: _pickPdfFile,
-                icon: const Icon(Icons.upload_file),
-                label: const Text("اختر ملف PDF جديد",
-                    style: TextStyle(fontFamily: medium)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: unselectedContainerColor,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
-              ),
+                      onPressed: _pickPdfFile,
+                      icon: const Icon(Icons.upload_file),
+                      label: const Text("اختر ملف PDF جديد",
+                          style: TextStyle(fontFamily: medium)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: unselectedContainerColor,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                    ),
 
               if (_selectedPdfFile != null)
                 Container(
@@ -272,7 +277,8 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         behavior: SnackBarBehavior.floating,
-                        content: Text("تم تعديل التحليل بنجاح", style: TextStyle(fontFamily: regular)),
+                        content: Text("تم تعديل التحليل بنجاح",
+                            style: TextStyle(fontFamily: regular)),
                         backgroundColor: primaryColor,
                       ),
                     );
@@ -281,59 +287,65 @@ class _EditAnalysisViewState extends State<EditAnalysisView> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         behavior: SnackBarBehavior.floating,
-                        content: Text(state.message, style: const TextStyle(fontFamily: regular)),
+                        content: Text(state.message,
+                            style: const TextStyle(fontFamily: regular)),
                         backgroundColor: errorColor,
                       ),
                     );
                   }
                 },
                 builder: (context, state) {
-                  return state is AnalysisUploading
+                  return state is AnalysisUpdateLoading
                       ? const Center(
-                      child: CircularProgressIndicator(
-                        backgroundColor: primaryColor,
-                      ))
+                          child: CircularProgressIndicator(
+                          backgroundColor: primaryColor,
+                        ))
                       : ElevatedButton(
-                    onPressed: () {
-                      if (!_formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'يجب ملئ كل الخانات المطلوبة',
-                              style: TextStyle(fontFamily: regular),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: errorColor,
+                          onPressed: () {
+                            if (!_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'يجب ملئ كل الخانات المطلوبة',
+                                    style: TextStyle(fontFamily: regular),
+                                  ),
+                                  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: errorColor,
+                                ),
+                              );
+                              return;
+                            } else {
+                              context
+                                  .read<AnalysisCubit>()
+                                  .updateAnalysisRecord(
+                                    id: widget.analysisRecord.id,
+                                    testName: _testNameController.text,
+                                    labName: _labNameController.text,
+                                    date: DateTime.parse(_dateController.text),
+                                    resultSummary:
+                                        _resultSummaryController.text.isNotEmpty
+                                            ? _resultSummaryController.text
+                                            : null,
+                                    resultStatus: _resultStatus,
+                                    medicalHistoryId:
+                                        widget.analysisRecord.medicalHistoryId,
+                                    pdfFile:
+                                        _isPdfChanged ? _selectedPdfFile : null,
+                                  );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryColor,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
+                          child: const Text("حفظ التعديلات",
+                              style: TextStyle(
+                                  fontFamily: bold,
+                                  fontSize: 16,
+                                  color: Colors.white)),
                         );
-                        return;
-                      } else {
-                        context.read<AnalysisCubit>().updateAnalysisRecord(
-                          id: widget.analysisRecord.id,
-                          testName: _testNameController.text,
-                          labName: _labNameController.text,
-                          date: DateTime.parse(_dateController.text),
-                          resultSummary: _resultSummaryController.text.isNotEmpty
-                              ? _resultSummaryController.text
-                              : null,
-                          resultStatus: _resultStatus,
-                          medicalHistoryId: widget.analysisRecord.medicalHistoryId,
-                          pdfFile: _isPdfChanged ? _selectedPdfFile : null,
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryColor,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                    ),
-                    child: const Text("حفظ التعديلات",
-                        style: TextStyle(
-                            fontFamily: bold,
-                            fontSize: 16,
-                            color: Colors.white)),
-                  );
                 },
               ),
             ],

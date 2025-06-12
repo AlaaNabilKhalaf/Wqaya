@@ -256,6 +256,7 @@ class _AddAllergyViewState extends State<AddAllergyView> {
                 controller: _notesController,
                 maxLines: 3,
               ),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   const Text(

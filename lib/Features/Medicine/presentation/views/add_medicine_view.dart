@@ -139,13 +139,14 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                         },
                       );
                     } else if (state is MedicineSelectionChanged) {
+                      state.medicines;
                       final medicines = state.medicines;
                       if (medicines.isEmpty) {
                         return const Center(
                           child: Text(
                             'لا توجد نتائج.',
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 16,fontFamily: regular),
                           ),
                         );
                       }
@@ -204,21 +205,21 @@ class _AddMedicineViewState extends State<AddMedicineView> {
                 builder: (context, state) {
                   // Get fresh reference to cubit to ensure latest state
                   final currentCubit = context.watch<MedicineCubit>();
-
                   return AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
-                    child: currentCubit.selectedIds.isNotEmpty
+                    child: currentCubit.tempSelectedIds.isNotEmpty
                         ? Padding(
                       padding: const EdgeInsets.all(16),
                       child: ElevatedButton.icon(
-                        key: ValueKey("submit_btn_${currentCubit.selectedIds.length}"),
+                        key: ValueKey("submit_btn_${currentCubit.tempSelectedIds.length}"),
                         onPressed: () {
                           currentCubit.submitSelectedMedicines();
                           Navigator.pop(context);
+                          currentCubit.tempSelectedIds.clear();
                         },
                         icon: const Icon(Icons.check, color: Colors.white),
                         label: Text(
-                          'تأكيد الاختيار (${currentCubit.selectedIds.length})',
+                          'تأكيد الاختيار (${currentCubit.tempSelectedIds.length})',
                           style: const TextStyle(fontSize: 16, color: Colors.white, fontFamily: black),
                         ),
                         style: ElevatedButton.styleFrom(

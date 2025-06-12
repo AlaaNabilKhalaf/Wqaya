@@ -176,6 +176,7 @@ class _MedicineViewState extends State<MedicineView>
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xff0094FD),
         onPressed: () {
+          context.read<MedicineCubit>().clearSelections();
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => const AddMedicineView()),
