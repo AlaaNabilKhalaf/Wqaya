@@ -254,7 +254,7 @@ class ComplaintEnums {
   // Type options with translations
   static const Map<String, String> typeOptionsArabic = {
     'Active': 'حالية',
-    'InActive': 'قديمة',
+    'Inactive': 'قديمة',
   };
 
   // Duration options with translations
