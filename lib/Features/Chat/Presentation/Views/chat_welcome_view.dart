@@ -16,7 +16,9 @@ class ChatWelcomeView extends StatelessWidget {
           child: CustomAppBar(backButtonFunction: (){
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const NavBarView()));
           },)),
-      body: const ChatWelcomeViewBody(),
+      body: const Directionality(
+          textDirection: TextDirection.ltr,
+          child: ChatWelcomeViewBody()),
     );
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../Core/utils/assets_data.dart';
 import 'package:wqaya/Core/Utils/fonts.dart';
 import 'package:wqaya/Core/widgets/regular_button.dart';
-import 'package:wqaya/Core/widgets/texts.dart';
 import 'package:wqaya/Features/Chat/Presentation/Views/active_chat_view.dart';
 
 import '../../../../Core/Utils/colors.dart';
@@ -78,71 +77,81 @@ class _ChatWelcomeViewBodyState extends State<ChatWelcomeViewBody> with SingleTi
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(18.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Spacer(),
-            AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(0, _slideAnimation.value),
-                  child: Transform.scale(
-                    scale: _scaleAnimation.value,
-                    child: Transform.rotate(
-                      angle: _rotationAnimation.value,
-                      child: Opacity(
-                        opacity: _fadeAnimation.value,
-                        child: child,
+        child: Directionality(
+          textDirection: TextDirection.ltr,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(),
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(0, _slideAnimation.value),
+                    child: Transform.scale(
+                      scale: _scaleAnimation.value,
+                      child: Transform.rotate(
+                        angle: _rotationAnimation.value,
+                        child: Opacity(
+                          opacity: _fadeAnimation.value,
+                          child: child,
+                        ),
                       ),
                     ),
+                  );
+                },
+                child: Image.asset(AssetsData.chatMainIcon, height: 200.sp),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Text(
+                  'Medical Assistant',
+                  style: TextStyle(
+                    fontSize: 30.sp,
+                    color: const Color(0xFF1678f2),
+                    fontFamily: black,
                   ),
-                );
-              },
-              child: Image.asset(AssetsData.chatMainIcon, height: 200.sp),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              child: RegularTextWithLocalization(
-                text: 'OCR Chatbot',
-                fontSize: 30.sp,
-                textColor: const Color(0xFF1678f2),
-                fontFamily: black,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              child: RegularTextWithLocalization(
-                text: 'howCanIHelpYou',
-                fontSize: 30.sp,
-                textColor: primaryColor,
-                fontFamily: light,
-              ),
-            ),
-            const Spacer(),
-            RegularButton(
-              height: 55.sp,
-              buttonColor: const Color(0xff7EB8FF),
-              borderRadius: 20,
-              onTap: _startChat,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    RegularTextWithLocalization(
-                      text: 'ارسل لي صورة',
-                      fontSize: 20,
-                      textColor: myWhiteColor,
-                      fontFamily: semiBold,
-                    ),
-                    Icon(Icons.send, color: myWhiteColor),
-                  ],
                 ),
               ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Text(
+                  'How can I help you today?',
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    color: primaryColor,
+                    fontFamily: light,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const Spacer(),
+              RegularButton(
+                height: 55.sp,
+                buttonColor: const Color(0xff7EB8FF),
+                borderRadius: 20,
+                onTap: _startChat,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Start Chat',
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          color: myWhiteColor,
+                          fontFamily: semiBold,
+                        ),
+                      ),
+                      const Icon(Icons.send, color: myWhiteColor),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

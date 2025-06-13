@@ -60,6 +60,7 @@ class _AddAllergyViewState extends State<AddAllergyView> {
     return Scaffold(
       backgroundColor: myWhiteColor,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         backgroundColor: myWhiteColor,
         elevation: 0,
         title: const Text("إضافة حساسية",

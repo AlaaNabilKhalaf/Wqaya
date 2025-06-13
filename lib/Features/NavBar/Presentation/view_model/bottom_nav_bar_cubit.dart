@@ -11,6 +11,7 @@ class BottomNavCubit extends Cubit<int> {
   void updateIndex(int index) {
     emit(index);
   }
+
   final List<Widget> pages = [
     const HomeView(),
     const ChatWelcomeView(),
@@ -29,9 +30,12 @@ class BottomNavCubit extends Cubit<int> {
     Icons.person_outline,
   ];
 
-  final List<GlobalKey<NavigatorState>> navigatorKeys = [
+  // Make GlobalKeys static to ensure they're only created once
+  static final List<GlobalKey<NavigatorState>> _navigatorKeys = [
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
     GlobalKey<NavigatorState>(),
   ];
+
+  List<GlobalKey<NavigatorState>> get navigatorKeys => _navigatorKeys;
 }

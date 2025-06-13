@@ -42,12 +42,18 @@ class ComplaintsCubit extends Cubit<ComplaintState> {
 
           emit(UserComplaintsLoaded(complaints));
         } else {
+
           print(1);
           emit(UserComplaintsError(responseData['message'] ?? 'حدث خطأ في جلب البيانات'));
         }
-      } else {          print(response.statusCode);
+      } else {
+        if (response.statusCode==400&& json.decode(response.body)['message'].toString()=="There are no complaints."){
+          emit(UserComplaintsLoaded([]));
 
-      emit(UserComplaintsError('حدث خطأ: ${response.statusCode}'));
+        }else {
+          print(response.body);
+          emit(UserComplaintsError('حدث خطأ: ${response.statusCode}'));
+        }
       }
     } catch (e) {
       print(3);

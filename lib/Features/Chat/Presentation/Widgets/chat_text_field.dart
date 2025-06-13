@@ -7,40 +7,38 @@ class ChatTextField extends StatelessWidget {
   const ChatTextField({
     super.key,
     required this.fieldController,
-
   });
+
   final TextEditingController fieldController;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-
       controller: fieldController,
       cursorColor: myWhiteColor,
-      style: const TextStyle(fontFamily: medium,color: myWhiteColor),
+      style: const TextStyle(fontFamily: medium, color: myWhiteColor),
       decoration: InputDecoration(
         hoverColor: myWhiteColor,
         filled: true,
         fillColor: primaryColor,
         hintStyle: TextStyle(
-            color: myWhiteColor,
-            fontFamily: semiBold,
-            fontSize: 20.sp
+          color: myWhiteColor.withValues(alpha:.7),
+          fontFamily: medium,
+          fontSize: 16.sp,
         ),
-        hintText: "كيف أساعدك..؟",
+        hintText: "Ask me about your health...",
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: primaryColor, width: 1),
           borderRadius: BorderRadius.circular(20.r),
         ),
-
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: primaryColor, width: 1),
           borderRadius: BorderRadius.circular(20.r),
         ),
-
         border: OutlineInputBorder(
           borderSide: const BorderSide(color: primaryColor, width: 1),
-          borderRadius: BorderRadius.circular(20.r),),
+          borderRadius: BorderRadius.circular(20.r),
+        ),
       ),
     );
   }

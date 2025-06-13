@@ -56,8 +56,14 @@ class AllergyCubit extends Cubit<AllergyState> {
             .toList();
        emit(UserAllergyLoaded(allergies));
       } else {
-        print(response.body);
-        emit(UserAllergyError('Failed to load allergies: ${response.statusCode}'));
+        if (response.statusCode==400&& json.decode(response.body)['message'].toString()=="There are no Allergics."){
+          emit(UserAllergyLoaded(const []));
+
+        }else {
+          print(response.body);
+          emit(UserAllergyError(
+              'Failed to load allergies: ${response.statusCode}'));
+        }
       }
     } catch (e) {
       print(e.toString());

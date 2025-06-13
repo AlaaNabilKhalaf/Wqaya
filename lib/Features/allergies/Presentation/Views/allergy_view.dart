@@ -77,7 +77,7 @@ class _AllergyViewState extends State<AllergyView>
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Center(child: Text('تم حذف الحساسية بنجاح',style: TextStyle(fontFamily: "Cairo"),)),
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.red,
               ),
             );
           } else if (state is DeleteAllergyError) {
